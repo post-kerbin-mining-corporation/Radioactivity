@@ -4,130 +4,138 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace NearFutureElectrical
+namespace Radioactivity
 {
-  [KSPAddon(KSPAddon.Startup.Flight, false)]
-  public class Radioactivity:MonoBehaviour
+
+  # Types of zone for attenuation
+  enum AttenuationType {
+    Part, Empty
+  }
+
+  # Represents an attenuation zone, where radiation is attenuated by passing through it
+  public class AttenuationZone {
+    public AttenuationType attenuationType;
+    public Part associatedPart;
+    public float size;
+
+    public AttenuationZone(AttenuationType tp, float sz)
+    {
+      attenuationType = tp;
+      size = sz;
+    }
+    public AttenuationZone(AttenuationType tp, float sz, Part part)
+      : this(tp, sz)
+    {
+        associatedPart = part;
+    }
+
+    public float Attenuate(float inStrength)
+    {
+      if (attenuationType == AttenuationType.Empty)
+      {
+        # attenuate radiation only by inverse square
+        return flux/ (4.0f * Mathf.PI * this.size * this.size)
+      }
+
+      if (attenuationType == AttenuationType.Part)
+      {
+        # attenuate the distance
+        float atten = flux/ (4.0f * Mathf.PI * this.size * this.size)
+        # default spacecraft component is aluminum
+        float mu = 16.0f;
+        # density in gm/cm3
+        float rho = 1f;
+        return atten* Mathf.Exp( -this.size * rho * mu);
+        // i0*e^(-ux), x = thickness (cm), u = linear attenuation coeff (cm-1). u values:
+        // Al: 13, Pb: 82, W: 74, Fe: 26 -> need to be mult by density in g/cm3
+      }
+    }
+  }
+
+  # Represents a link between a source and a sink
+  public class RadiationLink
   {
 
-    enum AttenuationType {
-      Part, Empty
-    }
+    public RadioactiveSource source;
+    public RadioactiveSink sink;
 
-    public class AttenuationZone {
-      public AttenuationType attenuationType;
-      public Part associatedPart;
-      public float size;
+    public float fluxStart = 1.0f;
+    public float fluxEndScale = 0.0f;
 
-      public AttenuationZone(AttenuationType tp, float sz)
-      {
-        attenuationType = tp;
-        size = sz;
-      }
-      public AttenuationZone(AttenuationType tp, float sz, Part part)
-        : this(tp, sz)
-      {
-          associatedPart = part;
-      }
-    }
+    public float overlayShown = false;
 
-    float raycastDistance = 2500f;
-
-    float fluxCutoff = 1f;
-
-    List<RadioactiveSource> allRadSources = new List<RadioactiveSource>();
-    List<RadioactiveSource> allRadSinks = new List<RadioactiveSink>();
-
-    # Remove a radiation source from the source list
-    public void RegisterSource(RadioactiveSource src)
+    public List<AttenuationZone> Path
     {
-      allRadSources.Add(src);
+      get {return attenuationPath;}
     }
 
-    # Remove a radiation source from the source list
-    public void UnregisterSource(RadioactiveSource src)
+    public LineRenderer OverlayPath
     {
-
+      get {return overlayPath;}
+      set {overlayPath = value;}
     }
-    # Add a radiation sink to the sink list
-    public void RegisterSink(RadioactiveSink snk)
+
+    public GameObject GO
     {
-      allRadSinks.Add(snk);
+      get {return go;}
     }
-    # Remove a radiation sink from the sink list
-    public void UnregisterSink(snk)
+
+    protected LineRenderer overlayPath;
+    protected GameObject go;
+    protected List<AttenuationZone> attenuationPath;
+
+    public RadiationLink(RadioactiveSource src, RadioactiveSink snk)
     {
-
+        source = src;
+        sink = snk;
+        ComputeConnection(src, snk);
     }
 
-    public void Start()
+    public void ToggleOverlay()
     {
-
+        overlayShown = !overlayShown;
+        if (overlayShown)
+          ShowOverlay();
+        else
+            HideOverlay();
+    }
+    public void ShowOverlay()
+    {
+      overlayShown = true;
+      RadioactivityOverlay.Instance.Show(this);
+    }
+    public void HideOverlay()
+    {
+      overlayShown = false;
+      RadioactivityOverlay.Instance.Hide(this);
     }
 
-    # Master method that simulates all paths
     public void Simulate()
     {
-      foreach (RadioactiveSource src in allRadSources) {
-        if (src.Emitting)
-
-      }
+      snk.AddFlux(src.Emission * fluxEndScale);
     }
 
-    # Computes emision line of sights
-    public void ComputeEmission(RadioactiveSource src)
-    {
-      foreach (RadioactiveSink snk in allRadSinks)
-      {
-        ComputeFluxAtTarget(src, snk);
-      }
-
-    }
-
-    public void ComputeFluxAtTarget(RadioactiveSource src, RadioactiveSink target)
+    # Gets the ray path
+    public void ComputeConnection(RadioactiveSource src, RadioactiveSink target)
     {
       # Gets parts between source and sink
-      List<AttenuationZone> hits = GetLineOfSight(src, target);
+      attenuationPath = GetLineOfSight(src, target);
 
-      float sourceStrength = src.Emission;
-      float finalFlux = AttenuateFlux();
-
+      float sourceStrength = fluxStart;
+      fluxEndScale = AttenuateFlux();
     }
-    protected AttenuateFlux(List<AttenuationZone> rayPath, float strength)
+    # Attenuates a ray
+    protected float AttenuateFlux(List<AttenuationZone> rayPath, float strength)
     {
         # march along the ray, attenuating as we go
         float curFlux = strength;
         foreach (AttenuationZone z in rayPath)
         {
-
-          if (z.attenuationType == AttenuationType.Empty)
+          if (curFlux >= fluxCutoff)
           {
-              curFlux = AttentuateEmpty(z, curFlux);
-          }
-          else if (z.attenuationType == AttentionType.Part)
-          {
-              curFlux = AttenuatePart(z, curFlux);
+            curFlux = z.Attenuate(curFlux);
           }
         }
-    }
-
-    protected float AttentuateEmpty(AttenuationZone z, float flux)
-    {
-        return flux/ (4.0f * Mathf.PI * z.size * z.size)
-    }
-
-    protected float AttenuatePart(AttenuationZone z, float flux)
-    {
-        # attenuate the distance
-        float atten = AttentuateEmpty(z, flux);
-        # default spacecraft component is aluminum
-        float mu = 16.0f;
-        # density in gm/cm3
-        float rho = 1f;
-
-        return atten* Mathf.Exp( -z.size * rho * mu);
-        // i0*e^(-ux), x = thickness (cm), u = linear attenuation coeff (cm-1). u values:
-        // Al: 13, Pb: 82, W: 74, Fe: 26 -> need to be mult by density in g/cm3
     }
 
     # Computes LOS between a source and a sink
@@ -185,9 +193,145 @@ namespace NearFutureElectrical
           prevStop = h.distance;
         }
       }
-
       return attens;
     }
+  }
+
+  [KSPAddon(KSPAddon.Startup.Flight, false)]
+  public class Radioactivity:MonoBehaviour
+  {
+    # Items loaded from CFG
+    # ---------------------
+    # maximum distance to raycast
+    float raycastDistance = 2000f;
+    # minimum flux level to care about
+    float fluxCutoff = 1f;
+
+    float defaultPartAttenuationCoefficient = 16f;
+
+    bool simulatePointRadiation = true;
+    bool simulateSolarRadiation = false;
+    bool simulateCosmicRadiation = false;
+    # ---------------------
+
+    public static Radioactivity Instance { get; private set; }
+
+    List<RadioactiveSource> allRadSources = new List<RadioactiveSource>();
+    List<RadioactiveSource> allRadSinks = new List<RadioactiveSink>();
+    List<RadiationLink> allLinks = new List<RadioactiveLink>();
+
+    # Remove a radiation source from the source list
+    public void RegisterSource(RadioactiveSource src)
+    {
+      allRadSources.Add(src);
+      Utils.Log("Adding radiation source to simulator");
+    }
+
+    # Remove a radiation source from the source list
+    public void UnregisterSource(RadioactiveSource src)
+    {
+      Utils.Log("Removing radiation source from simulator");
+    }
+    # Add a radiation sink to the sink list
+    public void RegisterSink(RadioactiveSink snk)
+    {
+      allRadSinks.Add(snk);
+      Utils.Log("Adding radiation sink to simulator");
+    }
+    # Remove a radiation sink from the sink list
+    public void UnregisterSink(RadioactiveSink snk)
+    {
+      Utils.Log("Removing radiation sink from simulator");
+    }
+    # Show the overlay for a given source
+    public void ShowOverlay(RadioactiveSource src)
+    {
+      foreach (RadioactiveLink lnk in allLinks)
+      {
+        if (lnk.source == src)
+        {
+          lnk.ShowOverlay();
+        }
+      }
+    }
+    public void ShowOverlay(RadioactiveSink snk)
+    {
+      foreach (RadioactiveLink lnk in allLinks)
+      {
+        if (lnk.sink == snk)
+        {
+          lnk.ShowOverlay();
+        }
+      }
+    }
+    public void HideOverlay(RadioactiveSource src)
+    {
+      foreach (RadioactiveLink lnk in allLinks)
+      {
+        if (lnk.source == src)
+        {
+          lnk.HideOverlay();
+        }
+      }
+    }
+    public void HideOverlay(RadioactiveSink snk)
+    {
+      foreach (RadioactiveLink lnk in allLinks)
+      {
+        if (lnk.source == snk)
+        {
+          lnk.HideOverlay();
+        }
+      }
+    }
+
+    protected void Awake()
+    {
+      Instance = this;
+    }
+    protected void Start()
+    {
+
+    }
+
+
+    public void FixedUpdate()
+    {
+      float timeScalar = TimeWarp.fixedDeltaTime;
+      Simulate();
+    }
+
+    # builds the radiation network from scratch
+    public void BuildRadiationLinks()
+    {
+      foreach (RadioactiveSource s in allRadSources)
+      {
+       foreach RadioactiveSink s2 in allRadSinks)
+       {
+         allLinks.Add(new RadiationLink(s, s2));
+       }
+      }
+    }
+
+    # Master method that simulates radiation
+    public void Simulate()
+    {
+      if (simulatePointRadiation)
+        SimulatePointRadiation();
+    }
+
+    # simulate point radiation from precomputed pathways
+    public void SimulatePointRadiation()
+    {
+      foreach (RadiationLink link in allLinks)
+        {
+          # recompute pathways if needed
+          # Simulate the radiation based on precomputed pathways
+          lnk.Simulate();
+        }
+
+    }
+
 
   }
 }
