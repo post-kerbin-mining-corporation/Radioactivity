@@ -27,6 +27,7 @@ namespace Radioactivity
       shownLinks.Remove(lnk);
     }
 
+    // Create and set up the line renderer
     protected SetupRenderer(RadioactiveLink lnk)
     {
       lnk.GO = new GameObject("RadioactiveLinkRendererRoot");
@@ -39,6 +40,7 @@ namespace Radioactivity
       lnk.OverlayPath.SetPostions(new Vector3[lnk.source.EmitterTransform.position, lnk.sink.SinkTransform.position]);
     }
 
+    // Destroy the line renderer
     protected DestroyRenderer(RadioactiveLink lnk)
     {
       if (lnk.GO)

@@ -1,4 +1,5 @@
-# All radioactive sources derive from this
+// Represents a module that creates radiation output
+// All radioactive sources derive from this
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +11,15 @@ namespace Radioactivity
 
   public class GenericRadiationEmitter:PartModule
   {
-    # Associated RadioactiveSource from which to emit
+    // Associated RadioactiveSource from which to emit
     [KSPField(isPersistant = true)]
     public string SourceID = "";
 
-    # Is the source emitting?
+    // Is the source emitting?
     KSPField(isPersistant = true)]
     public bool Emitting = true;
 
-    # Get the current emission
+    // Get the current emission
     public float CurrentEmission {
       get {return currentEmission;}
       set {currentEmission = value;}
@@ -29,6 +30,7 @@ namespace Radioactivity
 
     public override void OnStart()
     {
+      // Locate the appropriate radioactive source and register
       RadioactiveSource[] radSrcs = this.GetComponents<RadioactiveSource>();
       foreach (RadioactiveSource radS in radSrcs)
       {
@@ -37,7 +39,9 @@ namespace Radioactivity
           radSrc.RegisterEmitter(this);
       }
       if (radSrc == null)
-        Debug.Log("Error, could not find associated RadioactiveSource");
+        Debug.LogError("Could not find associated RadioactiveSource");
     }
+
+
   }
 }

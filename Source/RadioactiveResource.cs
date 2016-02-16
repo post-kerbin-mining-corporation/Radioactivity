@@ -1,5 +1,4 @@
-# A resource that is radioactive.
-# Placed in a resource container
+// Represents a container full of radioactive resources
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +10,13 @@ namespace Radioactivity
 
   public class RadioactiveResource:GenericRadiationEmitter
   {
-      # The resource that will emit the radiation
+      // The resource that will emit the radiation
       [KSPField(isPersistant = true)]
       public string ResourceName = "";
 
-      # Amount of emission per unit in MBq
-      # eg 1 kg nuclear waste = 10 TBq
-      # 1 kg uranium = 25 MBq
+      // Amount of emission per unit in MBq
+      // eg 1 kg nuclear waste = 10 TBq
+      // 1 kg uranium = 25 MBq
       [KSPField(isPersistant = true)]
       public float EmissionPerUnit = 1f;
 
@@ -31,7 +30,8 @@ namespace Radioactivity
         base.OnFixedUpdate();
         if (Emitting)
         {
-          # Get amount of resource present, multiply per unit, emit
+          // Get amount of resource present, multiply per unit, emit
+          // TODO: Actually do this
           double curAmount = 10f;
           CurrentEmission = curAmount * EmissionPerUnit;
         }
