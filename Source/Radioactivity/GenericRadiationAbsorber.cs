@@ -15,15 +15,26 @@ namespace Radioactivity
     [KSPField(isPersistant = true)]
     public string AbsorberID = "";
 
-    protected float currentEmission = 0f;
+    [KSPField(isPersistant = true)]
+    public double LifetimeRadiation = 0d;
+
+    [KSPField(isPersistant = true)]
+    public double CurrentRadiation = 0d;
+
+    protected double prevRadiation = 0d;
     protected RadioactiveSink radSink;
 
     // Adds radiation
     public virtual void AddRadiation(float amt)
     {
-
+      LifetimeRadiation = LifetimeRadiation + amt;
     }
-
+    public override void OnFixedUpdate()
+    {
+      CurrentRadiation = LifetimeRadiation - prevRadiation;
+      prevRadiation = LifetimeRadiation;
+    }
+    
     public override void  OnStart(PartModule.StartState state)
     {
       // Locate the associated sink and register
