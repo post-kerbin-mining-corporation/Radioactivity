@@ -15,7 +15,7 @@ namespace Radioactivity
     public string EngineID = "";
 
     // Maximum emission at engine maximum
-    [KSPField(isPersistant = true)]
+    [KSPField(isPersistant = false)]
     public float EmissionAtMax = 100f;
 
     protected bool useLegacyEngines = false;
@@ -26,7 +26,7 @@ namespace Radioactivity
     public override void OnStart(PartModule.StartState state)
     {
       base.OnStart(state);
-      SetupEngines()
+      SetupEngines();
     }
     public override void OnFixedUpdate()
     {
@@ -41,7 +41,7 @@ namespace Radioactivity
       if (engineLegacy == null)
         return;
 
-      base.CurrentEmission = engineLegacy.requestedThrottle/100f * EmissionAtMax;
+      base.CurrentEmission = engineLegacy.requestedThrottle * EmissionAtMax;
     }
     // Handles emission for engines using ModuleEnginesFX
     protected void HandleEmission()
@@ -49,7 +49,7 @@ namespace Radioactivity
       if (engine == null)
         return;
 
-      base.CurrentEmission = engine.requestedThrottle/100f * EmissionAtMax;
+      base.CurrentEmission = engine.requestedThrottle * EmissionAtMax;
     }
 
     protected void SetupEngines()
@@ -64,7 +64,7 @@ namespace Radioactivity
         engineLegacy = enginesLegacy[0];
       } else
       {
-        if (EngineID == "" || EngineID = String.Empty)
+        if (EngineID == "" || EngineID == String.Empty)
         {
             Utils.LogWarning("RadioactiveEngine: EngineID field not specified, trying to use default engine");
             if (engines.Length > 0)
@@ -72,7 +72,7 @@ namespace Radioactivity
         }
         foreach (ModuleEnginesFX fx in engines)
         {
-          if (fx.EngineID == EngineID)
+          if (fx.engineID == EngineID)
           {
             engine = fx;
           }

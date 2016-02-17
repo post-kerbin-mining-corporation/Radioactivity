@@ -31,10 +31,11 @@ namespace Radioactivity
     protected void SetupRenderer(RadiationLink lnk)
     {
       lnk.GO = new GameObject("RadioactiveLinkRendererRoot");
+      //lnk.GO.layer = RadioactivitySettings.overlayRayLayer;
       lnk.OverlayPath = lnk.GO.AddComponent<LineRenderer>();
-      lnk.OverlayPath.material = new Material(Shader.Find("Particles/Additive"));
+      lnk.OverlayPath.material = new Material(Shader.Find(RadioactivitySettings.overlayRayMaterial));
       lnk.OverlayPath.SetVertexCount(2);
-      lnk.OverlayPath.SetWidth(lnk.source.CurrentEmission / 10f, lnk.source.CurrentEmission / 10f);
+      lnk.OverlayPath.SetWidth(lnk.source.CurrentEmission / RadioactivitySettings.overlayRayWidthScalar, lnk.source.CurrentEmission / RadioactivitySettings.overlayRayWidthScalar);
       lnk.OverlayPath.SetColors(Color.red, new Color(1f, 1f/lnk.fluxEndScale, 1f/lnk.fluxEndScale));
       lnk.OverlayPath.useWorldSpace = true;
       lnk.OverlayPath.SetPosition(0, lnk.source.EmitterTransform.position); 

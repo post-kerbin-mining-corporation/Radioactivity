@@ -12,7 +12,7 @@ namespace Radioactivity
   public class GenericRadiationEmitter:PartModule
   {
     // Associated RadioactiveSource from which to emit
-    [KSPField(isPersistant = true)]
+    [KSPField(isPersistant = false)]
     public string SourceID = "";
 
     // Is the source emitting?

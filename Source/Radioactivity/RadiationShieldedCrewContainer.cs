@@ -37,7 +37,7 @@ namespace Radioactivity
     // Distributes radiation to any crew
     protected void IrradiateCrew()
     {
-      if (this.part.crew > 0)
+      if (this.part.protoModuleCrew.Count > 0)
       {
 
       }

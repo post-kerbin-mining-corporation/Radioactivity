@@ -25,12 +25,16 @@ namespace Radioactivity
     // Default density for a part
     public static float defaultDensity = 1f;
 
+    public static int overlayRayLayer = 0;
+    public static float overlayRayWidthScalar = 10f;
+    public static string overlayRayMaterial = "Particles/Additive";
+
     // do we simulate these?
     public static bool simulatePointRadiation = true;
     public static bool simulateSolarRadiation = false;
     public static bool simulateCosmicRadiation = false;
 
-    
+    public static bool debugNetwork = true;
 
   }
 

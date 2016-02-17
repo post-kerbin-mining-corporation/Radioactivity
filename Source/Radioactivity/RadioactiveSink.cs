@@ -12,11 +12,12 @@ namespace Radioactivity
   public class RadioactiveSink:PartModule
   {
     // The ID of the sink
-    [KSPField(isPersistant = true)]
-    public string SinkID = "";
+    [KSPField(isPersistant = false)]
+    public string SinkID;
+
     // The Transform to use for raycast calculations
-    [KSPField(isPersistant = true)]
-    public string SinkTransformName = "";
+    [KSPField(isPersistant = false)]
+    public string SinkTransformName;
 
     [KSPField(isPersistant = false)]
     public bool ShowOverlay = false;
@@ -58,17 +59,20 @@ namespace Radioactivity
     public override void OnStart(PartModule.StartState state)
     {
       // Set up the sink transform, if it doesn't exist use the part root
-      SinkTransform = part.FindModelTransform(SinkTransformName);
+       if (SinkTransformName != String.Empty)
+        SinkTransform = part.FindModelTransform(SinkTransformName);
       if (SinkTransform == null)
       {
-        Debug.LogWarning("Couldn't find Source transform, using root transform");
+        Utils.LogWarning("Couldn't find Source transform, using part root transform");
         SinkTransform = part.transform;
       }
+      if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
       Radioactivity.Instance.RegisterSink(this);
     }
 
     public void OnDestroy()
     {
+        if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
       Radioactivity.Instance.UnregisterSink(this);
     }
   }

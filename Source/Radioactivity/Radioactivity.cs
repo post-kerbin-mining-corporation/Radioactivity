@@ -88,6 +88,27 @@ namespace Radioactivity
         set { go = value; }
     }
 
+    public int ZoneCount
+    {
+        get { if (Path != null) return Path.Count; else return 0; }
+    }
+
+    public int OccluderCount
+    {
+        get { if (Path != null) 
+        {
+            int ct = 0;
+            foreach (AttenuationZone z in Path)
+            {
+                if (z.attenuationType != AttenuationType.Empty)
+                    ct++;
+            }
+            return ct;
+        }
+        return 0;
+        }
+    }
+
     protected Vector3 relPos;
     protected LineRenderer overlayPath;
     protected GameObject go;
@@ -209,23 +230,24 @@ namespace Radioactivity
       // for each object we hit outgoing, see if we found it incoming
       foreach (RaycastHit h in outgoing)
       {
-          Utils.Log(h.ToString());
-         Utils.Log(h.transform.ToString());
-         Utils.Log(h.rigidbody.ToString());
+       
         // Add a new empty attenuation zone based on where the last one stopped
         attens.Add (new AttenuationZone(h.distance - prevStop));
-
-        RaycastHit found = incoming.Find(item => item.rigidbody == h.rigidbody);
-        Utils.Log(found.rigidbody.ToString());
-        // If this raycastHit has a friend in the incoming array, create a new zone based on that
-        if ( found.collider != null )
+        if (h.rigidbody != null)
         {
-          attens.Add(new AttenuationZone(totalPathLength - h.distance - found.distance, h.rigidbody.gameObject.GetComponent<Part>() ));
-          prevStop = h.distance + totalPathLength - found.distance;
+            RaycastHit found = incoming.Find(item => item.rigidbody == h.rigidbody);
+            Utils.Log(found.rigidbody.ToString());
+            // If this raycastHit has a friend in the incoming array, create a new zone based on that
+            if (found.collider != null)
+            {
+                attens.Add(new AttenuationZone(totalPathLength - h.distance - found.distance, h.rigidbody.gameObject.GetComponent<Part>()));
+                prevStop = h.distance + totalPathLength - found.distance;
 
-        } else
-        {
-          prevStop = h.distance;
+            }
+            else
+            {
+                prevStop = h.distance;
+            }
         }
       }
       return attens;
@@ -233,7 +255,7 @@ namespace Radioactivity
   }
 
   [KSPAddon(KSPAddon.Startup.MainMenu, false)]
-  public class RadioactivitySetttings:MonoBehaviour
+  public class RadioactivityStartup:MonoBehaviour
   {
     public void Start()
     {
@@ -241,10 +263,19 @@ namespace Radioactivity
     }
   }
 
-  [KSPAddon(KSPAddon.Startup.Flight, false)]
+  [KSPAddon(KSPAddon.Startup.EveryScene, false)]
   public class Radioactivity:MonoBehaviour
   {
     public static Radioactivity Instance { get; private set; }
+
+    public List<RadioactiveSource> AllSources
+    { get { return allRadSources; } }
+
+      public List<RadioactiveSink> AllSinks
+    { get { return allRadSinks; } }
+
+      public List<RadiationLink> AllLinks
+      { get { return allLinks; } }
 
     List<RadioactiveSource> allRadSources = new List<RadioactiveSource>();
     List<RadioactiveSink> allRadSinks = new List<RadioactiveSink>();
@@ -255,25 +286,43 @@ namespace Radioactivity
     {
       allRadSources.Add(src);
       BuildNewRadiationLink(src);
-      Utils.Log("Adding radiation source to simulator");
+      if (RadioactivitySettings.debugNetwork)
+        Utils.Log("Adding radiation source "+ src.SourceID +" on part " + src.part.name + " to simulator");
     }
 
     // Remove a radiation source from the source list
     public void UnregisterSource(RadioactiveSource src)
     {
-      Utils.Log("Removing radiation source from simulator");
+       if (RadioactivitySettings.debugNetwork)
+           Utils.Log("Removing radiation source "+ src.SourceID +" on part " + src.part.name + " from simulator");
     }
     // Add a radiation sink to the sink list
     public void RegisterSink(RadioactiveSink snk)
     {
       allRadSinks.Add(snk);
       BuildNewRadiationLink(snk);
-      Utils.Log("Adding radiation sink to simulator");
+      if (RadioactivitySettings.debugNetwork)
+          Utils.Log("Adding radiation sink "+ snk.SinkID +" on part " + snk.part.name + " to simulator");
     }
     // Remove a radiation sink from the sink list
     public void UnregisterSink(RadioactiveSink snk)
     {
-      Utils.Log("Removing radiation sink from simulator");
+       if (RadioactivitySettings.debugNetwork)
+           Utils.Log("Removing radiation sink "+ snk.SinkID +" on part " + snk.part.name + " from simulator");
+    }
+    public void ShowAllOverlays()
+    {
+        foreach (RadiationLink lnk in allLinks)
+        {
+            lnk.ShowOverlay();
+        }
+    }
+    public void HideAllOverlays()
+    {
+        foreach (RadiationLink lnk in allLinks)
+        {
+            lnk.HideOverlay();
+        }
     }
     // Show the ray overlay for a given source or sink
     public void ShowOverlay(RadioactiveSource src)

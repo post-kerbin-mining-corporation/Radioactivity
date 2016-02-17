@@ -41,15 +41,15 @@ namespace Radioactivity
 
     public static void Log(string str)
     {
-        Debug.Log("Radioactivity: " + str);
+        Debug.Log("Radioactivity > " + str);
     }
     public static void LogError(string str)
     {
-        Debug.LogError("Radioactivity: " + str);
+        Debug.LogError("Radioactivity > " + str);
     }
     public static void LogWarning(string str)
     {
-        Debug.LogWarning("Radioactivity: " + str);
+        Debug.LogWarning("Radioactivity > " + str);
     }
 
 

@@ -12,11 +12,11 @@ namespace Radioactivity
   public class RadioactiveSource:PartModule
   {
       // The name of the radioactive source
-      [KSPField(isPersistant = true)]
-      public string SourceID = "";
+      [KSPField(isPersistant = false)]
+      public string SourceID;
       // Name of the transform to use for emission
-      [KSPField(isPersistant = true)]
-      public string EmitterTransformName = "";
+      [KSPField(isPersistant = false)]
+      public string EmitterTransformName;
 
       [KSPField(isPersistant = true)]
       public bool Emitting = true;
@@ -64,16 +64,19 @@ namespace Radioactivity
       public override void OnStart(PartModule.StartState state)
       {
         // Set up the emission transform, if it doesn't exist use the part root
-        EmitterTransform = part.FindModelTransform("EmitterTransformName");
+        if (EmitterTransformName != String.Empty)
+            EmitterTransform = part.FindModelTransform(EmitterTransformName);
         if (EmitterTransform == null)
         {
-          Debug.LogWarning("Couldn't find Emitter transform, using root transform");
+          Utils.LogWarning("Couldn't find Emitter transform, using part root transform");
           EmitterTransform = part.transform;
         }
-        Radioactivity.Instance.RegisterSource(this);
+          if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
+            Radioactivity.Instance.RegisterSource(this);
       }
       public void OnDestroy()
       {
+          if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
         Radioactivity.Instance.UnregisterSource(this);
       }
 

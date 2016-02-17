@@ -12,7 +12,7 @@ namespace Radioactivity
   public class GenericRadiationAbsorber:PartModule
   {
     // Associated RadioactiveSink to use for absorbtion
-    [KSPField(isPersistant = true)]
+    [KSPField(isPersistant = false)]
     public string AbsorberID = "";
 
     [KSPField(isPersistant = true)]
@@ -35,7 +35,7 @@ namespace Radioactivity
       prevRadiation = LifetimeRadiation;
     }
     
-    public override void  OnStart(PartModule.StartState state)
+    public override void OnStart(PartModule.StartState state)
     {
       // Locate the associated sink and register
       RadioactiveSink[] radSnks = this.GetComponents<RadioactiveSink>();

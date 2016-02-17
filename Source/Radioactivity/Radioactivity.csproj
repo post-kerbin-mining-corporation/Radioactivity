@@ -51,13 +51,16 @@
     <Compile Include="GenericRadiationEmitter.cs" />
     <Compile Include="ModuleRadiationParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadiationShieldedCrewContainer.cs" />
+    <Compile Include="RadiationTracker.cs" />
+    <Compile Include="RadioactiveEngine.cs" />
     <Compile Include="RadioactiveResource.cs" />
     <Compile Include="RadioactiveSink.cs" />
     <Compile Include="RadioactiveSource.cs" />
-    <Compile Include="RadioactiveTracker.cs" />
     <Compile Include="Radioactivity.cs" />
     <Compile Include="RadioactivitySettings.cs" />
     <Compile Include="RadioactivityOverlay.cs" />
+    <Compile Include="RadioactivityUI.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
