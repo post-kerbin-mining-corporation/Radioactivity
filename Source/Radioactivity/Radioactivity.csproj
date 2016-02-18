@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttenuationZone.cs" />
     <Compile Include="GenericRadiationAbsorber.cs" />
     <Compile Include="GenericRadiationEmitter.cs" />
     <Compile Include="ModuleRadiationParameters.cs" />

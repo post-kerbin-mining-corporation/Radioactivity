@@ -11,10 +11,78 @@ namespace Radioactivity
   [KSPAddon(KSPAddon.Startup.MainMenu, false)]
   public class RadioactivityStartup:MonoBehaviour
   {
+
+      private List<Part> evaParts;
+
+      public void Awake()
+      {
+          evaParts = new List<Part>();
+      }
     public void Start()
     {
       Utils.LoadSettings();
     }
+
+    public void Update()
+    {
+        if (!PartLoader.Instance.IsReady() || PartResourceLibrary.Instance == null)
+        {
+            return;
+        }
+        if (evaParts.Count < 2)
+        {
+            Utils.Log("EVA: Finding EVA parts");
+            FindEVAParts();
+        }
+        else if (evaParts.Count == 2)
+        {
+            AddEVAModules();
+        }
+
+    }
+      // Concept for this function came from Toadius' EVAManager
+     protected void FindEVAParts()
+     {
+         AvailablePart loadedPart;
+	    for (int i = 0; i < PartLoader.LoadedPartsList.Count; i++)
+	    {
+		    loadedPart = PartLoader.LoadedPartsList[i];
+		    string lowerName = loadedPart.name.ToLower();
+
+		    if (lowerName == "kerbaleva" || lowerName == "kerbalevafemale")
+		    {
+			    evaParts.Add(loadedPart.partPrefab);
+			    if (this.evaParts.Count == 2)
+			    {
+				    break;
+			    }
+		    }
+	    }
+     }
+     protected void AddEVAModules()
+     {
+         foreach (Part eva in evaParts)
+         {
+             AddEVARadioactivityTrackers(eva);
+         }
+     }
+     protected void AddEVARadioactivityTrackers(Part p)
+     {
+         if (p.GetComponent<RadioactiveSink>() != null)
+         {
+             Utils.Log("EVA: Module already exists");
+         }
+         else
+         {
+             Utils.Log("EVA: Adding modules");
+             RadioactiveSink sink = p.gameObject.AddComponent<RadioactiveSink>();
+             RadiationTracker tracker = p.gameObject.AddComponent<RadiationTracker>();
+
+             sink.SinkID = "Kerbal";
+             tracker.AbsorberID = "Kerbal";
+             
+         }
+     }
   }
 
   // Main class. Does simulations, holds data, holds the network
