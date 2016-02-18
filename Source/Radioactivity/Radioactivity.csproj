@@ -51,6 +51,7 @@
     <Compile Include="GenericRadiationEmitter.cs" />
     <Compile Include="ModuleRadiationParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadiationLink.cs" />
     <Compile Include="RadiationShieldedCrewContainer.cs" />
     <Compile Include="RadiationTracker.cs" />
     <Compile Include="RadioactiveEngine.cs" />

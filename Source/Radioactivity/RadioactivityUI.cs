@@ -13,6 +13,7 @@ namespace Radioactivity
         private bool uiShown = false;
         private GUIStyle uiStyle;
         private Rect windowPos = new Rect(0, 0, 480, 480);
+        private RadiationLink currentDrawnLink = null;
         // Stock toolbar button
         private static ApplicationLauncherButton stockToolbarButton = null;
 
@@ -89,6 +90,9 @@ namespace Radioactivity
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
+            if (currentDrawnLink != null)
+                DrawPathDetails();
+            
         }
 
         private void DrawSourceInfo(RadioactiveSource src)
@@ -114,10 +118,25 @@ namespace Radioactivity
             GUILayout.Label("Zone Count: " + lnk.ZoneCount.ToString());
             GUILayout.Label("Occluder Count: " + lnk.OccluderCount.ToString());
             GUILayout.Label("Rendered: " + lnk.overlayShown.ToString());
-
+            if (GUILayout.Button("Path Details"))
+                currentDrawnLink = lnk;
             GUILayout.EndVertical();
         }
-
+        private void DrawPathDetails()
+        {
+            GUILayout.Label("Attenuation Path Details");
+            GUILayout.Label("Connectivity: " + currentDrawnLink.source.SourceID + " to " + currentDrawnLink.sink.SinkID);
+            GUILayout.Label("Final Intensity: " + currentDrawnLink.fluxEndScale.ToString());
+            
+            GUILayout.BeginVertical();
+            int n = 1;
+            foreach (AttenuationZone z in currentDrawnLink.Path)
+            {
+                GUILayout.Label(n.ToString() + ". " + z.ToString());
+                n++;
+            }
+            GUILayout.EndVertical();
+        }
 
         public void OnDestroy()
         {

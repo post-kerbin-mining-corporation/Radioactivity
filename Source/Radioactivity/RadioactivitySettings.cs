@@ -20,13 +20,15 @@ namespace Radioactivity
     public static float maximumPositionDelta = 1.0f;
 
     // Part properties
-    // Default value for the linear attenuation coefficient for parts
-    public static float defaultPartAttenuationCoefficient = 16f;
+    // Default value for the linear attenuation coefficient for parts, in cm-1
+    public static float defaultPartAttenuationCoefficient = 0.325f;
     // Default density for a part
     public static float defaultDensity = 1f;
 
     public static int overlayRayLayer = 0;
-    public static float overlayRayWidthScalar = 10f;
+    public static float overlayRayWidthMult = 0.01f;
+    public static float overlayRayWidthMin = 0.025f;
+    public static float overlayRayWidthMax = 0.5f;
     public static string overlayRayMaterial = "Particles/Additive";
 
     // do we simulate these?
@@ -34,7 +36,18 @@ namespace Radioactivity
     public static bool simulateSolarRadiation = false;
     public static bool simulateCosmicRadiation = false;
 
+      // If on, generates UI debug messages
+    public static bool debugUI = true;
+      // If on, debug overlays
+    public static bool debugOverlay = true;
+      // If on, generates debug messages for Source and Sink objects
+    public static bool debugSourceSinks = true;
+      // If on, debug modules added by Radioactivity
+    public static bool debugModules = true;
+      // If on, generates network creation/destruction/modification messages
     public static bool debugNetwork = true;
+      // If on, generates debug messages when building raycast paths
+    public static bool debugRaycasting = true;
 
   }
 
