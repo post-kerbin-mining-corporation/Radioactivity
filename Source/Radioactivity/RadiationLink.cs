@@ -107,7 +107,7 @@ namespace Radioactivity
             // LOS needs to be recomputed if we're off by more than maximumPositionDelta.
             // TODO: Needs to be recomputed if the total mass changes (propellant loss)
             // TODO: BUT that is more complicated!!
-            Vector3 curRelPos = source.EmitterTransform.position - sink.SinkTransform.position;
+            Vector3 curRelPos = Utils.getRelativePosition(source.EmitterTransform, sink.SinkTransform.position);
             if (((curRelPos - relPos).sqrMagnitude > RadioactivitySettings.maximumPositionDelta * RadioactivitySettings.maximumPositionDelta))
             {
                 ComputeConnection(source, sink);
@@ -124,7 +124,7 @@ namespace Radioactivity
                 Utils.Log("Creating connection from " + src.part.name + " to " + target.part.name);
             
             // Store the relative position of both endpoints
-            relPos = src.EmitterTransform.position - target.SinkTransform.position;
+            relPos = Utils.getRelativePosition(src.EmitterTransform, target.SinkTransform.position);//src.EmitterTransform.position - target.SinkTransform.position;
 
             // Gets parts between source and sink
             attenuationPath = GetLineOfSight(src, target);
@@ -132,6 +132,7 @@ namespace Radioactivity
             
             fluxEndScale = AttenuateFlux(attenuationPath, fluxStart);
         }
+        
 
         // Attenuates the ray between the source and sink
         protected double AttenuateFlux(List<AttenuationZone> rayPath, double strength)

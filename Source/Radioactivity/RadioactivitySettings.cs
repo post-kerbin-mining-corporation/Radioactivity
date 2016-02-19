@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+
 namespace Radioactivity
 {
 
@@ -26,7 +27,7 @@ namespace Radioactivity
     public static float defaultDensity = 1f;
 
     public static int overlayRayLayer = 0;
-    public static float overlayRayWidthMult = 0.01f;
+    public static float overlayRayWidthMult = 0.005f;
     public static float overlayRayWidthMin = 0.025f;
     public static float overlayRayWidthMax = 0.5f;
     public static string overlayRayMaterial = "Particles/Additive";

@@ -35,6 +35,8 @@ namespace Radioactivity
       lnk.OverlayPath = lnk.GO.AddComponent<LineRenderer>();
       lnk.OverlayPath.material = new Material(Shader.Find(RadioactivitySettings.overlayRayMaterial));
       lnk.OverlayPath.material.color = Color.white;
+      lnk.OverlayPath.material.renderQueue = 4000;
+      lnk.OverlayPath.gameObject.layer = 15;
       lnk.OverlayPath.SetVertexCount(2);
       float w = Mathf.Clamp(lnk.source.CurrentEmission * RadioactivitySettings.overlayRayWidthMult, RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMax);
       lnk.OverlayPath.SetWidth(w, w);
