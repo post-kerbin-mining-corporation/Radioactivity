@@ -13,11 +13,11 @@ namespace Radioactivity
     // Maximum distance to raycast for point radiation
     public static float raycastDistance = 2000f;
     // Minimum flux level to propagate along attenuation paths
-    public static float fluxCutoff = 0.001f;
+    public static float fluxCutoff = 0f;
     // Starting default flux when propagating along paths
     public static float defaultRaycastFluxStart = 1.0f;
     // How far the geometry between two radiation link endpoints can change before we need to recalculate it
-    public static float maximumPositionDelta = 1.0f;
+    public static float maximumPositionDelta = 0.5f;
 
     // Part properties
     // Default value for the linear attenuation coefficient for parts, in cm-1
@@ -53,6 +53,6 @@ namespace Radioactivity
 
   // Types of zone for attenuation
   public enum AttenuationType {
-    Part, ParameterizedPart, Empty
+    Part, ParameterizedPart, Terrain, Empty
   }
 }

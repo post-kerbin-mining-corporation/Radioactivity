@@ -13,7 +13,7 @@ namespace Radioactivity
   {
 
       private List<Part> evaParts;
-
+      private bool evaModified = false;
       public void Awake()
       {
           evaParts = new List<Part>();
@@ -21,6 +21,7 @@ namespace Radioactivity
     public void Start()
     {
       Utils.LoadSettings();
+      
     }
 
     public void Update()
@@ -34,7 +35,7 @@ namespace Radioactivity
             Utils.Log("EVA: Finding EVA parts");
             FindEVAParts();
         }
-        else if (evaParts.Count == 2)
+        else if (evaParts.Count == 2 && !evaModified)
         {
             AddEVAModules();
         }
@@ -80,7 +81,7 @@ namespace Radioactivity
 
              sink.SinkID = "Kerbal";
              tracker.AbsorberID = "Kerbal";
-             
+             evaModified = true;
          }
      }
   }
@@ -116,10 +117,14 @@ namespace Radioactivity
     // Remove a radiation source from the source list
     public void UnregisterSource(RadioactiveSource src)
     {
-        allRadSources.Remove(src);
-        RemoveRadiationLink(src);
-       if (RadioactivitySettings.debugNetwork)
-           Utils.Log("Removing radiation source "+ src.SourceID +" on part " + src.part.name + " from simulator");
+        if (allRadSources.Count > 0)
+        {
+            
+            RemoveRadiationLink(src);
+            allRadSources.Remove(src);
+            if (RadioactivitySettings.debugNetwork && src != null)
+                Utils.Log("Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
+        }
     }
     // Add a radiation sink to the sink list
     public void RegisterSink(RadioactiveSink snk)
@@ -132,10 +137,13 @@ namespace Radioactivity
     // Remove a radiation sink from the sink list
     public void UnregisterSink(RadioactiveSink snk)
     {
-        allRadSinks.Remove(snk);
-        RemoveRadiationLink(snk);
-       if (RadioactivitySettings.debugNetwork)
-           Utils.Log("Removing radiation sink "+ snk.SinkID +" on part " + snk.part.name + " from simulator");
+        if (allRadSinks.Count > 0)
+        {
+            RemoveRadiationLink(snk);
+            allRadSinks.Remove(snk);
+            if (RadioactivitySettings.debugNetwork && snk != null)
+                Utils.Log("Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
+        }
     }
       // Show the ray overlay for ALL links
     public void ShowAllOverlays()
@@ -202,7 +210,65 @@ namespace Radioactivity
     }
     protected void Start()
     {
+        if (HighLogic.LoadedSceneIsEditor)
+        {
+            Utils.Log("Editor: Starting monitor");
+            GameEvents.onEditorShipModified.Add(new EventData<ShipConstruct>.OnEvent(onEditorVesselModified));
+        }
+        else
+        {
+            GameEvents.onEditorShipModified.Remove(new EventData<ShipConstruct>.OnEvent(onEditorVesselModified));
+        }
+    }
 
+    public void onEditorVesselModified(ShipConstruct ship)
+    {
+        Utils.Log("Editor: Vessel Changed, recalculate all parts");
+        if (!HighLogic.LoadedSceneIsEditor) { return; }
+        foreach (RadioactiveSource s in allRadSources.ToList())
+        {
+            UnregisterSource(s);
+        }
+        foreach (RadioactiveSink s in allRadSinks.ToList())
+        {
+            UnregisterSink(s);
+        }
+
+        foreach (Part vesPart in ship.Parts)
+        {
+            RadioactiveSource src = vesPart.gameObject.GetComponent<RadioactiveSource>();
+            RadioactiveSink snk = vesPart.gameObject.GetComponent<RadioactiveSink>();
+
+            if (src != null)
+                RegisterSource(src);
+            if (snk != null)
+                RegisterSink(snk);
+
+        }
+       
+    }
+
+    protected void TryAddSource(RadioactiveSource src)
+    {
+        bool exists = false;
+        foreach (RadioactiveSource usedS in allRadSources)
+        {
+            if (usedS == src)
+                exists = true;
+        }
+        if (!exists)
+            this.RegisterSource(src);
+    }
+    protected void TryAddSink(RadioactiveSink snk)
+    {
+        bool exists = false;
+        foreach (RadioactiveSink usedS in allRadSinks)
+        {
+            if (usedS == snk)
+                exists = true;
+        }
+        if (!exists)
+            this.RegisterSink(snk);
     }
 
     // builds the radiation network from scratch
@@ -270,10 +336,11 @@ namespace Radioactivity
 
     public void FixedUpdate()
     {
-        if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
+        if (HighLogic.LoadedSceneIsFlight)
         {
             Simulate();
         }
+        
     }
 
     // Master method that simulates radiation

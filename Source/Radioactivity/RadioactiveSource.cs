@@ -50,6 +50,7 @@ namespace Radioactivity
       }
 
       private float curEmission = 0f;
+      private bool registered = false;
       private Transform emitterTransform;
       private List<GenericRadiationEmitter> associatedEmitters = new List<GenericRadiationEmitter>();
 
@@ -63,21 +64,32 @@ namespace Radioactivity
       
       public override void OnStart(PartModule.StartState state)
       {
-        // Set up the emission transform, if it doesn't exist use the part root
-        if (EmitterTransformName != String.Empty)
-            EmitterTransform = part.FindModelTransform(EmitterTransformName);
-        if (EmitterTransform == null)
-        {
-          Utils.LogWarning("Couldn't find Emitter transform, using part root transform");
-          EmitterTransform = part.transform;
-        }
-          if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
-            Radioactivity.Instance.RegisterSource(this);
+          // Set up the emission transform, if it doesn't exist use the part root
+          if (EmitterTransformName != String.Empty)
+              EmitterTransform = part.FindModelTransform(EmitterTransformName);
+          if (EmitterTransform == null)
+          {
+              Utils.LogWarning("Couldn't find Emitter transform, using part root transform");
+              EmitterTransform = part.transform;
+          }
+          
+        
+
+          if (HighLogic.LoadedSceneIsFlight && !registered)
+          {
+              Radioactivity.Instance.RegisterSource(this);
+              registered = true;
+          }
       }
+
       public void OnDestroy()
       {
-          if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
-        Radioactivity.Instance.UnregisterSource(this);
+         
+          if (HighLogic.LoadedSceneIsFlight)
+          {
+              Radioactivity.Instance.UnregisterSource(this);
+              registered = false;
+          }
       }
 
       public override void OnFixedUpdate()

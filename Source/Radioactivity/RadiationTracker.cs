@@ -16,10 +16,10 @@ namespace Radioactivity
     [KSPField(isPersistant = false, guiActive = true, guiName = "Dose Rate")]
     public string CurrentRadiationString;
 
-    public override void OnFixedUpdate()
+    public override void FixedUpdate()
     {
-      CurrentRadiationString = String.Format("{0:F2}/s", LifetimeRadiation-prevRadiation);
-      LifetimeRadiationString = String.Format("{0:F2}/s", LifetimeRadiation);
+      CurrentRadiationString = String.Format("{0:F2} /s", LifetimeRadiation-prevRadiation);
+      LifetimeRadiationString = String.Format("{0:F2}", LifetimeRadiation);
     }
   }
 }

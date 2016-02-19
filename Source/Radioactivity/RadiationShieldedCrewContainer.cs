@@ -25,12 +25,12 @@ namespace Radioactivity
       LifetimeRadiation = LifetimeRadiation + amt * (1f - RadiationAttenuationFraction);
     }
 
-    public override void OnFixedUpdate()
+    public override void FixedUpdate()
     {
       CurrentRadiationString = String.Format("{0:F2}/s", CurrentRadiation);
       LifetimeRadiationString = String.Format("{0:F2}/s", LifetimeRadiation);
       IrradiateCrew();
-      base.OnFixedUpdate();
+      base.FixedUpdate();
 
 
     }

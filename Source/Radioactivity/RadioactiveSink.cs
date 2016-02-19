@@ -40,6 +40,7 @@ namespace Radioactivity
     }
 
     private Transform sinkTransform;
+    private bool registered = false;
     private List<GenericRadiationAbsorber> associatedAbsorbers = new List<GenericRadiationAbsorber>();
 
     // Registers an abosrber module to read from this sink
@@ -56,24 +57,36 @@ namespace Radioactivity
       }
     }
 
+
     public override void OnStart(PartModule.StartState state)
     {
-      // Set up the sink transform, if it doesn't exist use the part root
-       if (SinkTransformName != String.Empty)
-        SinkTransform = part.FindModelTransform(SinkTransformName);
-      if (SinkTransform == null)
-      {
-        Utils.LogWarning("Couldn't find Source transform, using part root transform");
-        SinkTransform = part.transform;
-      }
-      if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
-      Radioactivity.Instance.RegisterSink(this);
+        // Set up the sink transform, if it doesn't exist use the part root
+        if (SinkTransformName != String.Empty)
+            SinkTransform = part.FindModelTransform(SinkTransformName);
+        if (SinkTransform == null)
+        {
+            Utils.LogWarning("Couldn't find Source transform, using part root transform");
+            SinkTransform = part.transform;
+        }
+        if (HighLogic.LoadedSceneIsFlight && !registered)
+        {
+            Radioactivity.Instance.RegisterSink(this);
+            registered = true;
+        }
     }
 
     public void OnDestroy()
     {
-        if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
-      Radioactivity.Instance.UnregisterSink(this);
+        if (registered)
+        {
+            Radioactivity.Instance.UnregisterSink(this);
+            registered = false;
+        }
+        if (HighLogic.LoadedSceneIsFlight)
+        {
+            Radioactivity.Instance.UnregisterSink(this);
+            registered = false;
+        }
     }
   }
 }

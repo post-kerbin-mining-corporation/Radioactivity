@@ -13,8 +13,8 @@ namespace Radioactivity
         public RadioactiveSource source;
         public RadioactiveSink sink;
 
-        public double fluxStart = 1.0f;
-        public double fluxEndScale = 0.0f;
+        public double fluxStart = 1.0d;
+        public double fluxEndScale = 0.0d;
 
         public bool overlayShown = false;
         public List<AttenuationZone> Path
@@ -73,21 +73,26 @@ namespace Radioactivity
         // Hide or show the overlay for this link
         public void ToggleOverlay()
         {
-            overlayShown = !overlayShown;
             if (overlayShown)
-                ShowOverlay();
+               HideOverlay();
             else
-                HideOverlay();
+                ShowOverlay();
         }
         public void ShowOverlay()
         {
-            overlayShown = true;
-            RadioactivityOverlay.Instance.Show(this);
+            if (!overlayShown)
+            {
+                overlayShown = true;
+                RadioactivityOverlay.Instance.Show(this);
+            }
         }
         public void HideOverlay()
         {
-            overlayShown = false;
-            RadioactivityOverlay.Instance.Hide(this);
+            if (overlayShown)
+            {
+                overlayShown = false;
+                RadioactivityOverlay.Instance.Hide(this);
+            }
         }
 
         // Simulate the link, that is, compute the flux from the source and add it to the sink
@@ -103,23 +108,28 @@ namespace Radioactivity
             // TODO: Needs to be recomputed if the total mass changes (propellant loss)
             // TODO: BUT that is more complicated!!
             Vector3 curRelPos = source.EmitterTransform.position - sink.SinkTransform.position;
-            if (((curRelPos - relPos).sqrMagnitude > RadioactivitySettings.maximumPositionDelta))
+            if (((curRelPos - relPos).sqrMagnitude > RadioactivitySettings.maximumPositionDelta * RadioactivitySettings.maximumPositionDelta))
             {
                 ComputeConnection(source, sink);
             }
+        }
+        public void ForceRecompute()
+        {
+            ComputeConnection(source, sink);
         }
         // Compute the ray path between the source and sink
         protected void ComputeConnection(RadioactiveSource src, RadioactiveSink target)
         {
             if (RadioactivitySettings.debugNetwork)
                 Utils.Log("Creating connection from " + src.part.name + " to " + target.part.name);
-
+            
             // Store the relative position of both endpoints
             relPos = src.EmitterTransform.position - target.SinkTransform.position;
 
             // Gets parts between source and sink
             attenuationPath = GetLineOfSight(src, target);
             // Attenuate the ray between these
+            
             fluxEndScale = AttenuateFlux(attenuationPath, fluxStart);
         }
 
@@ -130,10 +140,9 @@ namespace Radioactivity
             double curFlux = strength;
             foreach (AttenuationZone z in rayPath)
             {
-                if (curFlux >= RadioactivitySettings.fluxCutoff)
-                {
-                    curFlux = z.Attenuate(curFlux);
-                }
+                
+                 curFlux = curFlux *z.Attenuate(curFlux);
+                
             }
             return curFlux;
         }
@@ -158,21 +167,22 @@ namespace Radioactivity
             /// sort by distance, ascending
             if (hitsForward.Count > 0)
             {
+                Debug.Log("forward hits");
                 hitsForward = hitsForward.OrderBy(o => o.distance).ToList();
             }
             if (hitsBackward.Count > 0)
             {
+                Debug.Log("backward hits");
                 hitsBackward = hitsBackward.OrderByDescending(o => o.distance).ToList();
             }
 
-            if (hitsForward.Count > 0 && hitsBackward.Count > 0)
-                return CreatePathway(hitsForward, hitsBackward, sep);
-            else
-                return null;
+            
+            return CreatePathway(hitsForward, hitsBackward, src, target, sep);
+            
         }
 
         // Go through raycast results (both ways) in order to create the attenuation path
-        protected List<AttenuationZone> CreatePathway(List<RaycastHit> outgoing, List<RaycastHit> incoming, float totalPathLength)
+        protected List<AttenuationZone> CreatePathway(List<RaycastHit> outgoing, List<RaycastHit> incoming, RadioactiveSource src, RadioactiveSink target, float totalPathLength)
         {
             List<AttenuationZone> attens = new List<AttenuationZone>();
             if (RadioactivitySettings.debugRaycasting)
@@ -191,8 +201,11 @@ namespace Radioactivity
                     Part associatedPart = h.collider.GetComponentInParent<Part>();
                     if (RadioactivitySettings.debugRaycasting)
                         Utils.Log("Raycaster: Located 2-way hit! Path through is of L: " + (totalPathLength - h.distance - found.distance).ToString() + " and part is " + associatedPart.ToString());
-                    absorbedLength +=  (totalPathLength - h.distance - found.distance);
-                    attens.Add(new AttenuationZone(totalPathLength - h.distance - found.distance, associatedPart));
+                    if (associatedPart != target.part)
+                    {
+                        absorbedLength += (totalPathLength - h.distance - found.distance);
+                        attens.Add(new AttenuationZone(totalPathLength - h.distance - found.distance, associatedPart));
+                    }
                 }
                 else
                 {
@@ -206,8 +219,8 @@ namespace Radioactivity
             // TODO: Need to add another AttenuationZone to account for the target part. probably take the last hit in the outgoing array to do this (good assumption)
 
             // Add the empty space as a single zone
-            if (totalPathLength - absorbedLength > 0f)
-                attens.Add(new AttenuationZone(totalPathLength - absorbedLength));
+            if (totalPathLength > 0f)
+                attens.Add(new AttenuationZone(totalPathLength));
 
             return attens;
         }

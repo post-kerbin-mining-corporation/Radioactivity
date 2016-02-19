@@ -29,7 +29,7 @@ namespace Radioactivity
     {
       LifetimeRadiation = LifetimeRadiation + amt;
     }
-    public override void OnFixedUpdate()
+    public virtual void FixedUpdate()
     {
       CurrentRadiation = LifetimeRadiation - prevRadiation;
       prevRadiation = LifetimeRadiation;

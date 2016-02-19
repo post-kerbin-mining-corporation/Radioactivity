@@ -105,10 +105,13 @@ namespace Radioactivity
         }
         private void DrawSinkInfo(RadioactiveSink snk)
         {
-            GUILayout.BeginVertical();
-            GUILayout.Label("Sink: " + snk.SinkID);
-            GUILayout.Label("On: " + snk.part.name);
-            GUILayout.EndVertical();
+            if (snk != null)
+            {
+                GUILayout.BeginVertical();
+                GUILayout.Label("Sink: " + snk.SinkID);
+                GUILayout.Label("On: " + snk.part.name);
+                GUILayout.EndVertical();
+            }
         }
         private void DrawLinkInfo(RadiationLink lnk)
         {

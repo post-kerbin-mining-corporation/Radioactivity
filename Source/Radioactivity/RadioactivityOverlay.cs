@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Radioactivity
 {
-  [KSPAddon(KSPAddon.Startup.Flight, false)]
+  [KSPAddon(KSPAddon.Startup.EveryScene, false)]
   public class RadioactivityOverlay:MonoBehaviour
   {
 
@@ -38,7 +38,7 @@ namespace Radioactivity
       lnk.OverlayPath.SetVertexCount(2);
       float w = Mathf.Clamp(lnk.source.CurrentEmission * RadioactivitySettings.overlayRayWidthMult, RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMax);
       lnk.OverlayPath.SetWidth(w, w);
-      lnk.OverlayPath.SetColors(Color.red, new Color(1f, (float)(1d / lnk.fluxEndScale), (float)(1d / lnk.fluxEndScale)));
+      lnk.OverlayPath.SetColors(Color.red, new Color(1f, Mathf.Log10((float)(1d / lnk.fluxEndScale)) / 10f, Mathf.Log10((float)(1d / lnk.fluxEndScale)) / 10f));
       lnk.OverlayPath.useWorldSpace = true;
       lnk.OverlayPath.SetPosition(0, lnk.source.EmitterTransform.position); 
       lnk.OverlayPath.SetPosition(1, lnk.sink.SinkTransform.position);
@@ -78,7 +78,7 @@ namespace Radioactivity
     {
       if (lnk.OverlayPath != null)
       {
-          lnk.OverlayPath.SetColors(Color.red, new Color(1f, (float)(1d / lnk.fluxEndScale), (float)(1d / lnk.fluxEndScale)));
+          lnk.OverlayPath.SetColors(Color.red, new Color(1f, Mathf.Log10((float)(1d / lnk.fluxEndScale)) / 10f, Mathf.Log10((float)(1d / lnk.fluxEndScale)) / 10f));
         lnk.OverlayPath.SetPosition(0, lnk.source.EmitterTransform.position);
         lnk.OverlayPath.SetPosition(1, lnk.sink.SinkTransform.position);
         float w = Mathf.Clamp(lnk.source.CurrentEmission *RadioactivitySettings.overlayRayWidthMult, RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMax);
