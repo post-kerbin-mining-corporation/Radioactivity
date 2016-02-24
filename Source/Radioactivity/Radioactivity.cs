@@ -247,7 +247,13 @@ namespace Radioactivity
         }
        
     }
-
+    public void ForceRecomputeNetwork()
+    {
+        foreach (RadiationLink lnk in AllLinks)
+        {
+            lnk.ForceRecompute();
+        }
+    }
     protected void TryAddSource(RadioactiveSource src)
     {
         bool exists = false;

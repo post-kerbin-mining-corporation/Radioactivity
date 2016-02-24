@@ -14,15 +14,18 @@ namespace Radioactivity
     public static float GetDisplacement(Part p)
     {
       Vector3 size = p.DragCubes.WeightedSize;
+      
       float[] areas = new float[6];
       areas = p.DragCubes.WeightedArea;
+      
       float xPortion = areas[0] / (size.y * size.z);
-      float yPortion = areas[2] / (size.z * size.x);
-      float zPortion = areas[1] / (size.y * size.x);
+      float yPortion = areas[1] / (size.z * size.x);
+      float zPortion = areas[2] / (size.y * size.x);
       float xzPortion = (Math.Min(xPortion, zPortion) + 2f * (xPortion * zPortion)) * (1f / 3f);
-        return 1f;
-      //return cube * xzPortion * yPortion;
+      float cube = size.x * size.y * size.z;
+      return cube;// *xzPortion * yPortion;
     }
+
     public static float GetDensity(Part p)
     {
         return p.mass / GetDisplacement(p);

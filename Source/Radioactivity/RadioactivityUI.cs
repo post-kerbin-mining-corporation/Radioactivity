@@ -11,13 +11,23 @@ namespace Radioactivity
     {
 
         private bool uiShown = false;
-        private GUIStyle uiStyle;
-        private Rect windowPos = new Rect(0, 0, 480, 480);
+        private bool initStyles = false;
+        private GUIStyle entryStyle;
+        private GUIStyle windowStyle;
+        private Rect windowPos = new Rect(0, 0, 600, 480);
+        private Rect linkWindowPos = new Rect(200, 0, 480, 200);
         private RadiationLink currentDrawnLink = null;
         // Stock toolbar button
         private static ApplicationLauncherButton stockToolbarButton = null;
 
-        
+        private void InitStyles()
+        {
+            entryStyle = new GUIStyle(HighLogic.Skin.textArea);
+            entryStyle.active = entryStyle.hover = entryStyle.normal;
+            windowStyle = new GUIStyle(HighLogic.Skin.window);
+            initStyles = true;
+            
+        }
         public void Awake()
         {
             Utils.Log("UI: Awake");
@@ -28,7 +38,7 @@ namespace Radioactivity
         public void Start()
         {
             Utils.Log("UI: Start");
-            uiStyle = new GUIStyle(HighLogic.Skin.window);
+            
             try
             {
                 RenderingManager.RemoveFromPostDrawQueue(0, OnUIDraw);
@@ -46,24 +56,31 @@ namespace Radioactivity
 
         public void OnUIDraw()
         {
+            if (!initStyles)
+                InitStyles();
             if (uiShown)
             {
-                windowPos= GUILayout.Window(947695, windowPos, DrawWindow, "Radioactivity", uiStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
-                
-
+                windowPos= GUILayout.Window(947695, windowPos, DrawWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+                if (currentDrawnLink != null)
+                    linkWindowPos = GUILayout.Window(947696, linkWindowPos, DrawLinkWindow, "Path Details", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
             }
         }
 
         private void DrawWindow(int windowID)
         {
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Hide all raypaths"))
+            if (GUILayout.Button("Hide Overlay"))
                 Radioactivity.Instance.HideAllOverlays();
-            if (GUILayout.Button("Show all raypaths"))
+            GUILayout.Space(40f);
+            if (GUILayout.Button("Show Overlay"))
                 Radioactivity.Instance.ShowAllOverlays();
             GUILayout.EndHorizontal();
 
+            if (GUILayout.Button("Force Recalculate"))
+                Radioactivity.Instance.ForceRecomputeNetwork();
+
             GUILayout.BeginHorizontal();
+            
 
             GUILayout.BeginVertical();
             GUILayout.Label("Source List: Count = " + Radioactivity.Instance.AllSources.Count.ToString());
@@ -90,41 +107,66 @@ namespace Radioactivity
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
-            if (currentDrawnLink != null)
-                DrawPathDetails();
-            
+            GUI.DragWindow();
         }
 
         private void DrawSourceInfo(RadioactiveSource src)
         {
-            GUILayout.BeginVertical();
-            GUILayout.Label("Source: " + src.SourceID);
-            GUILayout.Label("On: " + src.part.name);
-            GUILayout.Label("Emitting at: " + src.CurrentEmission.ToString());
-            GUILayout.EndVertical();
+            if (src != null)
+            {
+                GUILayout.BeginHorizontal(entryStyle);
+                GUILayout.BeginVertical();
+                GUILayout.Label("Emitter ID: " + src.SourceID);
+                GUILayout.Label("On Part: " + src.part.name);
+                GUILayout.EndVertical();
+                GUILayout.Label("Strength: " + src.CurrentEmission.ToString());
+                GUILayout.EndHorizontal();
+            }
         }
         private void DrawSinkInfo(RadioactiveSink snk)
         {
             if (snk != null)
             {
+                GUILayout.BeginHorizontal(entryStyle);
                 GUILayout.BeginVertical();
                 GUILayout.Label("Sink: " + snk.SinkID);
                 GUILayout.Label("On: " + snk.part.name);
                 GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
             }
         }
         private void DrawLinkInfo(RadiationLink lnk)
         {
+            GUILayout.BeginHorizontal(entryStyle);
             GUILayout.BeginVertical();
-            GUILayout.Label("Connectivity: " + lnk.source.SourceID  + " to " + lnk.sink.SinkID);
-            GUILayout.Label("Final Intensity: " + lnk.fluxEndScale.ToString());
-            GUILayout.Label("Zone Count: " + lnk.ZoneCount.ToString());
-            GUILayout.Label("Occluder Count: " + lnk.OccluderCount.ToString());
-            GUILayout.Label("Rendered: " + lnk.overlayShown.ToString());
-            if (GUILayout.Button("Path Details"))
-                currentDrawnLink = lnk;
+            GUILayout.Label(lnk.source.SourceID  + " to " + lnk.sink.SinkID);
+            GUILayout.Label("End intensity: " + lnk.fluxEndScale.ToString());
             GUILayout.EndVertical();
+            GUILayout.BeginVertical();
+            GUILayout.Label("Zones: " + lnk.ZoneCount.ToString());
+            GUILayout.Label("Occluders: " + lnk.OccluderCount.ToString());
+            if (GUILayout.Button("Path Details"))
+            {
+                if (currentDrawnLink != null)
+                {
+                    currentDrawnLink = null;
+                } else
+                {
+                    Rect x = GUILayoutUtility.GetLastRect();
+                    linkWindowPos.y = x.y + windowPos.y;
+                    currentDrawnLink = lnk;
+                }
+            }
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
         }
+
+        private void DrawLinkWindow(int windowID)
+        {
+                DrawPathDetails();
+        }
+
+
         private void DrawPathDetails()
         {
             GUILayout.Label("Attenuation Path Details");
@@ -135,7 +177,7 @@ namespace Radioactivity
             int n = 1;
             foreach (AttenuationZone z in currentDrawnLink.Path)
             {
-                GUILayout.Label(n.ToString() + ". " + z.ToString());
+                GUILayout.Label(n.ToString() + ". " + z.ToString(),entryStyle);
                 n++;
             }
             GUILayout.EndVertical();

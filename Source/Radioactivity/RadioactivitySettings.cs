@@ -21,16 +21,16 @@ namespace Radioactivity
     public static float maximumPositionDelta = 0.5f;
 
     // Part properties
-    // Default value for the linear attenuation coefficient for parts, in cm-1
-    public static float defaultPartAttenuationCoefficient = 0.325f;
+    // Default value for the linear attenuation coefficient for parts, in cm2/g
+    public static float defaultPartAttenuationCoefficient = 1.5f;
     // Default density for a part
     public static float defaultDensity = 1f;
 
     public static int overlayRayLayer = 0;
     public static float overlayRayWidthMult = 0.005f;
-    public static float overlayRayWidthMin = 0.025f;
+    public static float overlayRayWidthMin = 0.05f;
     public static float overlayRayWidthMax = 0.5f;
-    public static string overlayRayMaterial = "Particles/Additive";
+    public static string overlayRayMaterial = "GUI/Text Shader";
 
     // do we simulate these?
     public static bool simulatePointRadiation = true;
