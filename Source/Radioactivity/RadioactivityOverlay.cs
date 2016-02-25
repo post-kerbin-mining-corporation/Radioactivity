@@ -39,12 +39,11 @@ namespace Radioactivity
     protected void SetupRenderer(RadiationLink lnk)
     {
       lnk.GO = new GameObject("RadioactiveLinkRendererRoot");
-      lnk.GO.transform.parent = lnk.source.vessel.vesselTransform;
+      if (HighLogic.LoadedSceneIsFlight)
+        lnk.GO.transform.parent = lnk.source.vessel.vesselTransform;
       foreach (AttenuationZone zn in lnk.Path)
-      {
-          
+      {  
             CreateZoneLineRenderer(lnk, zn);
-          
       }
       if (RadioactivitySettings.debugOverlay)
         Utils.Log("Overlay: Showing link between " + lnk.source.SourceID + " and "+ lnk.sink.SinkID+ " for render");
@@ -53,7 +52,7 @@ namespace Radioactivity
     {
         /// Create the components
         LineRenderer lr = CreateBasicRenderer(lnk.GO.transform);
-        float valIn = -(float)Math.Log10(zn.attenuationIn)/10f;
+        float valIn = -(float)Math.Log10(zn.attenuationOut)/10f;
         float valOut = -(float)Math.Log10(zn.attenuationOut) / 10f;
         lr.SetColors(grad.Evaluate(valIn),grad.Evaluate(valOut));
 

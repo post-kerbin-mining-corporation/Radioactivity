@@ -57,17 +57,20 @@ namespace Radioactivity
             }
         }
 
+        protected bool needsGeometricRecalculation = true;
+        protected bool needsSimpleRecalculation = true;
         protected Vector3 relPos;
+        protected float connectionMass = 0f;
         protected List<LineRenderer> overlayPaths;
         protected GameObject go;
-        protected List<AttenuationZone> attenuationPath;
+        protected List<AttenuationZone> attenuationPath = new List<AttenuationZone>();
 
         public RadiationLink(RadioactiveSource src, RadioactiveSink snk)
         {
             fluxStart = RadioactivitySettings.defaultRaycastFluxStart;
             source = src;
             sink = snk;
-            ComputeConnection(src, snk);
+            //ComputeConnection(src, snk);
         }
 
         // Hide or show the overlay for this link
@@ -98,31 +101,61 @@ namespace Radioactivity
         // Simulate the link, that is, compute the flux from the source and add it to the sink
         public void Simulate(float timeScale)
         {
+            TestRecompute();
+            if (needsGeometricRecalculation)
+            {
+                RadioactivityOverlay.Instance.Update(this);
+                ComputeGeometry(this.source, this.sink);
+            }
+            if (needsSimpleRecalculation)
+            {
+                RadioactivityOverlay.Instance.Update(this);
+                fluxEndScale = AttenuateFlux(Path, 1.0f);
+            }
+
             sink.AddRadiation((float)((double)source.CurrentEmission * timeScale * fluxEndScale));
         }
 
         // Tests to see whether the LOS needs to be recomputed
-        public void Recompute()
+        public void TestRecompute()
         {
-            // LOS needs to be recomputed if we're off by more than maximumPositionDelta.
-            // TODO: Needs to be recomputed if the total mass changes (propellant loss)
-            // TODO: BUT that is more complicated!!
+            
             if (source != null && sink != null && source.EmitterTransform != null && sink.SinkTransform != null)
             {
+                // LOS needs to be recomputed if we're off by more than maximumPositionDelta.
                 Vector3 curRelPos = Utils.getRelativePosition(source.EmitterTransform, sink.SinkTransform.position);
                 if (((curRelPos - relPos).sqrMagnitude > RadioactivitySettings.maximumPositionDelta * RadioactivitySettings.maximumPositionDelta))
                 {
-                    ComputeConnection(source, sink);
-                    RadioactivityOverlay.Instance.Update(this);
+                    Utils.Log("Raycaster: Recalculating due to position differential");
+                    needsGeometricRecalculation = true;
+                }
+                // LOS needs to be recomputed if mass is very different
+                float curMass = GetConnectionMass();
+                if (Mathf.Abs(connectionMass - curMass) > RadioactivitySettings.maximumMassDelta)
+                {
+                    Utils.Log("Raycaster: Recalculating due to mass differential of " + Mathf.Abs(connectionMass - curMass).ToString());
+                    needsSimpleRecalculation = true;
                 }
             }
         }
-        public void ForceRecompute()
+        protected float GetConnectionMass()
         {
-            ComputeConnection(source, sink);
+            float m = 0f;
+            foreach (AttenuationZone z in Path)
+            {
+                
+                if (z.attenuationType == AttenuationType.ParameterizedPart || z.attenuationType == AttenuationType.Part)
+                {
+                    if (z.associatedPart != null && z.associatedPart.Rigidbody != null)
+                    {
+                        m += z.associatedPart.Rigidbody.mass;
+                    }
+                }
+            }
+            return m;
         }
         // Compute the ray path between the source and sink
-        protected void ComputeConnection(RadioactiveSource src, RadioactiveSink target)
+        public void ComputeGeometry(RadioactiveSource src, RadioactiveSink target)
         {
             if (RadioactivitySettings.debugNetwork)
                 Utils.Log("Creating connection from " + src.part.name + " to " + target.part.name);
@@ -132,9 +165,11 @@ namespace Radioactivity
 
             // Gets parts between source and sink
             attenuationPath = GetLineOfSight(src, target);
+
             // Attenuate the ray between these
-            
             fluxEndScale = AttenuateFlux(attenuationPath, fluxStart);
+
+            needsGeometricRecalculation = false;
         }
         
 
@@ -145,10 +180,11 @@ namespace Radioactivity
             double curFlux = strength;
             foreach (AttenuationZone z in rayPath)
             {
-                
-                 curFlux = z.Attenuate(curFlux);
-                
+                 curFlux = z.Attenuate(curFlux);   
             }
+            // Get the total mass in the connection
+            connectionMass = GetConnectionMass();
+            needsSimpleRecalculation = false;
             return curFlux;
         }
 

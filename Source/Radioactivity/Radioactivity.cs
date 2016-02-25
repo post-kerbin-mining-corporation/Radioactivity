@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,6 @@ namespace Radioactivity
   [KSPAddon(KSPAddon.Startup.MainMenu, false)]
   public class RadioactivityStartup:MonoBehaviour
   {
-
       private List<Part> evaParts;
       private bool evaModified = false;
       public void Awake()
@@ -101,6 +101,7 @@ namespace Radioactivity
       public List<RadiationLink> AllLinks
       { get { return allLinks; } }
 
+      bool simulationReady = false;
     List<RadioactiveSource> allRadSources = new List<RadioactiveSource>();
     List<RadioactiveSink> allRadSinks = new List<RadioactiveSink>();
     List<RadiationLink> allLinks = new List<RadiationLink>();
@@ -219,6 +220,14 @@ namespace Radioactivity
         {
             GameEvents.onEditorShipModified.Remove(new EventData<ShipConstruct>.OnEvent(onEditorVesselModified));
         }
+        StartCoroutine(WaitForInit(5));
+    }
+
+    protected IEnumerator WaitForInit(int frames)
+    {
+        yield return frames;
+        simulationReady = true;
+        Utils.Log("Simulator: Ready");
     }
 
     public void onEditorVesselModified(ShipConstruct ship)
@@ -251,7 +260,7 @@ namespace Radioactivity
     {
         foreach (RadiationLink lnk in AllLinks)
         {
-            lnk.ForceRecompute();
+            
         }
     }
     protected void TryAddSource(RadioactiveSource src)
@@ -342,7 +351,7 @@ namespace Radioactivity
 
     public void FixedUpdate()
     {
-        if (HighLogic.LoadedSceneIsFlight)
+        if (simulationReady)
         {
             Simulate();
         }
@@ -369,8 +378,7 @@ namespace Radioactivity
     {
       foreach (RadiationLink link in allLinks)
         {
-          // recompute pathways if needed
-          link.Recompute();
+    
           // Simulate the radiation based on precomputed pathways
           link.Simulate(TimeWarp.fixedDeltaTime);
         }

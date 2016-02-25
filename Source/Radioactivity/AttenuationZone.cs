@@ -9,7 +9,7 @@ namespace Radioactivity
     // Represents an attenuation zone, where radiation is attenuated by passing through it
     public class AttenuationZone
     {
-        public AttenuationType attenuationType;
+        public AttenuationType attenuationType = AttenuationType.Empty;
         public Part associatedPart;
         public ModuleRadiationParameters parameters;
         public float dist1 = 0f;

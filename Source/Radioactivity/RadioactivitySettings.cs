@@ -19,6 +19,8 @@ namespace Radioactivity
     public static float defaultRaycastFluxStart = 1.0f;
     // How far the geometry between two radiation link endpoints can change before we need to recalculate it
     public static float maximumPositionDelta = 0.5f;
+      // How much the mass through a raypath can change before we need to recalculate it
+    public static float maximumMassDelta = 0.05f;
 
     // Part properties
     // Default value for the linear attenuation coefficient for parts, in cm2/g
