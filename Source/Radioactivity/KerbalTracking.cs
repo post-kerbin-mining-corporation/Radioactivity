@@ -5,22 +5,37 @@ using System.Text;
 
 namespace Radioactivity
 {
-    class KerbalTracking
+      [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER, GameScenes.FLIGHT, GameScenes.TRACKSTATION)]
+    public class KerbalTracking: ScenarioModule
     {
+
+          public static KerbalTracking Instance { get; private set; }
+
+          internal KerbalDatabase KerbalDB;
+
+          public override void OnAwake()
+          {
+              Utils.Log("Kerbal Tracking: Init");
+              Instance = this;
+              base.OnAwake();
+
+              KerbalDB = new KerbalDatabase();
+          }
+
+          public override void OnLoad(ConfigNode node)
+          {
+              Utils.Log("Kerbal Tracking: Started Loading");
+              base.OnLoad(node);
+              KerbalDB.Load(node);
+              Utils.Log("Kerbal Tracking: Done Loading");
+          }
+
+          public override void OnSave(ConfigNode node)
+          {
+              Utils.Log("Kerbal Tracking: Started Saving");
+              base.OnSave(node);
+              KerbalDB.Save(node);
+              Utils.Log("Kerbal Tracking: Finished Saving");
+          }
     }
-
-    class RadioactivityKerbal
-    {
-        public const string ConfigNodeName = "RadioactivityKerbal";
-
-        public double LastUpdate;
-        public ProtoCrewMember.RosterStatus Status = ProtoCrewMember.RosterStatus.Available;
-        public ProtoCrewMember.KerbalType Type = ProtoCrewMember.KerbalType.Crew;
-        public Guid VesselId = Guid.Empty;
-        public string VesselName = " ";
-        public uint PartId;  //Probably not required - currently not used.
-        public int SeatIdx;  //Probably not required - currently not used.
-        public string SeatName = string.Empty;  //Probably not required - currently not used.
-    }
-
 }

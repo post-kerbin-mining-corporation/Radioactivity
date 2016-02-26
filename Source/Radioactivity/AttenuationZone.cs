@@ -11,7 +11,7 @@ namespace Radioactivity
     {
         public AttenuationType attenuationType = AttenuationType.Empty;
         public Part associatedPart;
-        public ModuleRadiationParameters parameters;
+        public RadiationParameters parameters;
         public float dist1 = 0f;
         public float dist2 = 0f;
         public float initialD = 1f;
@@ -46,7 +46,7 @@ namespace Radioactivity
             attenuationCoeff = (double)RadioactivitySettings.defaultPartAttenuationCoefficient;
             attenuationType = AttenuationType.Part;
             associatedPart = part;
-            parameters = part.GetComponent<ModuleRadiationParameters>();
+            parameters = part.GetComponent<RadiationParameters>();
             if (parameters != null)
             {
                 attenuationType = AttenuationType.ParameterizedPart;

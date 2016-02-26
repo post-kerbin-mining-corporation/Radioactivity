@@ -10,7 +10,7 @@ namespace Radioactivity
 
   public static class RadioactivitySettings
   {
-    // Raycasting
+    // RAYCAST SETTINGS
     // Maximum distance to raycast for point radiation
     public static float raycastDistance = 2000f;
     // Minimum flux level to propagate along attenuation paths
@@ -22,23 +22,30 @@ namespace Radioactivity
       // How much the mass through a raypath can change before we need to recalculate it
     public static float maximumMassDelta = 0.05f;
 
-    // Part properties
+    // DEFAULT PART SETTINGS
     // Default value for the linear attenuation coefficient for parts, in cm2/g
     public static float defaultPartAttenuationCoefficient = 1.5f;
     // Default density for a part
     public static float defaultDensity = 1f;
 
+      // OVERLAY SETTINGS
     public static int overlayRayLayer = 0;
     public static float overlayRayWidthMult = 0.005f;
     public static float overlayRayWidthMin = 0.05f;
     public static float overlayRayWidthMax = 0.5f;
     public static string overlayRayMaterial = "GUI/Text Shader";
 
+      // SIMULATOR SETTINGS
     // do we simulate these?
     public static bool simulatePointRadiation = true;
     public static bool simulateSolarRadiation = false;
     public static bool simulateCosmicRadiation = false;
 
+      // TRACKING SETTINGS
+    public static string pluginConfigNodeName = "RadioactivityKerbalTracking";
+    public static string kerbalConfigNodeName = "RadioactivityKerbal";
+
+      // DEBUG SETTINGS
       // If on, generates UI debug messages
     public static bool debugUI = true;
       // If on, debug overlays
@@ -51,6 +58,8 @@ namespace Radioactivity
     public static bool debugNetwork = true;
       // If on, generates debug messages when building raycast paths
     public static bool debugRaycasting = true;
+
+     
 
   }
 

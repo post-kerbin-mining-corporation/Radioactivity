@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Radioactivity
 {
 
-  public class ModuleRadiationParameters:PartModule
+  public class RadiationParameters:PartModule
   {
       // Override the part density in t/m3
       [KSPField(isPersistant = true)]
