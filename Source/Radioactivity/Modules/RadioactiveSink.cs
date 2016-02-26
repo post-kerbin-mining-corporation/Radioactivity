@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Radioactivity.Interfaces;
 
 namespace Radioactivity
 {
@@ -41,18 +42,12 @@ namespace Radioactivity
 
     private Transform sinkTransform;
     private bool registered = false;
-    private List<GenericRadiationAbsorber> associatedAbsorbers = new List<GenericRadiationAbsorber>();
-
-    // Registers an abosrber module to read from this sink
-    public void RegisterAbsorber(GenericRadiationAbsorber abs)
-    {
-      associatedAbsorbers.Add(abs);
-    }
+    private List<IRadiationAbsorber> associatedAbsorbers = new List<IRadiationAbsorber>();
 
     // Add radiation to the sink
     public void AddRadiation(float amt)
     {
-      foreach (GenericRadiationAbsorber abs in associatedAbsorbers) {
+      foreach (IRadiationAbsorber abs in associatedAbsorbers) {
         abs.AddRadiation(amt);
       }
     }
@@ -68,6 +63,14 @@ namespace Radioactivity
             Utils.LogWarning("Couldn't find Source transform, using part root transform");
             SinkTransform = part.transform;
         }
+
+        List<IRadiationAbsorber> absorbers = part.FindModulesImplementing<IRadiationAbsorber>();
+        foreach (IRadiationAbsorber abs in absorbers)
+        {
+            if (abs.GetSinkName() == SinkID)
+                associatedAbsorbers.Add(abs);
+        }
+
         if (HighLogic.LoadedSceneIsFlight && !registered)
         {
             Radioactivity.Instance.RegisterSink(this);

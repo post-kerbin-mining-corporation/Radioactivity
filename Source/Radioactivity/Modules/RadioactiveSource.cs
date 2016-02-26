@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Radioactivity.Interfaces;
 
 namespace Radioactivity
 {
@@ -52,15 +53,8 @@ namespace Radioactivity
       private float curEmission = 0f;
       private bool registered = false;
       private Transform emitterTransform;
-      private List<GenericRadiationEmitter> associatedEmitters = new List<GenericRadiationEmitter>();
+      private List<IRadiationEmitter> associatedEmitters = new List<IRadiationEmitter>();
 
-      // Registers an emitter module to emit from this ource
-      public void RegisterEmitter(GenericRadiationEmitter emit)
-      {
-        if (associatedEmitters == null)
-          associatedEmitters = new List<GenericRadiationEmitter>();
-        associatedEmitters.Add(emit);
-      }
       
       public override void OnStart(PartModule.StartState state)
       {
@@ -72,8 +66,13 @@ namespace Radioactivity
               Utils.LogWarning("Couldn't find Emitter transform, using part root transform");
               EmitterTransform = part.transform;
           }
-          
-        
+
+          List<IRadiationEmitter> emitters = part.FindModulesImplementing<IRadiationEmitter>();
+          foreach (IRadiationEmitter emit in emitters)
+          {
+              if (emit.GetSourceName() == SourceID)
+                  associatedEmitters.Add(emit);
+          }
 
           if (HighLogic.LoadedSceneIsFlight && !registered)
           {
@@ -102,14 +101,15 @@ namespace Radioactivity
       {
         float emitSum = 0f;
         bool isAllOff = false;
-        foreach (GenericRadiationEmitter emit in associatedEmitters)
+        foreach (IRadiationEmitter emit in associatedEmitters)
         {
-          isAllOff = emit.Emitting;
-          emitSum = emitSum + emit.CurrentEmission;
+            isAllOff = emit.IsEmitting();
+            emitSum = emitSum + emit.GetEmission();
         }
         Emitting = isAllOff;
         CurrentEmission = emitSum;
       }
+
 
 
 

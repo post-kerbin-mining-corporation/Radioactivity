@@ -48,17 +48,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttenuationZone.cs" />
-    <Compile Include="GenericRadiationAbsorber.cs" />
-    <Compile Include="GenericRadiationEmitter.cs" />
-    <Compile Include="ModuleRadiationParameters.cs" />
+    <Compile Include="Interfaces\IRadiationAbsorber.cs" />
+    <Compile Include="Interfaces\IRadiationEmitter.cs" />
+    <Compile Include="KerbalTracking.cs" />
+    <Compile Include="Modules\ModuleRadiationParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiationLink.cs" />
-    <Compile Include="RadiationShieldedCrewContainer.cs" />
-    <Compile Include="RadiationTracker.cs" />
-    <Compile Include="RadioactiveEngine.cs" />
-    <Compile Include="RadioactiveResource.cs" />
-    <Compile Include="RadioactiveSink.cs" />
-    <Compile Include="RadioactiveSource.cs" />
+    <Compile Include="Modules\RadiationShieldedCrewContainer.cs" />
+    <Compile Include="Modules\RadiationTracker.cs" />
+    <Compile Include="Modules\RadioactiveEngine.cs" />
+    <Compile Include="Modules\RadioactiveResource.cs" />
+    <Compile Include="Modules\RadioactiveSink.cs" />
+    <Compile Include="Modules\RadioactiveSource.cs" />
     <Compile Include="Radioactivity.cs" />
     <Compile Include="RadioactivitySettings.cs" />
     <Compile Include="RadioactivityOverlay.cs" />

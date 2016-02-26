@@ -4,21 +4,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Radioactivity.Interfaces;
 
 namespace Radioactivity
 {
 
-  public class RadioactiveResource:GenericRadiationEmitter
+  public class RadioactiveResource : PartModule, IRadiationEmitter
   {
+      // RadioactiveSource to use for emission
+      [KSPField(isPersistant = true)]
+      public string SourceID = "";
+
       // The resource that will emit the radiation
       [KSPField(isPersistant = true)]
       public string ResourceName = "";
 
-      // Amount of emission per unit in MBq
-      // eg 1 kg nuclear waste = 10 TBq
-      // 1 kg uranium = 25 MBq
+      // Amount of emission
       [KSPField(isPersistant = true)]
       public float EmissionPerUnit = 1f;
+
+      // Interface
+      public bool IsEmitting()
+      {
+          return true;
+      }
+      public float GetEmission()
+      {
+          return currentEmission;
+      }
+      public string GetSourceName()
+      {
+          return SourceID;
+      }
+
+      float currentEmission = 0f;
+      bool emitting = true;
 
       public override void OnStart(PartModule.StartState state)
       {
@@ -28,12 +48,12 @@ namespace Radioactivity
       public override void OnFixedUpdate()
       {
         base.OnFixedUpdate();
-        if (Emitting)
+        if (emitting)
         {
           // Get amount of resource present, multiply per unit, emit
           // TODO: Actually do this
           double curAmount = 10f;
-          CurrentEmission = (float)curAmount * EmissionPerUnit;
+          currentEmission = (float)curAmount * EmissionPerUnit;
         }
       }
   }

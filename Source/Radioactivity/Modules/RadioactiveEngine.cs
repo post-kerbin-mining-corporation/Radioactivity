@@ -4,24 +4,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Radioactivity.Interfaces;
 
 namespace Radioactivity
 {
 
-  public class RadioactiveEngine: GenericRadiationEmitter
+  public class RadioactiveEngine: PartModule, IRadiationEmitter
   {
-    // Engine to link
+      // RadioactiveSource to use for emission
+      [KSPField(isPersistant = true)]
+      public string SourceID = "";
+
+    // Engine ID to link to (only valid using ModuleEnginesFX
     [KSPField(isPersistant = true)]
     public string EngineID = "";
 
-    // Maximum emission at engine maximum
+    // Emission at maximum value
     [KSPField(isPersistant = false)]
     public float EmissionAtMax = 100f;
 
+
+    float currentEmission = 0f;
     protected bool useLegacyEngines = false;
 
     protected ModuleEnginesFX engine;
     protected ModuleEngines engineLegacy;
+
+      // Interface
+    public bool IsEmitting()
+    {
+        return true;
+    }
+    public float GetEmission()
+    {
+        return currentEmission;
+    }
+    public string GetSourceName()
+    {
+        return SourceID;
+    }
+
 
     public override void OnStart(PartModule.StartState state)
     {
@@ -41,7 +63,7 @@ namespace Radioactivity
       if (engineLegacy == null)
         return;
 
-      base.CurrentEmission = engineLegacy.requestedThrottle * EmissionAtMax;
+      currentEmission = engineLegacy.requestedThrottle * EmissionAtMax;
     }
     // Handles emission for engines using ModuleEnginesFX
     protected void HandleEmission()
@@ -49,7 +71,7 @@ namespace Radioactivity
       if (engine == null)
         return;
 
-      base.CurrentEmission = engine.requestedThrottle * EmissionAtMax;
+      currentEmission = engine.requestedThrottle * EmissionAtMax;
     }
 
     protected void SetupEngines()
