@@ -59,7 +59,38 @@ namespace Radioactivity
       // If on, generates debug messages when building raycast paths
     public static bool debugRaycasting = true;
 
-     
+
+    public static void Load(ConfigNode node)
+    {
+       Utils.Log("Settings: Started loading");
+
+       raycastDistance = Utils.GetValue(node, "RaycastDistance", 2000f);
+       fluxCutoff = Utils.GetValue(node, "FluxCutoff",0f);
+       defaultRaycastFluxStart = Utils.GetValue(node, "RaycastFluxStart",1.0f);
+       maximumPositionDelta = Utils.GetValue(node, "RaycastPositionDelta", 0.5f);
+       maximumMassDelta = Utils.GetValue(node, "RaycastMassDelta", 0.05f);
+       defaultPartAttenuationCoefficient = Utils.GetValue(node, "DefaultMassAttenuationCoefficient", 1.5f);
+       defaultDensity = Utils.GetValue(node, "DefaultDensity", 0.5f);
+
+       overlayRayWidthMult = Utils.GetValue(node, "OverlayRayWidthMultiplier", 0.005f);
+       overlayRayWidthMin = Utils.GetValue(node, "OverlayRayMinimumWidth", 0.05f);
+       overlayRayWidthMax = Utils.GetValue(node, "OverlayRayMaximumWidth", 0.5f);
+       overlayRayLayer = Utils.GetValue(node, "OverlayRayLayer", 0);
+       overlayRayMaterial = Utils.GetValue(node, "OverlayRayMaterial", "GUI/Text Shader");
+
+       simulatePointRadiation = Utils.GetValue(node, "EnablePointRadiation", true);
+       simulateCosmicRadiation = Utils.GetValue(node, "EnableCosmicRadiation", false);
+       simulateSolarRadiation = Utils.GetValue(node, "EnableSolarRadiation", false);
+
+       debugUI = Utils.GetValue(node, "DebugUI", true);
+       debugOverlay = Utils.GetValue(node, "DebugOverlay", true);
+       debugNetwork = Utils.GetValue(node, "DebugNetwork", true);
+       debugRaycasting = Utils.GetValue(node, "DebugRaycasting", true);
+       debugSourceSinks = Utils.GetValue(node, "DebugSourcesAndSinks", true);
+       debugModules = Utils.GetValue(node, "DebugModules", true);
+
+        Utils.Log("Settings: Finished loading");
+    }
 
   }
 

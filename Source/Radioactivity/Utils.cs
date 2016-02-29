@@ -40,15 +40,55 @@ namespace Radioactivity
 
         return relativePosition;
     }
-    // Loads the settings
-    public static void LoadSettings()
+    // Node loading
+      // several variants for data types
+    public static string GetValue(ConfigNode node, string nodeID, string defaultValue)
     {
-      ConfigNode[] nodes = GameDatabase.Instance.GetConfigNodes("RADIOACTIVITY_SETTINGS");
-      foreach (var node in nodes)
-      {
-
-      }
-
+        if (node.HasValue(nodeID))
+        {
+            return node.GetValue(nodeID);
+        }
+        return defaultValue;
+    }
+    public static int GetValue(ConfigNode node, string nodeID, int defaultValue)
+    {
+        if (node.HasValue(nodeID))
+        {
+            int val;
+            if (int.TryParse(node.GetValue(nodeID), out val))
+                return val;
+        }
+        return defaultValue;
+    }
+    public static float GetValue(ConfigNode node, string nodeID, float defaultValue)
+    {
+        if (node.HasValue(nodeID))
+        {
+            float val;
+            if (float.TryParse(node.GetValue(nodeID), out val))
+                return val;
+        }
+        return defaultValue;
+    }
+    public static double GetValue(ConfigNode node, string nodeID, double defaultValue)
+    {
+        if (node.HasValue(nodeID))
+        {
+            double val;
+            if (double.TryParse(node.GetValue(nodeID), out val))
+                return val;
+        }
+        return defaultValue;
+    }
+    public static bool GetValue(ConfigNode node, string nodeID, bool defaultValue)
+    {
+        if (node.HasValue(nodeID))
+        {
+            bool val;
+            if ( bool.TryParse(node.GetValue(nodeID), out val))
+                return val;
+        }
+        return defaultValue;
     }
 
     public static void Log(string str)

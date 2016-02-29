@@ -20,7 +20,7 @@ namespace Radioactivity
       }
     public void Start()
     {
-      Utils.LoadSettings();
+     
       
     }
 

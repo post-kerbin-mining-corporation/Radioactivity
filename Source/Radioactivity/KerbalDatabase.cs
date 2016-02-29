@@ -63,7 +63,7 @@ namespace Radioactivity
     {
         public double LastUpdate;
         public ProtoCrewMember.RosterStatus Status = ProtoCrewMember.RosterStatus.Available;
-        public ProtoCrewMember.KerbalType Type = ProtoCrewMember.KerbalType.Crew;
+        public ProtoCrewMember.KerbalType CrewType = ProtoCrewMember.KerbalType.Crew;
         public Guid VesselId = Guid.Empty;
         public string VesselName = " ";
         public uint PartId;  //Probably not required - currently not used.
@@ -77,18 +77,23 @@ namespace Radioactivity
         public bool IsNew { get; set; }
         public string Name;
 
-        public RadioactivityKerbal()
+        public RadioactivityKerbal(string name)
         {
-            
+            Name = name;
         }
 
         public void Irradiate(float amt)
         {
         }
 
-        public static RadioactivityKerbal Load(ConfigNode node, string name)
+        public static RadioactivityKerbal Load(ConfigNode config, string name)
         {
-            return null;
+            RadioactivityKerbal newKerbal = new RadioactivityKerbal(name);
+            //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
+            newKerbal.TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
+            newKerbal.CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
+
+            return newKerbal;
         }
 
         public ConfigNode Save(ConfigNode config)
@@ -97,7 +102,7 @@ namespace Radioactivity
             config.AddValue("lastUpdate", LastUpdate);
             config.AddValue("Name", Name);
             config.AddValue("Status", Status);
-            config.AddValue("Type", Type);
+            config.AddValue("Type", CrewType);
             config.AddValue("TotalExposure", TotalExposure);
             config.AddValue("CurrentExposure", CurrentExposure);
             return node;

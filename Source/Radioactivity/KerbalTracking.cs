@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Radioactivity
 {
-      [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER, GameScenes.FLIGHT, GameScenes.TRACKSTATION)]
+    [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER, GameScenes.FLIGHT, GameScenes.TRACKSTATION)]
     public class KerbalTracking: ScenarioModule
     {
 

@@ -50,8 +50,9 @@
     <Compile Include="AttenuationZone.cs" />
     <Compile Include="Interfaces\IRadiationAbsorber.cs" />
     <Compile Include="Interfaces\IRadiationEmitter.cs" />
+    <Compile Include="KerbalDatabase.cs" />
     <Compile Include="KerbalTracking.cs" />
-    <Compile Include="Modules\ModuleRadiationParameters.cs" />
+    <Compile Include="Modules\RadiationParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiationLink.cs" />
     <Compile Include="Modules\RadiationShieldedCrewContainer.cs" />
