@@ -27,6 +27,7 @@ namespace Radioactivity
               Utils.Log("Kerbal Tracking: Started Loading");
               base.OnLoad(node);
               KerbalDB.Load(node);
+              RadioactivitySettings.Load();
               Utils.Log("Kerbal Tracking: Done Loading");
           }
 

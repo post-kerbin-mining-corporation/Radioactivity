@@ -60,35 +60,45 @@ namespace Radioactivity
     public static bool debugRaycasting = true;
 
 
-    public static void Load(ConfigNode node)
+    public static void Load()
     {
+        ConfigNode settingsNode;
+        
        Utils.Log("Settings: Started loading");
+       if (GameDatabase.Instance.ExistsConfigNode("Radioactivity/RADIOACTIVITYSETTINGS"))
+       {
+           Utils.Log("Settings: Located settings file");
+           settingsNode = GameDatabase.Instance.GetConfigNode("Radioactivity/RADIOACTIVITYSETTINGS");
 
-       raycastDistance = Utils.GetValue(node, "RaycastDistance", 2000f);
-       fluxCutoff = Utils.GetValue(node, "FluxCutoff",0f);
-       defaultRaycastFluxStart = Utils.GetValue(node, "RaycastFluxStart",1.0f);
-       maximumPositionDelta = Utils.GetValue(node, "RaycastPositionDelta", 0.5f);
-       maximumMassDelta = Utils.GetValue(node, "RaycastMassDelta", 0.05f);
-       defaultPartAttenuationCoefficient = Utils.GetValue(node, "DefaultMassAttenuationCoefficient", 1.5f);
-       defaultDensity = Utils.GetValue(node, "DefaultDensity", 0.5f);
+           raycastDistance = Utils.GetValue(settingsNode, "RaycastDistance", 2000f);
+           fluxCutoff = Utils.GetValue(settingsNode, "FluxCutoff", 0f);
+           defaultRaycastFluxStart = Utils.GetValue(settingsNode, "RaycastFluxStart", 1.0f);
+           maximumPositionDelta = Utils.GetValue(settingsNode, "RaycastPositionDelta", 0.5f);
+           maximumMassDelta = Utils.GetValue(settingsNode, "RaycastMassDelta", 0.05f);
+           defaultPartAttenuationCoefficient = Utils.GetValue(settingsNode, "DefaultMassAttenuationCoefficient", 1.5f);
+           defaultDensity = Utils.GetValue(settingsNode, "DefaultDensity", 0.5f);
 
-       overlayRayWidthMult = Utils.GetValue(node, "OverlayRayWidthMultiplier", 0.005f);
-       overlayRayWidthMin = Utils.GetValue(node, "OverlayRayMinimumWidth", 0.05f);
-       overlayRayWidthMax = Utils.GetValue(node, "OverlayRayMaximumWidth", 0.5f);
-       overlayRayLayer = Utils.GetValue(node, "OverlayRayLayer", 0);
-       overlayRayMaterial = Utils.GetValue(node, "OverlayRayMaterial", "GUI/Text Shader");
+           overlayRayWidthMult = Utils.GetValue(settingsNode, "OverlayRayWidthMultiplier", 0.005f);
+           overlayRayWidthMin = Utils.GetValue(settingsNode, "OverlayRayMinimumWidth", 0.05f);
+           overlayRayWidthMax = Utils.GetValue(settingsNode, "OverlayRayMaximumWidth", 0.5f);
+           overlayRayLayer = Utils.GetValue(settingsNode, "OverlayRayLayer", 0);
+           overlayRayMaterial = Utils.GetValue(settingsNode, "OverlayRayMaterial", "GUI/Text Shader");
 
-       simulatePointRadiation = Utils.GetValue(node, "EnablePointRadiation", true);
-       simulateCosmicRadiation = Utils.GetValue(node, "EnableCosmicRadiation", false);
-       simulateSolarRadiation = Utils.GetValue(node, "EnableSolarRadiation", false);
+           simulatePointRadiation = Utils.GetValue(settingsNode, "EnablePointRadiation", true);
+           simulateCosmicRadiation = Utils.GetValue(settingsNode, "EnableCosmicRadiation", false);
+           simulateSolarRadiation = Utils.GetValue(settingsNode, "EnableSolarRadiation", false);
 
-       debugUI = Utils.GetValue(node, "DebugUI", true);
-       debugOverlay = Utils.GetValue(node, "DebugOverlay", true);
-       debugNetwork = Utils.GetValue(node, "DebugNetwork", true);
-       debugRaycasting = Utils.GetValue(node, "DebugRaycasting", true);
-       debugSourceSinks = Utils.GetValue(node, "DebugSourcesAndSinks", true);
-       debugModules = Utils.GetValue(node, "DebugModules", true);
-
+           debugUI = Utils.GetValue(settingsNode, "DebugUI", true);
+           debugOverlay = Utils.GetValue(settingsNode, "DebugOverlay", true);
+           debugNetwork = Utils.GetValue(settingsNode, "DebugNetwork", true);
+           debugRaycasting = Utils.GetValue(settingsNode, "DebugRaycasting", true);
+           debugSourceSinks = Utils.GetValue(settingsNode, "DebugSourcesAndSinks", true);
+           debugModules = Utils.GetValue(settingsNode, "DebugModules", true);
+       }
+       else
+       {
+           Utils.Log("Settings: Couldn't find settings file, using defaults");
+       }
         Utils.Log("Settings: Finished loading");
     }
 
