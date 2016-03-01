@@ -8,7 +8,7 @@ namespace Radioactivity
 {
     internal class KerbalDatabase
     {
-        Dictionary<string, RadioactivityKerbal> Kerbals;
+        internal Dictionary<string, RadioactivityKerbal> Kerbals;
 
         internal KerbalDatabase()
         {

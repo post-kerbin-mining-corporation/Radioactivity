@@ -101,6 +101,11 @@ namespace Radioactivity
       public List<RadiationLink> AllLinks
       { get { return allLinks; } }
 
+      public bool SimulationReady
+      {
+          get { return simulationReady; }
+      }
+
       bool simulationReady = false;
     List<RadioactiveSource> allRadSources = new List<RadioactiveSource>();
     List<RadioactiveSink> allRadSinks = new List<RadioactiveSink>();

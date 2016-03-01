@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Radioactivity.UI;
 
 namespace Radioactivity
 {
@@ -22,7 +23,12 @@ namespace Radioactivity
         private GUIStyle entryStyle;
         private GUIStyle windowStyle;
 
-        private Rect windowPos = new Rect(0, 0, 600, 480);
+        private UIOverlayWindow overlayView;
+
+        System.Random randomizer;
+
+        // obsolete
+        private Rect windowPos = new Rect(0, 0, 200, 480);
         private Rect linkWindowPos = new Rect(200, 0, 480, 200);
         private RadiationLink currentDrawnLink = null;
         // Stock toolbar button
@@ -43,6 +49,7 @@ namespace Radioactivity
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
         }
 
+
         public void Start()
         {
             Utils.Log("UI: Start");
@@ -60,16 +67,26 @@ namespace Radioactivity
             }
             if (ApplicationLauncher.Ready)
                 OnGUIAppLauncherReady();
-        }
 
+            randomizer = new System.Random(335462);
+            overlayView = new UIOverlayWindow(randomizer);
+        }
+        public void Update()
+        {
+            if (overlayShown)
+                overlayView.Update();
+        }
+    
         public void OnUIDraw()
         {
             if (!initStyles)
                 InitStyles();
             if (uiShown)
             {
-                //windowPos= GUILayout.Window(947695, windowPos, DrawWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+                mainWindowPos= GUILayout.Window(947625, mainWindowPos, DrawMainWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
 
+                if (overlayShown)
+                    DrawOverlay();
                 //if (currentDrawnLink != null)
                 //    linkWindowPos = GUILayout.Window(947696, linkWindowPos, DrawLinkWindow, "Path Details", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
             }
@@ -77,10 +94,17 @@ namespace Radioactivity
 
         public void DrawMainWindow(int WindowID)
         {
-
+            GUILayout.BeginVertical();
+            overlayShown = GUILayout.Toggle(overlayShown, "Overlay");
+            GUILayout.Button("Roster");
+            GUILayout.EndVertical();
         }
 
-        public void Draw
+        internal void DrawOverlay()
+        {
+            overlayView.Draw();
+        }
+
 
         // OLD PAST HERE
 

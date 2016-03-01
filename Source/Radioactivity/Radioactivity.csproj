@@ -64,7 +64,11 @@
     <Compile Include="Radioactivity.cs" />
     <Compile Include="RadioactivitySettings.cs" />
     <Compile Include="RadioactivityOverlay.cs" />
-    <Compile Include="RadioactivityUI.cs" />
+    <Compile Include="UI\RadioactivityUI.cs" />
+    <Compile Include="UI\UIOverlayWindow.cs" />
+    <Compile Include="UI\UIRosterWindow.cs" />
+    <Compile Include="UI\UISinkWindow.cs" />
+    <Compile Include="UI\UISourceWindow.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

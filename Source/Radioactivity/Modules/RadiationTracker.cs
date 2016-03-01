@@ -29,6 +29,11 @@ namespace Radioactivity
 
     protected double prevRadiation = 0d;
 
+    public string GetAlias()
+    {
+        return "Tracker";
+    }
+
     public string GetSinkName()
     {
         return AbsorberID;

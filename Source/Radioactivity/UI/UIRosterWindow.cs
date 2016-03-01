@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Radioactivity.UI;
+namespace Radioactivity.UI
 {
   public class UIRosterWindow
   {

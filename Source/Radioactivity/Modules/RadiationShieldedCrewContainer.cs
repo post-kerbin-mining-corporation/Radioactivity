@@ -33,6 +33,10 @@ namespace Radioactivity
 
     protected double prevRadiation = 0d;
 
+    public string GetAlias()
+    {
+        return "Crew";
+    }
     public string GetSinkName()
     {
         return AbsorberID;
@@ -42,25 +46,26 @@ namespace Radioactivity
     public void AddRadiation(float amt)
     {
       LifetimeRadiation = LifetimeRadiation + amt * (1f - RadiationAttenuationFraction);
+      IrradiateCrew(amt);
     }
 
     public void FixedUpdate()
     {
       CurrentRadiationString = String.Format("{0:F2}/s", CurrentRadiation);
       LifetimeRadiationString = String.Format("{0:F2}/s", LifetimeRadiation);
-      IrradiateCrew();
+      
       CurrentRadiation = LifetimeRadiation - prevRadiation;
       prevRadiation = LifetimeRadiation;
     }
     // Distributes radiation to any crew
     // TODO: scale this by kerbal surface area and mass (assume a spherical kerbal)
-    protected void IrradiateCrew()
+    protected void IrradiateCrew(float amt)
     {
       if (this.part.protoModuleCrew.Count > 0)
       {
           foreach (ProtoCrewMember crew in this.part.protoModuleCrew)
           {
-            KerbalTracking.Instance.Irradiate(crew);
+            KerbalTracking.Instance.IrradiateKerbal(crew, (double)amt);
           }
       }
     }

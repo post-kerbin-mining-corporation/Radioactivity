@@ -4,71 +4,98 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Radioactivity.UI;
+namespace Radioactivity.UI
 {
   public class UISinkWindow
   {
 
+      public RadioactiveSink Sink {
+          get { return sink; }
+      }
+
+    bool showWindow = false;
     bool showDetails = false;
     bool showRays = false;
+
+    int windowID;
+      
     Vector3 worldPosition;
     Vector2 screenPosition;
-    Rect windowPostion;
+    Rect windowPosition;
     RadioactiveSink sink;
+
     GUIStyle windowStyle;
     GUIStyle groupStyle;
     GUIStyle textHeaderStyle;
     GUIStyle textDescriptorStyle;
 
-    public UISinkWindow(RadioactiveSink snk)
+    public UISinkWindow(RadioactiveSink snk, System.Random random)
     {
       sink = snk;
+      windowID = random.Next();
       // Set up screen position
-      screenPosition = Camera.main.WorldToScreenPoint(sink.part.Transform.position);
-      windowPostion = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
+      screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
+      windowPosition = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
       GetStyles();
+      Debug.Log("dn");
     }
 
     internal void GetStyles()
     {
       windowStyle = new GUIStyle(HighLogic.Skin.window);
+      groupStyle = new GUIStyle(HighLogic.Skin.textArea);
+      textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
+      textHeaderStyle.alignment = TextAnchor.UpperLeft;
+        textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
+        textDescriptorStyle.alignment = TextAnchor.UpperRight;
     }
 
     public void UpdatePositions()
     {
-      screenPosition = Camera.main.WorldToScreenPoint(sink.part.Transform.position);
-      windowPostion = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
+      screenPosition = Camera.main.WorldToScreenPoint(sink.part.partTransform.position);
+      windowPosition = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
     }
 
     public void Draw()
     {
-      windowPos= GUILayout.Window(947695, windowPos, DrawWindow, sink.part.name, windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+        if (showWindow)
+            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, new GUIContent(sink.part.partName), windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
 
+        DrawButton();
+    }
+    internal void DrawButton()
+    {
+        if (GUI.Button(new Rect(screenPosition.x - 50f, screenPosition.y - 50f, 50f, 50f), ""))
+        {
+            showWindow = !showWindow;
+        }
     }
 
-    internal void DrawWindow()
+    internal void DrawWindow(int WindowID)
     {
       GUILayout.BeginVertical(groupStyle);
       GUILayout.BeginHorizontal();
       GUILayout.Label("Dose at surface", textHeaderStyle);
-      GUILayout.Label(sink.CurrentRadiation, textDescriptorStyle);
+      GUILayout.Label(sink.CurrentRadiation.ToString(), textDescriptorStyle);
       GUILayout.EndHorizontal();
       GUILayout.BeginHorizontal();
       GUILayout.Label("Affected", textHeaderStyle);
       GUILayout.Label(sink.GetAbsorberAliases(),textDescriptorStyle);
       GUILayout.EndHorizontal();
-      GUILayout.EndGroup();
+      GUILayout.EndVertical();
 
       GUILayout.BeginHorizontal();
-      showDetails = GUILayout.Toggle("Details");
-      showRays = GUILayout.Toggle("Rays");
+      showDetails = GUILayout.Toggle(showDetails, "Details");
+      showRays = GUILayout.Toggle(showRays, "Rays");
       GUILayout.EndHorizontal();
+      if (showDetails)
+          DrawDetails();
     }
 
     internal void DrawDetails()
     {
       GUILayout.BeginVertical(groupStyle);
-      sink.DrawSinkUIDetails();
+      
       GUILayout.EndVertical();
     }
   }
