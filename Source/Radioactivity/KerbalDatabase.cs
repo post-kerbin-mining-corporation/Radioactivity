@@ -26,7 +26,6 @@ namespace Radioactivity
             {
                 if (kNode.HasValue("KerbalName"))
                 {
-                    
                     string idx = kNode.GetValue("KerbalName");
                     Utils.Log(string.Format("Kerbal Database: Loading kerbal {0}", idx));
                     RadioactivityKerbal kerbal = RadioactivityKerbal.Load(kNode, idx);
@@ -39,6 +38,7 @@ namespace Radioactivity
         internal void Save(ConfigNode node)
         {
             Utils.Log("Kerbal Database: Saving...");
+
             ConfigNode dbNode;
             bool init = node.HasNode(RadioactivitySettings.pluginConfigNodeName);
             if (init)
@@ -82,8 +82,10 @@ namespace Radioactivity
             Name = name;
         }
 
-        public void Irradiate(float amt)
+        public void Irradiate(double amt)
         {
+          TotalExposure = TotalExposure + amt;
+          CurrentExposure = amt;
         }
 
         public static RadioactivityKerbal Load(ConfigNode config, string name)
@@ -92,7 +94,6 @@ namespace Radioactivity
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
             newKerbal.TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
             newKerbal.CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
-
             return newKerbal;
         }
 
@@ -105,6 +106,7 @@ namespace Radioactivity
             config.AddValue("Type", CrewType);
             config.AddValue("TotalExposure", TotalExposure);
             config.AddValue("CurrentExposure", CurrentExposure);
+            
             return node;
         }
 

@@ -38,5 +38,15 @@ namespace Radioactivity
               KerbalDB.Save(node);
               Utils.Log("Kerbal Tracking: Finished Saving");
           }
+
+          // Irradiates a kerbal
+          public void IrradiateKerbal(ProtoCrewMember crew, double amount)
+          {
+            foreach (RadioactivityKerbal kerbal in KerbalDB)
+            {
+              if (crew = kerbal.Kerbal)
+                kerbal.Irradiate(amount);
+            }
+          }
     }
 }

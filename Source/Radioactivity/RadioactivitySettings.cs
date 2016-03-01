@@ -45,6 +45,26 @@ namespace Radioactivity
     public static string pluginConfigNodeName = "RadioactivityKerbalTracking";
     public static string kerbalConfigNodeName = "RadioactivityKerbal";
 
+    // KERBAL EFFECTS
+    // Enable effects on kerbals
+    public static bool enableKerbalEffects = true;
+    // Enable death of kerbals instead of MIA-ness
+    public static bool enableKerbalDeath = false;
+    // Threshold before inducing radiation sickness (Sv)
+    public static float kerbalSicknessThreshold = 1f;
+    // Threshold before inducing death (Sv)
+    public static float kerbalDeathThreshold = 10f;
+    // Rate at which radiation exposure "heals" when on a mission (Sv/s). Default is about 1 Sv/yr
+    public static double kerbalHealRate = 0.00001157407407;
+    // Rate at which radiation exposure "heals" at the KSC (Sv/s). Default is about 10 Sv/yr
+    public static double kerbalHealRateKSC = 0.0001157407407;
+
+    // NON-KERBAL EFFECTS
+    // Enable degredation of science returns
+    public static bool enableScienceEffects = true;
+    // Enable degredation of probe cores under long radiation exposure
+    public static bool enableProbeEffects = true;
+
       // DEBUG SETTINGS
       // If on, generates UI debug messages
     public static bool debugUI = true;
@@ -63,7 +83,7 @@ namespace Radioactivity
     public static void Load()
     {
         ConfigNode settingsNode;
-        
+
        Utils.Log("Settings: Started loading");
        if (GameDatabase.Instance.ExistsConfigNode("Radioactivity/RADIOACTIVITYSETTINGS"))
        {
@@ -87,6 +107,16 @@ namespace Radioactivity
            simulatePointRadiation = Utils.GetValue(settingsNode, "EnablePointRadiation", true);
            simulateCosmicRadiation = Utils.GetValue(settingsNode, "EnableCosmicRadiation", false);
            simulateSolarRadiation = Utils.GetValue(settingsNode, "EnableSolarRadiation", false);
+
+           enableKerbalEffects = Utils.GetValue(settingsNode, "EnableKerbalEffects", true);
+           enableScienceEffects = Utils.GetValue(settingsNode, "EnableScienceEffects", true);
+           enableProbeEffects = Utils.GetValue(settingsNode, "EnableProbeEffects", true);
+
+           enableKerbalDeath = Utils.GetValue(settingsNode, "EnableKerbalDeath", false);
+           kerbalSicknessThreshold = Utils.GetValue(settingsNode, "RadiationSicknessThreshold", 1f);
+           kerbalDeathThreshold = Utils.GetValue(settingsNode, "RadiationDeathThreshold", 10f);
+           kerbalHealRate = Utils.GetValue(settingsNode, "RadiationHealRate", 0.00001157407407);
+           kerbalHealRateKSC = Utils.GetValue(settingsNode, "RadiationHealRateKSC", 0.0001157407407);
 
            debugUI = Utils.GetValue(settingsNode, "DebugUI", true);
            debugOverlay = Utils.GetValue(settingsNode, "DebugOverlay", true);

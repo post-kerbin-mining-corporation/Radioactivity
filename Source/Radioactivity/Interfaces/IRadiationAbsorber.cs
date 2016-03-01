@@ -13,6 +13,8 @@ namespace Radioactivity.Interfaces
         string GetSinkName();
 
         // Add radiation to a part. Should propagate radiation to kerbals, track it, etc.
-        void AddRadiation(float amt); 
+        void AddRadiation(float amt);
+
+        
     }
 }

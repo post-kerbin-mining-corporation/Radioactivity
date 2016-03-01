@@ -53,11 +53,15 @@ namespace Radioactivity
       prevRadiation = LifetimeRadiation;
     }
     // Distributes radiation to any crew
+    // TODO: scale this by kerbal surface area and mass (assume a spherical kerbal)
     protected void IrradiateCrew()
     {
       if (this.part.protoModuleCrew.Count > 0)
       {
-
+          foreach (ProtoCrewMember crew in this.part.protoModuleCrew)
+          {
+            KerbalTracking.Instance.Irradiate(crew);
+          }
       }
     }
   }
