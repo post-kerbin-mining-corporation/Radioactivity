@@ -8,6 +8,8 @@ namespace Radioactivity.Interfaces
 {
     public interface IRadiationAbsorber
     {
+        // Get the name of the alias of this absorber type in UIs
+        string GetAlias();
 
         // Get the name of the RadioactiveSink on this part to use
         string GetSinkName();
@@ -15,6 +17,6 @@ namespace Radioactivity.Interfaces
         // Add radiation to a part. Should propagate radiation to kerbals, track it, etc.
         void AddRadiation(float amt);
 
-        
+
     }
 }

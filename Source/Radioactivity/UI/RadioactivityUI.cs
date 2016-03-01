@@ -12,8 +12,16 @@ namespace Radioactivity
 
         private bool uiShown = false;
         private bool initStyles = false;
+
+        private bool overlayShown = false;
+        private bool rosterShown = false;
+
+        private Rect mainWindowPos = new Rect(5, 15, 200, 300);
+        private Rect rosterWindowPos = new Rect(210, 15, 350, 450);
+
         private GUIStyle entryStyle;
         private GUIStyle windowStyle;
+
         private Rect windowPos = new Rect(0, 0, 600, 480);
         private Rect linkWindowPos = new Rect(200, 0, 480, 200);
         private RadiationLink currentDrawnLink = null;
@@ -26,7 +34,7 @@ namespace Radioactivity
             entryStyle.active = entryStyle.hover = entryStyle.normal;
             windowStyle = new GUIStyle(HighLogic.Skin.window);
             initStyles = true;
-            
+
         }
         public void Awake()
         {
@@ -38,7 +46,7 @@ namespace Radioactivity
         public void Start()
         {
             Utils.Log("UI: Start");
-            
+
             try
             {
                 RenderingManager.RemoveFromPostDrawQueue(0, OnUIDraw);
@@ -60,11 +68,21 @@ namespace Radioactivity
                 InitStyles();
             if (uiShown)
             {
-                windowPos= GUILayout.Window(947695, windowPos, DrawWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
-                if (currentDrawnLink != null)
-                    linkWindowPos = GUILayout.Window(947696, linkWindowPos, DrawLinkWindow, "Path Details", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+                //windowPos= GUILayout.Window(947695, windowPos, DrawWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+
+                //if (currentDrawnLink != null)
+                //    linkWindowPos = GUILayout.Window(947696, linkWindowPos, DrawLinkWindow, "Path Details", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
             }
         }
+
+        public void DrawMainWindow(int WindowID)
+        {
+
+        }
+
+        public void Draw
+
+        // OLD PAST HERE
 
         private void DrawWindow(int windowID)
         {
@@ -80,7 +98,7 @@ namespace Radioactivity
                 Radioactivity.Instance.ForceRecomputeNetwork();
 
             GUILayout.BeginHorizontal();
-            
+
 
             GUILayout.BeginVertical();
             GUILayout.Label("Source List: Count = " + Radioactivity.Instance.AllSources.Count.ToString());
@@ -172,7 +190,7 @@ namespace Radioactivity
             GUILayout.Label("Attenuation Path Details");
             GUILayout.Label("Connectivity: " + currentDrawnLink.source.SourceID + " to " + currentDrawnLink.sink.SinkID);
             GUILayout.Label("Final Intensity: " + currentDrawnLink.fluxEndScale.ToString());
-            
+
             GUILayout.BeginVertical();
             int n = 1;
             foreach (AttenuationZone z in currentDrawnLink.Path)

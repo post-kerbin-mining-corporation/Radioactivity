@@ -39,7 +39,20 @@ namespace Radioactivity
       get { return sinkTransform;}
       set { sinkTransform = value;}
     }
+    public double CurrentRadiation
+    {
+      get {return currentRadiation;}
+    }
+    public string GetAbsorberAliases()
+    {
+      string aliases = "";
+      foreach (IRadiationAbsorber abs in associatedAbsorbers) {
+        aliases += abs.GetAlias() + "\n";
+      }
+      return aliases;
+    }
 
+    private double currentRadiation;
     private Transform sinkTransform;
     private bool registered = false;
     private List<IRadiationAbsorber> associatedAbsorbers = new List<IRadiationAbsorber>();
@@ -47,11 +60,20 @@ namespace Radioactivity
     // Add radiation to the sink
     public void AddRadiation(float amt)
     {
+      currentRadiation += (double)amt;
       foreach (IRadiationAbsorber abs in associatedAbsorbers) {
         abs.AddRadiation(amt);
       }
     }
 
+    protected void FixedUpdate()
+    {
+      currentRadiation = 0d;
+    }
+    public void DrawUIDetails()
+    {
+      
+    }
 
     public override void OnStart(PartModule.StartState state)
     {

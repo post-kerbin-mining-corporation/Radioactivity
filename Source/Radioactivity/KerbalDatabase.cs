@@ -80,6 +80,8 @@ namespace Radioactivity
         public RadioactivityKerbal(string name)
         {
             Name = name;
+            TotalExposure = 0d;
+            CurrentExposure = 0d;
         }
 
         public void Irradiate(double amt)
@@ -106,7 +108,7 @@ namespace Radioactivity
             config.AddValue("Type", CrewType);
             config.AddValue("TotalExposure", TotalExposure);
             config.AddValue("CurrentExposure", CurrentExposure);
-            
+
             return node;
         }
 
