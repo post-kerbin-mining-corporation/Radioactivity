@@ -24,8 +24,10 @@ namespace Radioactivity
         private GUIStyle windowStyle;
 
         private UIOverlayWindow overlayView;
+        private UIRosterWindow rosterView;
 
         System.Random randomizer;
+        int windowIdentifier =;
 
         // obsolete
         private Rect windowPos = new Rect(0, 0, 200, 480);
@@ -69,24 +71,33 @@ namespace Radioactivity
                 OnGUIAppLauncherReady();
 
             randomizer = new System.Random(335462);
+
+            windowIdentifier = randomizer.Next();
             overlayView = new UIOverlayWindow(randomizer);
+            rosterView = new UIRosterWindow(randomizer);
         }
         public void Update()
         {
             if (overlayShown)
                 overlayView.Update();
+            if (rosterShown)
+              rosterView.Update();
         }
-    
+
         public void OnUIDraw()
         {
             if (!initStyles)
                 InitStyles();
             if (uiShown)
             {
-                mainWindowPos= GUILayout.Window(947625, mainWindowPos, DrawMainWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+                mainWindowPos= GUILayout.Window(windowIdentifier, mainWindowPos, DrawMainWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
 
                 if (overlayShown)
                     DrawOverlay();
+
+                if (rosterShown)
+                  DrawRoster();
+
                 //if (currentDrawnLink != null)
                 //    linkWindowPos = GUILayout.Window(947696, linkWindowPos, DrawLinkWindow, "Path Details", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
             }
@@ -96,13 +107,17 @@ namespace Radioactivity
         {
             GUILayout.BeginVertical();
             overlayShown = GUILayout.Toggle(overlayShown, "Overlay");
-            GUILayout.Button("Roster");
+            rosterShown = GUILayout.Toggle(rosterShown, "Roster");
             GUILayout.EndVertical();
         }
 
         internal void DrawOverlay()
         {
             overlayView.Draw();
+        }
+        internal void DrawRoster()
+        {
+            rosterView.Draw();
         }
 
 

@@ -18,7 +18,7 @@ namespace Radioactivity.UI
     bool showRays = false;
 
     int windowID;
-      
+
     Vector3 worldPosition;
     Vector2 screenPosition;
     Rect windowPosition;
@@ -45,9 +45,13 @@ namespace Radioactivity.UI
       windowStyle = new GUIStyle(HighLogic.Skin.window);
       groupStyle = new GUIStyle(HighLogic.Skin.textArea);
       textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
+      textHeaderStyle.color = color.white;
+      textHeaderStyle.stretchWidth = true;
       textHeaderStyle.alignment = TextAnchor.UpperLeft;
         textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
         textDescriptorStyle.alignment = TextAnchor.UpperRight;
+        textDescriptorStyle.stretchWidth = true;
+
     }
 
     public void UpdatePositions()
@@ -59,7 +63,7 @@ namespace Radioactivity.UI
     public void Draw()
     {
         if (showWindow)
-            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, new GUIContent(sink.part.partName), windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, new GUIContent(sink.part.partInfo.title), windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
 
         DrawButton();
     }
@@ -88,6 +92,7 @@ namespace Radioactivity.UI
       showDetails = GUILayout.Toggle(showDetails, "Details");
       showRays = GUILayout.Toggle(showRays, "Rays");
       GUILayout.EndHorizontal();
+
       if (showDetails)
           DrawDetails();
     }
@@ -95,7 +100,7 @@ namespace Radioactivity.UI
     internal void DrawDetails()
     {
       GUILayout.BeginVertical(groupStyle);
-      
+
       GUILayout.EndVertical();
     }
   }

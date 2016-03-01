@@ -10,10 +10,12 @@ namespace Radioactivity.UI
   {
       System.Random random;
       List<UISinkWindow> sinkWindows;
+      List<UISourceWindow> sourceWindows;
 
       public UIOverlayWindow(System.Random randomizer)
       {
           sinkWindows = new List<UISinkWindow>();
+          sourceWindows = new List<UISourceWindow>();
           random = randomizer;
       }
       public void Draw()
@@ -21,6 +23,10 @@ namespace Radioactivity.UI
           foreach (UISinkWindow sinkDraw in sinkWindows)
           {
               sinkDraw.Draw();
+          }
+          foreach (UISourceWindow sourceDraw in sourceWindows)
+          {
+              sourceDraw.Draw();
           }
       }
       public void Update()
@@ -31,17 +37,25 @@ namespace Radioactivity.UI
                {
                    UpdateSinkList();
                }
+               if (sourceWindows.Count != Radioactivity.Instance.AllSources.Count)
+               {
+                   UpdateSourceList();
+               }
 
                foreach (UISinkWindow sinkDraw in sinkWindows)
                {
                    sinkDraw.UpdatePositions();
+               }
+               foreach (UISourceWindow sourceDraw in sourceWindows)
+               {
+                 sourceDraw.UpdatePositions();
                }
            }
         }
 
       void UpdateSinkList()
       {
-          
+
           List<UISinkWindow> toRemove =  new List<UISinkWindow>();
           List<RadioactiveSink> toAdd =  new List<RadioactiveSink>();
           // Check for destroyed sinks
@@ -76,6 +90,36 @@ namespace Radioactivity.UI
 
       void UpdateSourceList()
       {
+        List<UISourceWindow> toRemove =  new List<UISourceWindow>();
+        List<RadioactiveSource> toAdd =  new List<RadioactiveSource>();
+        // Check for destroyed sinks
+        foreach (UISourceWindow sourceDraw in sourceWindows)
+        {
+            if (!Radioactivity.Instance.AllSources.Contains(sourceDraw.Source))
+                toRemove.Add(sourceDraw);
+        }
+        // Check for new sinks
+        foreach (RadioactiveSource src in Radioactivity.Instance.AllSources)
+        {
+            bool found = false;
+            foreach (UISourceWindow sourceDraw in sourceWindows)
+            {
+                if (sourceDraw.Sink == src)
+                    found = true;
+            }
+            if (!found)
+                toAdd.Add(src);
+        }
+
+        foreach (UISourceWindow s in toRemove)
+        {
+            sourceWindows.Remove(s);
+        }
+        // Check for new sinks
+        foreach (RadioactiveSource src in toAdd)
+        {
+            sourceWindows.Add(new UISourceWindow(src, random));
+        }
       }
 
   }
