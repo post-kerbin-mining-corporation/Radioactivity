@@ -17,11 +17,12 @@ namespace Radioactivity
         private bool overlayShown = false;
         private bool rosterShown = false;
 
-        private Rect mainWindowPos = new Rect(5, 15, 200, 300);
+        private Rect mainWindowPos = new Rect(5, 15, 150, 300);
         private Rect rosterWindowPos = new Rect(210, 15, 350, 450);
 
         private GUIStyle entryStyle;
         private GUIStyle windowStyle;
+        private GUIStyle buttonStyle;
 
         private UIOverlayWindow overlayView;
         private UIRosterWindow rosterView;
@@ -41,6 +42,7 @@ namespace Radioactivity
             entryStyle = new GUIStyle(HighLogic.Skin.textArea);
             entryStyle.active = entryStyle.hover = entryStyle.normal;
             windowStyle = new GUIStyle(HighLogic.Skin.window);
+            buttonStyle = new GUIStyle(HighLogic.Skin.button);
             initStyles = true;
 
         }
@@ -97,18 +99,16 @@ namespace Radioactivity
 
                 if (rosterShown)
                   DrawRoster();
-
-                //if (currentDrawnLink != null)
-                //    linkWindowPos = GUILayout.Window(947696, linkWindowPos, DrawLinkWindow, "Path Details", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
             }
         }
 
         public void DrawMainWindow(int WindowID)
         {
             GUILayout.BeginVertical();
-            overlayShown = GUILayout.Toggle(overlayShown, "Overlay");
-            rosterShown = GUILayout.Toggle(rosterShown, "Roster");
+            overlayShown = GUILayout.Toggle(overlayShown, "Overlay", buttonStyle);
+            rosterShown = GUILayout.Toggle(rosterShown, "Roster", buttonStyle);
             GUILayout.EndVertical();
+            GUI.DragWindow();
         }
 
         internal void DrawOverlay()

@@ -13,7 +13,6 @@ namespace Radioactivity.UI
       Vessel, Nearby, Active, All
     }
 
-
     System.Random random;
     int windowIdentifier;
     Rect windowPosition =  new Rect(210, 15, 350, 150);;
@@ -25,7 +24,8 @@ namespace Radioactivity.UI
     GUIStyle windowStyle;
     GUIStyle groupStyle;
     GUIStyle nameStyle;
-
+    GUIStyle labelStyle;
+    GUIStyle valueStyle;
 
     List<RadioactivityKerbal> drawnKerbals = new List<RadioactivityKerbal>();
 
@@ -41,25 +41,54 @@ namespace Radioactivity.UI
       windowStyle = new GUIStyle(HighLogic.Skin.window);
       groupStyle = new GUIStyle(HighLogic.Skin.textArea);
       nameStyle = new GUIStyle(HighLogic.Skin.Label);
+      labelStyle = new GUIStyle(HighLogic.Skin.Label);
+      valueStyle = new GUIStyle(HighLogic.Skin.Label);
     }
 
-    public void Draw()
-    {
-        windowPosition = GUILayout.Window(windowIdentifier, windowPos, DrawWindow, "Radioactivity Roster", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
-    }
+
     public void Update()
      {
        switch (modeFlag)
        {
          case 0:
+          GetKerbalsVessel();
           break;
          case 1:
+          GetKerbalsLocal();
           break;
          case 2:
+         GetKerbalsActive();
           break;
          case 3:
+          GetKerbalsAll();
           break;
        }
+     }
+     // Get kerbals in the vessel
+     internal GetKerbalsVessel()
+     {
+
+     }
+     // Get all kerbals in the physics bubble
+     internal GetKerbalsLocal()
+     {
+
+     }
+     // Get kerbals that are in flight
+     internal GetKerbalsActive()
+     {
+
+     }
+     // Get all kerbals
+     internal GetKerbalsAll()
+     {
+
+     }
+
+
+     public void Draw()
+     {
+         windowPosition = GUILayout.Window(windowIdentifier, windowPos, DrawWindow, "Radioactivity Roster", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
      }
 
      void DrawWindow(int WindowID)
@@ -68,6 +97,7 @@ namespace Radioactivity.UI
         scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Width(350), GUILayout.MinHeight(150));
         DrawKerbalList();
         GUILayout.EndScrollView()
+        GUI.DragWindow();
      }
 
      void DrawModeBar()

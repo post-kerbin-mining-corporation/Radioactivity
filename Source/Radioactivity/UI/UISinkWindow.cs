@@ -28,6 +28,7 @@ namespace Radioactivity.UI
     GUIStyle groupStyle;
     GUIStyle textHeaderStyle;
     GUIStyle textDescriptorStyle;
+    GUIStyle buttonStyle;
 
     public UISinkWindow(RadioactiveSink snk, System.Random random)
     {
@@ -51,6 +52,7 @@ namespace Radioactivity.UI
         textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
         textDescriptorStyle.alignment = TextAnchor.UpperRight;
         textDescriptorStyle.stretchWidth = true;
+        buttonStyle = new GUIStyle(HighLogic.Skin.button);
 
     }
 
@@ -89,8 +91,8 @@ namespace Radioactivity.UI
       GUILayout.EndVertical();
 
       GUILayout.BeginHorizontal();
-      showDetails = GUILayout.Toggle(showDetails, "Details");
-      showRays = GUILayout.Toggle(showRays, "Rays");
+      showDetails = GUILayout.Toggle(showDetails, "DETAILS", buttonStyle);
+      showRays = GUILayout.Toggle(showRays, "RAYS", buttonStyle);
       GUILayout.EndHorizontal();
 
       if (showDetails)

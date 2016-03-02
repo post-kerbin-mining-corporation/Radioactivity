@@ -18,6 +18,9 @@ namespace Radioactivity.UI
 
     int windowID;
 
+    Vector2 iconDims = new Vector2(40f,40f)
+    Vector2 windowDims = new Vector2(200f,120f);
+
     Vector3 worldPosition;
     Vector2 screenPosition;
     Rect windowPosition;
@@ -25,6 +28,7 @@ namespace Radioactivity.UI
 
     GUIStyle windowStyle;
     GUIStyle groupStyle;
+    GUIStyle buttonStyle;
     GUIStyle textHeaderStyle;
     GUIStyle textDescriptorStyle;
 
@@ -34,7 +38,7 @@ namespace Radioactivity.UI
       windowID = random.Next();
       // Set up screen position
       screenPosition = Camera.main.WorldToScreenPoint(source.part.transform.position);
-      windowPosition = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
+      windowPosition = new Rect(screenPosition.x+50f, Screen.height-screenPosition.y+windowDims.y/2f, windowDims.x, windowDims.y);
       GetStyles();
     }
 
@@ -49,12 +53,13 @@ namespace Radioactivity.UI
         textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
         textDescriptorStyle.alignment = TextAnchor.UpperRight;
         textDescriptorStyle.stretchWidth = true;
+        buttonStyle = new GUIStyle(HighLogic.Skin.buttonStyle);
     }
 
     public void UpdatePositions()
     {
       screenPosition = Camera.main.WorldToScreenPoint(source.part.partTransform.position);
-      windowPosition = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
+      windowPosition = new Rect(screenPosition.x+50f, Screen.height-screenPosition.y+windowDims.y/2f, windowDims.x, windowDims.y);
     }
 
     public void Draw()
@@ -66,7 +71,7 @@ namespace Radioactivity.UI
     }
     internal void DrawButton()
     {
-        if (GUI.Button(new Rect(screenPosition.x - 50f, screenPosition.y - 50f, 50f, 50f), ""))
+        if (GUI.Button(new Rect(screenPosition.x - iconDims.x/2f, Screen.height-screenPosition.y-iconDims.y/2f, iconDims.x, iconDims.y), ""))
         {
             showWindow = !showWindow;
         }
@@ -86,8 +91,8 @@ namespace Radioactivity.UI
       GUILayout.EndVertical();
 
       GUILayout.BeginHorizontal();
-      showDetails = GUILayout.Toggle(showDetails, "Details");
-      showRays = GUILayout.Toggle(showRays, "Rays");
+      showDetails = GUILayout.Toggle(showDetails, "DETAILS", buttonStyle);
+      showRays = GUILayout.Toggle(showRays, "RAYS", buttonStyle);
       GUILayout.EndHorizontal();
       if (showDetails)
           DrawDetails();
