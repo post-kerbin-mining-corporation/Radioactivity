@@ -36,6 +36,16 @@ namespace Radioactivity
           Radioactivity.Instance.HideOverlay(this);
       }
 
+      public string GetEmitterAliases()
+      {
+          string aliases = "";
+          foreach (IRadiationEmitter abs in associatedEmitters)
+          {
+              aliases += abs.GetAlias() + "\n";
+          }
+          return aliases;
+      }
+
       // Access the current emission
       public float CurrentEmission
       {

@@ -18,11 +18,11 @@ namespace Radioactivity.UI
 
     int windowID;
 
-    Vector2 iconDims = new Vector2(40f,40f)
+    Vector2 iconDims = new Vector2(40f, 40f);
     Vector2 windowDims = new Vector2(200f,120f);
 
     Vector3 worldPosition;
-    Vector2 screenPosition;
+    Vector3 screenPosition;
     Rect windowPosition;
     RadioactiveSource source;
 
@@ -47,27 +47,27 @@ namespace Radioactivity.UI
       windowStyle = new GUIStyle(HighLogic.Skin.window);
       groupStyle = new GUIStyle(HighLogic.Skin.textArea);
       textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
-      textHeaderStyle.color = color.white;
+      textHeaderStyle.normal.textColor = Color.white;
       textHeaderStyle.stretchWidth = true;
       textHeaderStyle.alignment = TextAnchor.UpperLeft;
         textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
         textDescriptorStyle.alignment = TextAnchor.UpperRight;
         textDescriptorStyle.stretchWidth = true;
-        buttonStyle = new GUIStyle(HighLogic.Skin.buttonStyle);
+        buttonStyle = new GUIStyle(HighLogic.Skin.button);
     }
 
     public void UpdatePositions()
     {
       screenPosition = Camera.main.WorldToScreenPoint(source.part.partTransform.position);
-      windowPosition = new Rect(screenPosition.x+50f, Screen.height-screenPosition.y+windowDims.y/2f, windowDims.x, windowDims.y);
+      windowPosition = new Rect(screenPosition.x+50f, Screen.height-screenPosition.y - windowDims.y/2f, windowDims.x, windowDims.y);
     }
 
     public void Draw()
     {
         if (showWindow)
             windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, new GUIContent(source.part.partInfo.title), windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
-
-        DrawButton();
+        if (screenPosition.z > 0f)
+            DrawButton();
     }
     internal void DrawButton()
     {
@@ -82,11 +82,11 @@ namespace Radioactivity.UI
       GUILayout.BeginVertical(groupStyle);
       GUILayout.BeginHorizontal();
       GUILayout.Label("Dose at emitter", textHeaderStyle);
-      GUILayout.Label(sink.CurrentRadiation.ToString(), textDescriptorStyle);
+      GUILayout.Label(source.CurrentEmission.ToString(), textDescriptorStyle);
       GUILayout.EndHorizontal();
       GUILayout.BeginHorizontal();
       GUILayout.Label("Sources", textHeaderStyle);
-      GUILayout.Label(source.GetSourceAliases(),textDescriptorStyle);
+      GUILayout.Label(source.GetEmitterAliases(),textDescriptorStyle);
       GUILayout.EndHorizontal();
       GUILayout.EndVertical();
 

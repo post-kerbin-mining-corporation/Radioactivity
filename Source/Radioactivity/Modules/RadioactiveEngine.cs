@@ -43,6 +43,10 @@ namespace Radioactivity
     {
         return SourceID;
     }
+    public string GetAlias()
+    {
+        return "Nuclear Engine";
+    }
 
 
     public override void OnStart(PartModule.StartState state)

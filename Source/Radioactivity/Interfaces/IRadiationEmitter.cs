@@ -7,6 +7,9 @@ namespace Radioactivity.Interfaces
 {
     public interface IRadiationEmitter
     {
+        // Get the name of the alias of this emitter type in UIs
+        string GetAlias();
+
         // Get the name of the RadioactiveSource on this part to use
         string GetSourceName();
 

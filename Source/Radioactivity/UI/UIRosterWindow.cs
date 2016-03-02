@@ -15,7 +15,7 @@ namespace Radioactivity.UI
 
     System.Random random;
     int windowIdentifier;
-    Rect windowPosition =  new Rect(210, 15, 350, 150);;
+    Rect windowPosition =  new Rect(210, 15, 350, 150);
 
     int modeFlag = 0;
     string[] modeStrings = new string[] {"CURRENT","NEARBY","ACTIVE","ALL"};
@@ -26,6 +26,7 @@ namespace Radioactivity.UI
     GUIStyle nameStyle;
     GUIStyle labelStyle;
     GUIStyle valueStyle;
+    GUIStyle buttonStyle;
 
     List<RadioactivityKerbal> drawnKerbals = new List<RadioactivityKerbal>();
 
@@ -40,9 +41,10 @@ namespace Radioactivity.UI
     {
       windowStyle = new GUIStyle(HighLogic.Skin.window);
       groupStyle = new GUIStyle(HighLogic.Skin.textArea);
-      nameStyle = new GUIStyle(HighLogic.Skin.Label);
-      labelStyle = new GUIStyle(HighLogic.Skin.Label);
-      valueStyle = new GUIStyle(HighLogic.Skin.Label);
+      nameStyle = new GUIStyle(HighLogic.Skin.label);
+      labelStyle = new GUIStyle(HighLogic.Skin.label);
+      valueStyle = new GUIStyle(HighLogic.Skin.label);
+      buttonStyle = new GUIStyle(HighLogic.Skin.button);
     }
 
 
@@ -65,22 +67,22 @@ namespace Radioactivity.UI
        }
      }
      // Get kerbals in the vessel
-     internal GetKerbalsVessel()
+     internal void GetKerbalsVessel()
      {
 
      }
      // Get all kerbals in the physics bubble
-     internal GetKerbalsLocal()
+     internal void GetKerbalsLocal()
      {
 
      }
      // Get kerbals that are in flight
-     internal GetKerbalsActive()
+     internal void GetKerbalsActive()
      {
 
      }
      // Get all kerbals
-     internal GetKerbalsAll()
+     internal void GetKerbalsAll()
      {
 
      }
@@ -88,36 +90,43 @@ namespace Radioactivity.UI
 
      public void Draw()
      {
-         windowPosition = GUILayout.Window(windowIdentifier, windowPos, DrawWindow, "Radioactivity Roster", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+         windowPosition = GUILayout.Window(windowIdentifier, windowPosition, DrawWindow, "Radioactivity Roster", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
      }
 
      void DrawWindow(int WindowID)
      {
         DrawModeBar();
-        scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUILayout.Width(350), GUILayout.MinHeight(150));
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, groupStyle, GUILayout.Width(350), GUILayout.MinHeight(150));
         DrawKerbalList();
-        GUILayout.EndScrollView()
+        GUILayout.EndScrollView();
         GUI.DragWindow();
      }
 
      void DrawModeBar()
      {
-       modeFlag = GUILayout.SelectionGrid(modeFlag, modeStrings, 4);
+       modeFlag = GUILayout.SelectionGrid(modeFlag, modeStrings, 4, buttonStyle);
      }
 
      void DrawKerbalList()
      {
-       foreach (RadioactivityKerbal kerbal in drawnKerbals)
-       {
-          DrawKerbalInfo(kerbal);
-       }
+         if (drawnKerbals.Count > 0)
+         {
+             foreach (RadioactivityKerbal kerbal in drawnKerbals)
+             {
+                 DrawKerbalInfo(kerbal);
+             }
+         }
+         else
+         {
+             GUILayout.Label("No Kerbals found", labelStyle);
+         }
 
      }
 
      void DrawKerbalInfo(RadioactivityKerbal kerbal)
      {
        GUILayout.BeginHorizontal();
-       GUILayout.Label(kerbal.name, nameStyle);
+       GUILayout.Label(kerbal.Name, nameStyle);
 
        GUILayout.EndHorizontal();
 

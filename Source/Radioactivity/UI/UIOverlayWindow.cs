@@ -104,7 +104,7 @@ namespace Radioactivity.UI
             bool found = false;
             foreach (UISourceWindow sourceDraw in sourceWindows)
             {
-                if (sourceDraw.Sink == src)
+                if (sourceDraw.Source == src)
                     found = true;
             }
             if (!found)

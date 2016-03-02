@@ -19,8 +19,12 @@ namespace Radioactivity.UI
 
     int windowID;
 
+    Vector2 iconDims = new Vector2(40f, 40f);
+    Vector2 windowDims = new Vector2(200f, 120f);
+
+
     Vector3 worldPosition;
-    Vector2 screenPosition;
+    Vector3 screenPosition;
     Rect windowPosition;
     RadioactiveSink sink;
 
@@ -36,7 +40,7 @@ namespace Radioactivity.UI
       windowID = random.Next();
       // Set up screen position
       screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
-      windowPosition = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
+      windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
       GetStyles();
       Debug.Log("dn");
     }
@@ -46,7 +50,7 @@ namespace Radioactivity.UI
       windowStyle = new GUIStyle(HighLogic.Skin.window);
       groupStyle = new GUIStyle(HighLogic.Skin.textArea);
       textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
-      textHeaderStyle.color = color.white;
+      textHeaderStyle.normal.textColor = Color.white;
       textHeaderStyle.stretchWidth = true;
       textHeaderStyle.alignment = TextAnchor.UpperLeft;
         textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
@@ -58,20 +62,21 @@ namespace Radioactivity.UI
 
     public void UpdatePositions()
     {
-      screenPosition = Camera.main.WorldToScreenPoint(sink.part.partTransform.position);
-      windowPosition = new Rect(screenPosition.x +50, screenPosition.y-50, 200f, 150f);
+        // Set up screen position
+        screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
+        windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y - windowDims.y / 2f, windowDims.x, windowDims.y);
     }
 
     public void Draw()
     {
         if (showWindow)
             windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, new GUIContent(sink.part.partInfo.title), windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
-
-        DrawButton();
+        if (screenPosition.z > 0f)
+            DrawButton();
     }
     internal void DrawButton()
     {
-        if (GUI.Button(new Rect(screenPosition.x - 50f, screenPosition.y - 50f, 50f, 50f), ""))
+        if (GUI.Button(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), ""))
         {
             showWindow = !showWindow;
         }

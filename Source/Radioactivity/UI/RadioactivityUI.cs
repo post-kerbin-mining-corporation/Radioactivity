@@ -17,7 +17,7 @@ namespace Radioactivity
         private bool overlayShown = false;
         private bool rosterShown = false;
 
-        private Rect mainWindowPos = new Rect(5, 15, 150, 300);
+        private Rect mainWindowPos = new Rect(5, 15, 150, 120);
         private Rect rosterWindowPos = new Rect(210, 15, 350, 450);
 
         private GUIStyle entryStyle;
@@ -28,7 +28,7 @@ namespace Radioactivity
         private UIRosterWindow rosterView;
 
         System.Random randomizer;
-        int windowIdentifier =;
+        int windowIdentifier;
 
         // obsolete
         private Rect windowPos = new Rect(0, 0, 200, 480);

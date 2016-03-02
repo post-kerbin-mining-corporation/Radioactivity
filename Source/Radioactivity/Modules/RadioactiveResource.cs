@@ -36,6 +36,10 @@ namespace Radioactivity
       {
           return SourceID;
       }
+      public string GetAlias()
+      {
+          return "Resource";
+      }
 
       float currentEmission = 0f;
       bool emitting = true;
