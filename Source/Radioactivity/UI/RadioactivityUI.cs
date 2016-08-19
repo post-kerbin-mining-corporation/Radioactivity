@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Radioactivity.UI;
+using KSP.UI.Screens;
 
-namespace Radioactivity
+namespace Radioactivity.UI
 {
     [KSPAddon(KSPAddon.Startup.EveryScene, false)]
     public class RadioactivityUI:MonoBehaviour
@@ -58,17 +59,6 @@ namespace Radioactivity
         {
             Utils.Log("UI: Start");
 
-            try
-            {
-                RenderingManager.RemoveFromPostDrawQueue(0, OnUIDraw);
-            }
-            catch
-            {
-            }
-            if (HighLogic.LoadedSceneIsEditor || HighLogic.LoadedSceneIsFlight)
-            {
-                RenderingManager.AddToPostDrawQueue(0, OnUIDraw);
-            }
             if (ApplicationLauncher.Ready)
                 OnGUIAppLauncherReady();
 
@@ -84,6 +74,13 @@ namespace Radioactivity
                 overlayView.Update();
             if (rosterShown)
               rosterView.Update();
+        }
+        public void OnGUI()
+        {
+            if (Event.current.type == EventType.Repaint || Event.current.isMouse)
+            {
+            }
+            OnUIDraw();
         }
 
         public void OnUIDraw()

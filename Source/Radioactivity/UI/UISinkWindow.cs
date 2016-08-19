@@ -34,9 +34,12 @@ namespace Radioactivity.UI
     GUIStyle textDescriptorStyle;
     GUIStyle buttonStyle;
 
-    public UISinkWindow(RadioactiveSink snk, System.Random random)
+    Texture atlas;
+
+    public UISinkWindow(RadioactiveSink snk, System.Random random, Texture iconAtlas)
     {
       sink = snk;
+      atlas = iconAtlas;
       windowID = random.Next();
       // Set up screen position
       screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);

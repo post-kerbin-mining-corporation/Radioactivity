@@ -26,15 +26,17 @@ namespace Radioactivity.UI
     Rect windowPosition;
     RadioactiveSource source;
 
+    Texture atlas;
     GUIStyle windowStyle;
     GUIStyle groupStyle;
     GUIStyle buttonStyle;
     GUIStyle textHeaderStyle;
     GUIStyle textDescriptorStyle;
 
-    public UISourceWindow(RadioactiveSource src, System.Random random)
+    public UISourceWindow(RadioactiveSource src, System.Random random, Texture iconAtlas)
     {
       source = src;
+      atlas = iconAtlas;
       windowID = random.Next();
       // Set up screen position
       screenPosition = Camera.main.WorldToScreenPoint(source.part.transform.position);
@@ -71,7 +73,8 @@ namespace Radioactivity.UI
     }
     internal void DrawButton()
     {
-        if (GUI.Button(new Rect(screenPosition.x - iconDims.x/2f, Screen.height-screenPosition.y-iconDims.y/2f, iconDims.x, iconDims.y), ""))
+        GUI.DrawTextureWithTexCoords(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), atlas, new Rect(0f, 0.5f, 0.5f, 0.5f));
+        if (GUI.Button(new Rect(screenPosition.x - iconDims.x/2f, Screen.height-screenPosition.y-iconDims.y/2f, iconDims.x, iconDims.y), "",new GUIStyle()))
         {
             showWindow = !showWindow;
         }
