@@ -138,25 +138,25 @@ namespace Radioactivity.UI
 
             GUILayout.BeginVertical();
             GUILayout.Label("Source List: Count = " + Radioactivity.Instance.AllSources.Count.ToString());
-            foreach (RadioactiveSource src in Radioactivity.Instance.AllSources)
+            for (int i = 0; i <Radioactivity.Instance.AllSources.Count; i++)
             {
-                DrawSourceInfo(src);
+                DrawSourceInfo(Radioactivity.Instance.AllSources[i]);
             }
             GUILayout.EndVertical();
 
             GUILayout.BeginVertical();
             GUILayout.Label("Sink List: Count = " + Radioactivity.Instance.AllSinks.Count.ToString());
-            foreach (RadioactiveSink snk in Radioactivity.Instance.AllSinks)
+            for (int i = 0; i <Radioactivity.Instance.AllSinks.Count; i++) (RadioactiveSink snk in Radioactivity.Instance.AllSinks)
             {
-                DrawSinkInfo(snk);
+                DrawSinkInfo(Radioactivity.Instance.AllSinks[i]);
             }
             GUILayout.EndVertical();
 
             GUILayout.BeginVertical();
             GUILayout.Label("Link List: Count = " + Radioactivity.Instance.AllLinks.Count.ToString());
-            foreach (RadiationLink lnk in Radioactivity.Instance.AllLinks)
+            for (int i = 0; i <Radioactivity.Instance.AllLinks.Count; i++)
             {
-                DrawLinkInfo(lnk);
+                DrawLinkInfo(Radioactivity.Instance.AllLinks[i]);
             }
             GUILayout.EndVertical();
 

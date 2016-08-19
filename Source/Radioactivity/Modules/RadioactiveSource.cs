@@ -25,6 +25,9 @@ namespace Radioactivity
       [KSPField(isPersistant = false)]
       public bool ShowOverlay = false;
 
+      [KSPField(isPersistant = false)]
+      public int IconID = 0;
+
       // Show or hide the radioactive overlay from this source
       [KSPEvent(guiActive = true, guiName = "Toggle Rays")]
       public void ToggleOverlay()
@@ -65,7 +68,7 @@ namespace Radioactivity
       private Transform emitterTransform;
       private List<IRadiationEmitter> associatedEmitters = new List<IRadiationEmitter>();
 
-      
+
       public override void OnStart(PartModule.StartState state)
       {
           // Set up the emission transform, if it doesn't exist use the part root
@@ -93,7 +96,7 @@ namespace Radioactivity
 
       public void OnDestroy()
       {
-         
+
           if (HighLogic.LoadedSceneIsFlight)
           {
               Radioactivity.Instance.UnregisterSource(this);

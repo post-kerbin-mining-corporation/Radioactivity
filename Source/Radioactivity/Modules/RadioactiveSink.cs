@@ -23,6 +23,9 @@ namespace Radioactivity
     [KSPField(isPersistant = false)]
     public bool ShowOverlay = false;
 
+    [KSPField(isPersistant = false)]
+    public int IconID = 0;
+
     [KSPEvent(guiActive = true, guiName = "Toggle Rays")]
     public void ToggleOverlay()
     {
@@ -72,7 +75,7 @@ namespace Radioactivity
     }
     public void DrawUIDetails()
     {
-      
+
     }
 
     public override void OnStart(PartModule.StartState state)

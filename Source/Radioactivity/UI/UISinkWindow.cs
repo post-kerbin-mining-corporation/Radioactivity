@@ -34,6 +34,7 @@ namespace Radioactivity.UI
     GUIStyle textDescriptorStyle;
     GUIStyle buttonStyle;
 
+    Rect atlasIconRect;
     Texture atlas;
 
     public UISinkWindow(RadioactiveSink snk, System.Random random, Texture iconAtlas)
@@ -45,7 +46,15 @@ namespace Radioactivity.UI
       screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
       windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
       GetStyles();
-      Debug.Log("dn");
+
+      if (sink.IconID == 0)
+        atlasIcon = new Rect(0f,0.5f,0.5f,0.5f);
+      if (sink.IconID == 1)
+        atlasIcon = new Rect(0.5f,0.5f,0.5f,0.5f);
+      if (sink.IconID == 2)
+        atlasIcon = new Rect(0f,0.0f,0.5f,0.5f);
+      if (sink.IconID == 3)
+        atlasIcon = new Rect(0.5f,0.0f,0.5f,0.5f);
     }
 
     internal void GetStyles()
@@ -79,6 +88,7 @@ namespace Radioactivity.UI
     }
     internal void DrawButton()
     {
+      GUI.DrawTextureWithTexCoords(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), atlas, atlasIconRect);
         if (GUI.Button(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), ""))
         {
             showWindow = !showWindow;

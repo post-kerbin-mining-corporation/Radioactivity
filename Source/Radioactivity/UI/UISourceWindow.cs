@@ -26,6 +26,8 @@ namespace Radioactivity.UI
     Rect windowPosition;
     RadioactiveSource source;
 
+    Rect atlasIconRect;
+
     Texture atlas;
     GUIStyle windowStyle;
     GUIStyle groupStyle;
@@ -42,6 +44,15 @@ namespace Radioactivity.UI
       screenPosition = Camera.main.WorldToScreenPoint(source.part.transform.position);
       windowPosition = new Rect(screenPosition.x+50f, Screen.height-screenPosition.y+windowDims.y/2f, windowDims.x, windowDims.y);
       GetStyles();
+
+      if (sink.IconID == 0)
+        atlasIconRect = new Rect(0f,0.5f,0.5f,0.5f);
+      if (sink.IconID == 1)
+        atlasIconRect = new Rect(0.5f,0.5f,0.5f,0.5f);
+      if (sink.IconID == 2)
+        atlasIconRect = new Rect(0f,0.0f,0.5f,0.5f);
+      if (sink.IconID == 3)
+        atlasIconRect = new Rect(0.5f,0.0f,0.5f,0.5f);
     }
 
     internal void GetStyles()
@@ -73,7 +84,7 @@ namespace Radioactivity.UI
     }
     internal void DrawButton()
     {
-        GUI.DrawTextureWithTexCoords(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), atlas, new Rect(0f, 0.5f, 0.5f, 0.5f));
+        GUI.DrawTextureWithTexCoords(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), atlas, atlasIconRect);
         if (GUI.Button(new Rect(screenPosition.x - iconDims.x/2f, Screen.height-screenPosition.y-iconDims.y/2f, iconDims.x, iconDims.y), "",new GUIStyle()))
         {
             showWindow = !showWindow;

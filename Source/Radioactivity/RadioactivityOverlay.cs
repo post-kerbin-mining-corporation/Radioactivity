@@ -28,9 +28,9 @@ namespace Radioactivity
     }
     public void Update(RadiationLink lnk)
     {
-        foreach (RadiationLink l in shownLinks)
+       for (int i = 0; i < shownLinks.Count; i++)
         {
-            if (l == lnk)
+            if (shownLinks[i] == lnk)
                 UpdateRenderer(lnk);
         }
     }
@@ -41,9 +41,9 @@ namespace Radioactivity
       lnk.GO = new GameObject("RadioactiveLinkRendererRoot");
       if (HighLogic.LoadedSceneIsFlight)
         lnk.GO.transform.parent = lnk.source.vessel.vesselTransform;
-      foreach (AttenuationZone zn in lnk.Path)
-      {  
-            CreateZoneLineRenderer(lnk, zn);
+      for (int i = 0; i < lnk.Path.Count; i++)
+      {
+            CreateZoneLineRenderer(lnk, lnk.Path[i]);
       }
       if (RadioactivitySettings.debugOverlay)
         Utils.Log("Overlay: Showing link between " + lnk.source.SourceID + " and "+ lnk.sink.SinkID+ " for render");
@@ -133,9 +133,10 @@ namespace Radioactivity
     protected void UpdateRenderer(RadiationLink lnk)
     {
         DestroyZoneLineRenderers(lnk);
-        foreach (AttenuationZone zn in lnk.Path)
+
+        for (int i = 0; i < lnk.Path.Count; i++)
         {
-             CreateZoneLineRenderer(lnk, zn);
+              CreateZoneLineRenderer(lnk, lnk.Path[i]);
         }
     }
     // Destroy the line renderer
@@ -164,9 +165,9 @@ namespace Radioactivity
 
     protected void UpdateLinks()
     {
-      foreach (RadiationLink lnk in shownLinks)
+      for (int i = 0; i < shownLinks.Count; i++)
       {
-        UpdatePathRenderer(lnk);
+            UpdatePathRenderer(shownLinks[i]);
       }
     }
 

@@ -53,7 +53,7 @@ namespace Radioactivity
     {
       CurrentRadiationString = String.Format("{0:F2}/s", CurrentRadiation);
       LifetimeRadiationString = String.Format("{0:F2}/s", LifetimeRadiation);
-      
+
       CurrentRadiation = LifetimeRadiation - prevRadiation;
       prevRadiation = LifetimeRadiation;
     }
@@ -63,9 +63,9 @@ namespace Radioactivity
     {
       if (this.part.protoModuleCrew.Count > 0)
       {
-          foreach (ProtoCrewMember crew in this.part.protoModuleCrew)
+          for (int i = 0; i < this.part.protoModuleCrew ;i++)
           {
-            KerbalTracking.Instance.IrradiateKerbal(crew, (double)amt);
+            KerbalTracking.Instance.IrradiateKerbal(this.part.protoModuleCrew[i], (double)amt);
           }
       }
     }

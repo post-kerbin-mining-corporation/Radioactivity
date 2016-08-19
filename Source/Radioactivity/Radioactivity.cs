@@ -20,8 +20,8 @@ namespace Radioactivity
       }
     public void Start()
     {
-     
-      
+
+
     }
 
     public void Update()
@@ -125,7 +125,7 @@ namespace Radioactivity
     {
         if (allRadSources.Count > 0)
         {
-            
+
             RemoveRadiationLink(src);
             allRadSources.Remove(src);
             if (RadioactivitySettings.debugNetwork && src != null)
@@ -154,58 +154,58 @@ namespace Radioactivity
       // Show the ray overlay for ALL links
     public void ShowAllOverlays()
     {
-        foreach (RadiationLink lnk in allLinks)
+        for (int i = 0; i < allLinks.Count; i++)
         {
-            lnk.ShowOverlay();
+            allLinks[i].ShowOverlay();
         }
     }
     // Hide the ray overlay for ALL links
     public void HideAllOverlays()
     {
-        foreach (RadiationLink lnk in allLinks)
+        for (int i = 0; i < allLinks.Count; i++)
         {
-            lnk.HideOverlay();
+            allLinks[i].HideOverlay();
         }
     }
     // Show the ray overlay for a given source or sink
     public void ShowOverlay(RadioactiveSource src)
     {
-      foreach (RadiationLink lnk in allLinks)
+      for (int i = 0; i < allLinks.Count; i++)
       {
-        if (lnk.source == src && !lnk.overlayShown)
+        if (allLinks[i].source == src && !allLinks[i].overlayShown)
         {
-          lnk.ShowOverlay();
+          allLinks[i].ShowOverlay();
         }
       }
     }
     public void ShowOverlay(RadioactiveSink snk)
     {
-        foreach (RadiationLink lnk in allLinks)
+        for (int i = 0; i < allLinks.Count; i++)
       {
-          if (lnk.sink == snk && !lnk.overlayShown)
+          if (allLinks[i].sink == snk && !allLinks[i].overlayShown)
         {
-          lnk.ShowOverlay();
+          allLinks[i].ShowOverlay();
         }
       }
     }
     //Hide the ray overlay for a given source or sink
     public void HideOverlay(RadioactiveSource src)
     {
-        foreach (RadiationLink lnk in allLinks)
+        for (int i = 0; i < allLinks.Count; i++)
       {
-        if (lnk.source == src)
+        if (allLinks[i].source == src)
         {
-          lnk.HideOverlay();
+          allLinks[i].HideOverlay();
         }
       }
     }
     public void HideOverlay(RadioactiveSink snk)
     {
-        foreach (RadiationLink lnk in allLinks)
+      for (int i = 0; i < allLinks.Count; i++)
       {
-        if (lnk.sink == snk)
+        if (allLinks[i].sink == snk)
         {
-          lnk.HideOverlay();
+          allLinks[i].HideOverlay();
         }
       }
     }
@@ -239,19 +239,20 @@ namespace Radioactivity
     {
         Utils.Log("Editor: Vessel Changed, recalculate all parts");
         if (!HighLogic.LoadedSceneIsEditor) { return; }
-        foreach (RadioactiveSource s in allRadSources.ToList())
+
+        for (int i= 0; i< allRadSources.Count ;i++)
         {
-            UnregisterSource(s);
+            UnregisterSource(allRadSources[i]);
         }
-        foreach (RadioactiveSink s in allRadSinks.ToList())
+        for (int i= 0; i< allRadSinks.Counth ;i++)
         {
-            UnregisterSink(s);
+            UnregisterSink(allRadSinks[i]);
         }
 
-        foreach (Part vesPart in ship.Parts)
+        for (int i = 0; i < ship.Parts; i++)
         {
-            RadioactiveSource src = vesPart.gameObject.GetComponent<RadioactiveSource>();
-            RadioactiveSink snk = vesPart.gameObject.GetComponent<RadioactiveSink>();
+            RadioactiveSource src = ship.Parts[i].gameObject.GetComponent<RadioactiveSource>();
+            RadioactiveSink snk = ship.Parts[i].gameObject.GetComponent<RadioactiveSink>();
 
             if (src != null)
                 RegisterSource(src);
@@ -259,21 +260,21 @@ namespace Radioactivity
                 RegisterSink(snk);
 
         }
-       
+
     }
     public void ForceRecomputeNetwork()
     {
         foreach (RadiationLink lnk in AllLinks)
         {
-            
+
         }
     }
     protected void TryAddSource(RadioactiveSource src)
     {
         bool exists = false;
-        foreach (RadioactiveSource usedS in allRadSources)
+        for (int i=0; i< allRadSources.Count; i++)
         {
-            if (usedS == src)
+            if (allRadSources[i] == src)
                 exists = true;
         }
         if (!exists)
@@ -282,9 +283,9 @@ namespace Radioactivity
     protected void TryAddSink(RadioactiveSink snk)
     {
         bool exists = false;
-        foreach (RadioactiveSink usedS in allRadSinks)
+        for (int i=0; i< allRadSinks.Count; i++)
         {
-            if (usedS == snk)
+            if (allRadSinks[i] == snk)
                 exists = true;
         }
         if (!exists)
@@ -294,38 +295,38 @@ namespace Radioactivity
     // builds the radiation network from scratch
     protected void BuildRadiationLinks()
     {
-        foreach (RadioactiveSource s in allRadSources)
+        for (int i=0; i< allRadSources.Count; i++)
         {
-            foreach (RadioactiveSink s2 in allRadSinks)
+            for (int j=0; i< allRadSinks.Count; i++)
             {
-                allLinks.Add(new RadiationLink(s, s2));
+                allLinks.Add(new RadiationLink(allRadSources[i], allRadSources[j]));
             }
         }
     }
     // Build new link for a new sink in the network
     protected void BuildNewRadiationLink(RadioactiveSink snk)
     {
-        foreach (RadioactiveSource src in allRadSources)
+        for (int i=0; i< allRadSources.Count; i++)
         {
-            allLinks.Add(new RadiationLink(src, snk));
+            allLinks.Add(new RadiationLink(allRadSources[i], snk));
         }
 
     }
     // Build new links for a new source in the network
     protected void BuildNewRadiationLink(RadioactiveSource src)
     {
-        foreach (RadioactiveSink snk in allRadSinks)
+        for (int i=0; i< allRadSinks.Count; i++)
         {
-            allLinks.Add(new RadiationLink(src, snk));
+            allLinks.Add(new RadiationLink(src, allRadSinks[i]));
         }
     }
     // Removes all links to a given radiation source
     protected void RemoveRadiationLink(RadioactiveSource src)
     {
         RadiationLink toRm = null;
-        foreach (RadiationLink lnk in allLinks)
+        for (int i = 0; i < allLinks.Count; i++)
         {
-            if (lnk.source == src)
+            if (allLinks[i].source == src)
             {
                 toRm = lnk;
             }
@@ -340,9 +341,9 @@ namespace Radioactivity
     protected void RemoveRadiationLink(RadioactiveSink snk)
     {
         RadiationLink toRm = null;
-        foreach (RadiationLink lnk in allLinks)
+        for (int i = 0; i < allLinks.Count; i++)
         {
-            if (lnk.sink == snk)
+            if (allLinks[i].sink == snk)
             {
                 toRm = lnk;
             }
@@ -360,7 +361,7 @@ namespace Radioactivity
         {
             Simulate();
         }
-        
+
     }
 
     // Master method that simulates radiation
@@ -381,11 +382,11 @@ namespace Radioactivity
     // simulate point radiation
     protected void SimulatePointRadiation()
     {
-      foreach (RadiationLink link in allLinks)
+       for (int i = 0; i < allLinks.Count; i++)
         {
-    
+
           // Simulate the radiation based on precomputed pathways
-          link.Simulate(TimeWarp.fixedDeltaTime);
+          allLinks[i].Simulate(TimeWarp.fixedDeltaTime);
         }
 
     }

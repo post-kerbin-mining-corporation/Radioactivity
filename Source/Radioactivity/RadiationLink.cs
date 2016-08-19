@@ -46,9 +46,9 @@ namespace Radioactivity
                 if (Path != null)
                 {
                     int ct = 0;
-                    foreach (AttenuationZone z in Path)
+                    for (int i=0; i < Path.Count ; i++)
                     {
-                        if (z.attenuationType != AttenuationType.Empty)
+                        if (Path[i].attenuationType != AttenuationType.Empty)
                             ct++;
                     }
                     return ct;
@@ -119,7 +119,7 @@ namespace Radioactivity
         // Tests to see whether the LOS needs to be recomputed
         public void TestRecompute()
         {
-            
+
             if (source != null && sink != null && source.EmitterTransform != null && sink.SinkTransform != null)
             {
                 // LOS needs to be recomputed if we're off by more than maximumPositionDelta.
@@ -141,14 +141,14 @@ namespace Radioactivity
         protected float GetConnectionMass()
         {
             float m = 0f;
-            foreach (AttenuationZone z in Path)
+            for (int i = 0 ; i < Path.Count; i++)
             {
-                
-                if (z.attenuationType == AttenuationType.ParameterizedPart || z.attenuationType == AttenuationType.Part)
+
+                if (Path[i].attenuationType == AttenuationType.ParameterizedPart || Path[i].attenuationType == AttenuationType.Part)
                 {
-                    if (z.associatedPart != null && z.associatedPart.Rigidbody != null)
+                    if (Path[i].associatedPart != null && Path[i].associatedPart.Rigidbody != null)
                     {
-                        m += z.associatedPart.Rigidbody.mass;
+                        m += Path[i].associatedPart.Rigidbody.mass;
                     }
                 }
             }
@@ -159,7 +159,7 @@ namespace Radioactivity
         {
             if (RadioactivitySettings.debugNetwork)
                 Utils.Log("Creating connection from " + src.part.name + " to " + target.part.name);
-            
+
             // Store the relative position of both endpoints
             relPos = Utils.getRelativePosition(src.EmitterTransform, target.SinkTransform.position);//src.EmitterTransform.position - target.SinkTransform.position;
 
@@ -171,16 +171,16 @@ namespace Radioactivity
 
             needsGeometricRecalculation = false;
         }
-        
+
 
         // Attenuates the ray between the source and sink
         protected double AttenuateFlux(List<AttenuationZone> rayPath, double strength)
         {
             // march along the ray, attenuating as we go
             double curFlux = strength;
-            foreach (AttenuationZone z in rayPath)
+            for (int i = 0; i < rayPath.Count; i++)
             {
-                 curFlux = z.Attenuate(curFlux);   
+                 curFlux = rayPath[i].Attenuate(curFlux);
             }
             // Get the total mass in the connection
             connectionMass = GetConnectionMass();
@@ -213,18 +213,18 @@ namespace Radioactivity
             /// sort by distance, ascending
             if (hitsForward.Count > 0)
             {
-                
+
                 hitsForward = hitsForward.OrderBy(o => o.distance).ToList();
             }
             if (hitsBackward.Count > 0)
             {
-                
+
                 hitsBackward = hitsBackward.OrderByDescending(o => o.distance).ToList();
             }
 
-            
+
             return CreatePathway(hitsForward, hitsBackward, src, target, sep);
-            
+
         }
 
         // Go through raycast results (both ways) in order to create the attenuation path
@@ -240,18 +240,18 @@ namespace Radioactivity
 
             int hitNum = 0;
             // for each object we hit outgoing, see if we found it incoming
-            foreach (RaycastHit h in outgoing)
+            for (int i=0; i < outgoing.Count; i++)
             {
                 if (RadioactivitySettings.debugRaycasting)
-                    Utils.Log("Raycaster: Looking for incoming rayhits with " + h.collider.name);
-                
-                RaycastHit found = incoming.Find(item => item.collider == h.collider);
+                    Utils.Log("Raycaster: Looking for incoming rayhits with " + outgoing[i].collider.name);
+
+                RaycastHit found = incoming.Find(item => item.collider == outgoing[i].collider);
 
                 // If there is a matching collider
                 if (found.collider != null)
                 {
-                    curZoneEndDistance = h.distance;
-                    curZoneEndPoint = h.point;
+                    curZoneEndDistance = outgoing[i].distance;
+                    curZoneEndPoint = outgoing[i].point;
 
                     if (curZoneEndDistance - curZoneStartDistance > 0f)
                     {
@@ -266,15 +266,15 @@ namespace Radioactivity
 
                     if (layer == LayerMask.NameToLayer("Default"))
                     {
-                        Part associatedPart = h.collider.GetComponentInParent<Part>();
+                        Part associatedPart = outgoing[i].collider.GetComponentInParent<Part>();
                         if (RadioactivitySettings.debugRaycasting)
-                            Utils.Log("Raycaster: Located 2-way hit! Path through is of L: " + (totalPathLength - h.distance - found.distance).ToString() + " and part is " + associatedPart.ToString());
+                            Utils.Log("Raycaster: Located 2-way hit! Path through is of L: " + (totalPathLength - outgoing[i].distance - found.distance).ToString() + " and part is " + associatedPart.ToString());
                         if (associatedPart != target.part)
                         {
-                            
-                            curZoneStartPoint = h.point;
+
+                            curZoneStartPoint = outgoing[i].point;
                             curZoneEndPoint = found.point;
-                            curZoneStartDistance = h.distance;
+                            curZoneStartDistance = outgoing[i].distance;
                             curZoneEndDistance = totalPathLength - found.distance;
 
                             attens.Add(new AttenuationZone(curZoneStartDistance, curZoneEndDistance, associatedPart, curZoneStartPoint, curZoneEndPoint));
@@ -283,30 +283,30 @@ namespace Radioactivity
                     if (found.collider.gameObject.layer == LayerMask.NameToLayer("TerrainColliders"))
                     {
                         if (RadioactivitySettings.debugRaycasting)
-                            Utils.Log("Raycaster: Located 2-way hit! Path through is of L: " + (totalPathLength - h.distance - found.distance).ToString() + " on terraincolliders layer");
-                        curZoneStartPoint = h.point;
+                            Utils.Log("Raycaster: Located 2-way hit! Path through is of L: " + (totalPathLength - outgoing[i].distance - found.distance).ToString() + " on terraincolliders layer");
+                        curZoneStartPoint = outgoing[i].point;
                         curZoneEndPoint = found.point;
-                        curZoneStartDistance = h.distance;
+                        curZoneStartDistance = outgoing[i].distance;
                         curZoneEndDistance = totalPathLength - found.distance;
-                        attens.Add(new AttenuationZone(h.distance, totalPathLength - found.distance, AttenuationType.Terrain, h.point, found.point));
+                        attens.Add(new AttenuationZone(outgoing[i].distance, totalPathLength - found.distance, AttenuationType.Terrain, outgoing[i].point, found.point));
                     }
                     if (found.collider.gameObject.layer == LayerMask.NameToLayer("Local Scenery"))
                     {
                         if (RadioactivitySettings.debugRaycasting)
-                            Utils.Log("Raycaster: Located 2-way hit! Path through is of L: " + (totalPathLength - h.distance - found.distance).ToString() + " on LocalScenery layer");
-                        curZoneStartPoint = h.point;
+                            Utils.Log("Raycaster: Located 2-way hit! Path through is of L: " + (totalPathLength - outgoing[i].distance - found.distance).ToString() + " on LocalScenery layer");
+                        curZoneStartPoint = outgoing[i].point;
                         curZoneEndPoint = found.point;
-                        curZoneStartDistance = h.distance;
+                        curZoneStartDistance = outgoing[i].distance;
                         curZoneEndDistance = totalPathLength - found.distance;
-                        attens.Add(new AttenuationZone(h.distance, totalPathLength - found.distance, AttenuationType.Terrain, h.point, found.point));
+                        attens.Add(new AttenuationZone(outgoing[i].distance, totalPathLength - found.distance, AttenuationType.Terrain, outgoing[i].point, found.point));
                     }
                 }
                 else
                 {
                     if (RadioactivitySettings.debugRaycasting)
-                        Utils.Log("Raycaster: No incoming hits with " + h.collider.name + ", discarding...");
+                        Utils.Log("Raycaster: No incoming hits with " + outgoing[i].collider.name + ", discarding...");
                 }
-               
+
                 hitNum++;
             }
 
