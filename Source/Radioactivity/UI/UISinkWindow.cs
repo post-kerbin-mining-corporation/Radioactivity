@@ -48,13 +48,13 @@ namespace Radioactivity.UI
       GetStyles();
 
       if (sink.IconID == 0)
-        atlasIcon = new Rect(0f,0.5f,0.5f,0.5f);
+        atlasIconRect = new Rect(0f,0.5f,0.5f,0.5f);
       if (sink.IconID == 1)
-        atlasIcon = new Rect(0.5f,0.5f,0.5f,0.5f);
+          atlasIconRect = new Rect(0.5f, 0.5f, 0.5f, 0.5f);
       if (sink.IconID == 2)
-        atlasIcon = new Rect(0f,0.0f,0.5f,0.5f);
+          atlasIconRect = new Rect(0f, 0.0f, 0.5f, 0.5f);
       if (sink.IconID == 3)
-        atlasIcon = new Rect(0.5f,0.0f,0.5f,0.5f);
+          atlasIconRect = new Rect(0.5f, 0.0f, 0.5f, 0.5f);
     }
 
     internal void GetStyles()

@@ -146,7 +146,7 @@ namespace Radioactivity.UI
 
             GUILayout.BeginVertical();
             GUILayout.Label("Sink List: Count = " + Radioactivity.Instance.AllSinks.Count.ToString());
-            for (int i = 0; i <Radioactivity.Instance.AllSinks.Count; i++) (RadioactiveSink snk in Radioactivity.Instance.AllSinks)
+            for (int i = 0; i <Radioactivity.Instance.AllSinks.Count; i++)
             {
                 DrawSinkInfo(Radioactivity.Instance.AllSinks[i]);
             }

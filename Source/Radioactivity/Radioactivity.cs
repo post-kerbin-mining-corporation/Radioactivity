@@ -244,12 +244,12 @@ namespace Radioactivity
         {
             UnregisterSource(allRadSources[i]);
         }
-        for (int i= 0; i< allRadSinks.Counth ;i++)
+        for (int i= 0; i< allRadSinks.Count ;i++)
         {
             UnregisterSink(allRadSinks[i]);
         }
 
-        for (int i = 0; i < ship.Parts; i++)
+        for (int i = 0; i < ship.Parts.Count; i++)
         {
             RadioactiveSource src = ship.Parts[i].gameObject.GetComponent<RadioactiveSource>();
             RadioactiveSink snk = ship.Parts[i].gameObject.GetComponent<RadioactiveSink>();
@@ -299,7 +299,7 @@ namespace Radioactivity
         {
             for (int j=0; i< allRadSinks.Count; i++)
             {
-                allLinks.Add(new RadiationLink(allRadSources[i], allRadSources[j]));
+                allLinks.Add(new RadiationLink(allRadSources[i], allRadSinks[j]));
             }
         }
     }
@@ -328,7 +328,7 @@ namespace Radioactivity
         {
             if (allLinks[i].source == src)
             {
-                toRm = lnk;
+                toRm = allLinks[i];
             }
         }
         if (toRm != null)
@@ -345,7 +345,7 @@ namespace Radioactivity
         {
             if (allLinks[i].sink == snk)
             {
-                toRm = lnk;
+                toRm = allLinks[i];
             }
         }
         if (toRm != null)

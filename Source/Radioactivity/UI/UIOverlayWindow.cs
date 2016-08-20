@@ -89,7 +89,7 @@ namespace Radioactivity.UI
           // Check for new sinks
           for (int i = 0; i < toAdd.Count; i++ )
           {
-              sinkWindows.Add(new UISinkWindow(snk, random, icons));
+              sinkWindows.Add(new UISinkWindow(toAdd[i], random, icons));
           }
       }
 
@@ -98,7 +98,7 @@ namespace Radioactivity.UI
         List<UISourceWindow> toRemove =  new List<UISourceWindow>();
         List<RadioactiveSource> toAdd =  new List<RadioactiveSource>();
         // Check for destroyed sinks
-        for (int i = 0; i < sourcekWindows.Count; i++ )
+        for (int i = 0; i < sourceWindows.Count; i++ )
         {
             if (!Radioactivity.Instance.AllSources.Contains(sourceWindows[i].Source))
                 toRemove.Add(sourceWindows[i]);
@@ -123,7 +123,7 @@ namespace Radioactivity.UI
         // Check for new sinks
         for (int i = 0; i < toAdd.Count; i++ )
         {
-            sourceWindows.Add(new UISourceWindow(src, random, icons ));
+            sourceWindows.Add(new UISourceWindow(toAdd[i], random, icons ));
         }
       }
 

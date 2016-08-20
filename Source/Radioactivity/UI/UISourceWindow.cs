@@ -45,13 +45,13 @@ namespace Radioactivity.UI
       windowPosition = new Rect(screenPosition.x+50f, Screen.height-screenPosition.y+windowDims.y/2f, windowDims.x, windowDims.y);
       GetStyles();
 
-      if (sink.IconID == 0)
+      if (source.IconID == 0)
         atlasIconRect = new Rect(0f,0.5f,0.5f,0.5f);
-      if (sink.IconID == 1)
+      if (source.IconID == 1)
         atlasIconRect = new Rect(0.5f,0.5f,0.5f,0.5f);
-      if (sink.IconID == 2)
+      if (source.IconID == 2)
         atlasIconRect = new Rect(0f,0.0f,0.5f,0.5f);
-      if (sink.IconID == 3)
+      if (source.IconID == 3)
         atlasIconRect = new Rect(0.5f,0.0f,0.5f,0.5f);
     }
 
