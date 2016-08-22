@@ -26,7 +26,7 @@ namespace Radioactivity
     [KSPField(isPersistant = false)]
     public int IconID = 0;
 
-    [KSPEvent(guiActive = true, guiName = "Toggle Rays")]
+    [KSPEvent(guiActive = false, guiName = "Toggle Rays")]
     public void ToggleOverlay()
     {
       ShowOverlay = !ShowOverlay;
@@ -49,7 +49,7 @@ namespace Radioactivity
     public string GetAbsorberAliases()
     {
       string aliases = "";
-      for (int i = 0; i < associatedAbsorbers.Count; i++) 
+      for (int i = 0; i < associatedAbsorbers.Count; i++)
       {
           aliases += associatedAbsorbers[i].GetAlias();
 
@@ -60,19 +60,15 @@ namespace Radioactivity
       }
       return aliases;
     }
-    public string GetAbsorberDetails()
+
+    public Dictionary<string, string> GetAbsorberDetails()
     {
-        string details = "";
+        Dictionary<string, string> toReturn = new Dictionary<string, string>();
         for (int i = 0; i < associatedAbsorbers.Count; i++)
         {
-            details += associatedAbsorbers[i].GetDetails();
-            if (i + 1 < associatedAbsorbers.Count)
-            {
-                details += "\n";
-            }
+          toReturn = toReturn.Concat(associatedAbsorbers[i].GetDetails()).ToDictionary(x=>x.Key,x=>x.Value);
         }
-        return details;
-        
+        return toReturn;
     }
 
     private double currentRadiation;

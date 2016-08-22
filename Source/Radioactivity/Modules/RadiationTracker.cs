@@ -27,16 +27,23 @@ namespace Radioactivity
     [KSPField(isPersistant = true)]
     public double CurrentRadiation = 0d;
 
+    // Alias for UI
+    [KSPField(isPersistant = false)]
+    public string UIName = "Radiation Tracker";
+
     protected double prevRadiation = 0d;
 
     public string GetAlias()
     {
-        return "Tracker";
+        return UIName;
     }
-    public string GetDetails()
+    public Dictionary<string, string> GetDetails()
     {
-        return String.Format("<color=#ffffff><b>Lifetime Dose</b>:</color> {0,6:####.#}", LifetimeRadiation);
+        Dictionary<string, string> toReturn = new Dictionary<string, string>();
+        toReturn.Add("<color=#ffffff><b>Lifetime Dose</b>:</color>", String.Format( "{0}Sv", Utils.ToSI(LifetimeRadiation,"F2")))
+        return toReturn;
     }
+
 
 
     public string GetSinkName()

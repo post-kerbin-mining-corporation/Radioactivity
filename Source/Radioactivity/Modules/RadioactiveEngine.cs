@@ -23,6 +23,9 @@ namespace Radioactivity
     [KSPField(isPersistant = false)]
     public float EmissionAtMax = 100f;
 
+    // Alias for UI
+    [KSPField(isPersistant = false)]
+    public string UIName = "Nuclear Engine";
 
     float currentEmission = 0f;
     protected bool useLegacyEngines = false;
@@ -45,11 +48,13 @@ namespace Radioactivity
     }
     public string GetAlias()
     {
-        return "Nuclear Engine";
+        return UIName;
     }
-    public string GetDetails()
+    public Dictionary<string, string> GetDetails()
     {
-        return String.Format("<color=#ffffff><b>Engine Emission</b>:</color> {0}Sv", Utils.ToSI(currentEmission,"F2").PadLeft(15));
+        Dictionary<string, string> toReturn = new Dictionary<string, string>();
+        toReturn.Add("<color=#ffffff><b>Engine Emission</b>:</color>", String.Format("{0}Sv", Utils.ToSI(currentEmission,"F2")));
+        return toReturn;
     }
 
     public override void OnStart(PartModule.StartState state)
@@ -70,7 +75,10 @@ namespace Radioactivity
       if (engineLegacy == null)
         return;
 
-      currentEmission = engineLegacy.requestedThrottle * EmissionAtMax;
+        if (HighLogic.LoadedSceneIsFlight)
+          currentEmission = engineLegacy.requestedThrottle * EmissionAtMax;
+        else
+          currentEmission = EmissionAtMax;
     }
     // Handles emission for engines using ModuleEnginesFX
     protected void HandleEmission()
@@ -78,7 +86,10 @@ namespace Radioactivity
       if (engine == null)
         return;
 
-      currentEmission = engine.requestedThrottle * EmissionAtMax;
+        if (HighLogic.LoadedSceneIsFlight)
+          currentEmission = engine.requestedThrottle * EmissionAtMax;
+        else
+          currentEmission = EmissionAtMax;
     }
 
     protected void SetupEngines()

@@ -112,7 +112,7 @@ namespace Radioactivity.UI
 
       GUILayout.BeginHorizontal();
       showDetails = GUILayout.Toggle(showDetails, "DETAILS", buttonStyle);
-      
+
       showRays = GUILayout.Toggle(showRays, "RAYS", buttonStyle);
       showLinks = GUILayout.Toggle(showLinks, "LINKS", buttonStyle);
       GUILayout.EndHorizontal();
@@ -125,7 +125,14 @@ namespace Radioactivity.UI
     internal void DrawDetails()
     {
       GUILayout.BeginVertical(groupStyle);
-      GUILayout.Label(source.GetEmitterDetails(), textDescriptorStyle);
+
+      foreach (var kvp in source.GetEmitterDetails())
+      {
+          GUILayout.BeginHorizontal();
+          GUILayout.Label(kvp.Key, textHeaderStyle);
+          GUILayout.Label(kvp.Value, textDescriptorStyle);
+          GUILayout.EndHorizontal();
+      }
       GUILayout.EndVertical();
     }
     internal void DrawLinks()
@@ -153,7 +160,7 @@ namespace Radioactivity.UI
         GUILayout.EndVertical();
         DrawPathDetails(lnk);
         GUILayout.EndHorizontal();
-        
+
         GUILayout.EndVertical();
     }
     private void DrawPathDetails(RadiationLink lnk)

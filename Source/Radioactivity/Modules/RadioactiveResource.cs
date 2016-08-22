@@ -23,6 +23,10 @@ namespace Radioactivity
       [KSPField(isPersistant = true)]
       public float EmissionPerUnit = 1f;
 
+      // Alias for UI
+      [KSPField(isPersistant = false)]
+      public string UIName = "Nuclear Materials";
+
       // Interface
       public bool IsEmitting()
       {
@@ -38,11 +42,13 @@ namespace Radioactivity
       }
       public string GetAlias()
       {
-          return "Resource";
+          return UIName;
       }
-      public string GetDetails()
+      public Dictionary<string, string> GetDetails()
       {
-          return "";
+          Dictionary<string, string> toReturn = new Dictionary<string, string>();
+          toReturn.Add("Test","01");
+          return toReturn;
       }
 
       float currentEmission = 0f;

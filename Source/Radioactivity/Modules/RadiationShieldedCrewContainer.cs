@@ -31,17 +31,23 @@ namespace Radioactivity
     [KSPField(isPersistant = true)]
     public double CurrentRadiation = 0d;
 
+    // Alias for UI
+    [KSPField(isPersistant = false)]
+    public string UIName = "Crew Container";
+
     protected double prevRadiation = 0d;
 
     public string GetAlias()
     {
-        return "Crew";
+        return UIName;
     }
-    public string GetDetails()
+    public Dictionary<string, string> GetDetails()
     {
-        return String.Format("<color=#ffffff><b>Shielding</b>:</color> {0}% \n " +
-           "<color=#ffffff><b>Dose to Crew</b>:</color> {1}Sv ", (RadiationAttenuationFraction * 100f).ToString().PadLeft(15), Utils.ToSI(CurrentRadiation,"F2").PadLeft(15));
-        }
+        Dictionary<string, string> toReturn = new Dictionary<string, string>();
+        toReturn.Add("<color=#ffffff><b>Shielding</b>:</color>", String.Format( "{0}", RadiationAttenuationFraction * 100f))
+        toReturn.Add("<color=#ffffff><b>Crew Dose</b>:</color>", String.Format( "{0}Sv", Utils.ToSI(CurrentRadiation,"F2")))
+        return toReturn;
+      }
     public string GetSinkName()
     {
         return AbsorberID;
@@ -51,7 +57,9 @@ namespace Radioactivity
     public void AddRadiation(float amt)
     {
       LifetimeRadiation = LifetimeRadiation + amt * (1f - RadiationAttenuationFraction);
-      IrradiateCrew(amt);
+
+      if (HighLogic.LoadedSceneIsFlight)
+        IrradiateCrew(amt);
     }
 
     public void FixedUpdate()

@@ -14,10 +14,10 @@ namespace Radioactivity
     public static float GetDisplacement(Part p)
     {
       Vector3 size = p.DragCubes.WeightedSize;
-      
+
       float[] areas = new float[6];
       areas = p.DragCubes.WeightedArea;
-      
+
       float xPortion = areas[0] / (size.y * size.z);
       float yPortion = areas[1] / (size.z * size.x);
       float zPortion = areas[2] / (size.y * size.x);

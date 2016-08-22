@@ -29,7 +29,7 @@ namespace Radioactivity
       public int IconID = 0;
 
       // Show or hide the radioactive overlay from this source
-      [KSPEvent(guiActive = true, guiName = "Toggle Rays")]
+      [KSPEvent(guiActive = false, guiName = "Toggle Rays")]
       public void ToggleOverlay()
       {
         ShowOverlay = !ShowOverlay;
@@ -52,20 +52,16 @@ namespace Radioactivity
           }
           return aliases;
       }
-      public string GetEmitterDetails()
+      public Dictionary<string, string> GetEmitterDetails()
       {
-          string details = "";
+          Dictionary<string, string> toReturn = new Dictionary<string, string>();
           for (int i = 0; i < associatedEmitters.Count; i++)
           {
-              details += associatedEmitters[i].GetDetails();
-              if (i + 1 < associatedEmitters.Count)
-              {
-                  details += "\n";
-              }
+            toReturn = toReturn.Concat(associatedEmitters[i].GetDetails()).ToDictionary(x=>x.Key,x=>x.Value);
           }
-          return details;
-
+          return toReturn;
       }
+
       public List<RadiationLink> GetAssociatedLinks()
       {
           List<RadiationLink> lnks = new List<RadiationLink>();

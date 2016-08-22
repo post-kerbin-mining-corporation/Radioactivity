@@ -105,7 +105,7 @@ namespace Radioactivity.UI
       GUILayout.BeginVertical(groupStyle);
       GUILayout.BeginHorizontal();
       GUILayout.Label("<b>Dose at surface</b>", textHeaderStyle);
-      GUILayout.Label(sink.CurrentRadiation.ToString(), textDescriptorStyle);
+      GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")), textDescriptorStyle);
       GUILayout.EndHorizontal();
       GUILayout.BeginHorizontal();
       GUILayout.Label("<b>Affected</b>", textHeaderStyle);
@@ -125,7 +125,15 @@ namespace Radioactivity.UI
     internal void DrawDetails()
     {
       GUILayout.BeginVertical(groupStyle);
-      GUILayout.Label(sink.GetAbsorberDetails(), textDescriptorStyle);
+
+      foreach (var kvp in sink.GetAbsorberDetails())
+      {
+          GUILayout.BeginHorizontal();
+          GUILayout.Label(kvp.Key, textHeaderStyle);
+          GUILayout.Label(kvp.Value, textDescriptorStyle);
+          GUILayout.EndHorizontal();
+      }
+
       GUILayout.EndVertical();
     }
   }

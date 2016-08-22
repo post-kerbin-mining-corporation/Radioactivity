@@ -231,7 +231,7 @@ namespace Radioactivity
 
     protected IEnumerator WaitForInit(float t)
     {
-        
+
         yield return new WaitForSeconds(t);
         simulationReady = true;
         Utils.Log("Simulator: Ready");
@@ -417,7 +417,7 @@ namespace Radioactivity
         if (RadioactivitySettings.simulatePointRadiation)
             SimulatePointRadiationEditor();
 
-        
+
     }
     // simulate point radiation
     protected void SimulatePointRadiationEditor()

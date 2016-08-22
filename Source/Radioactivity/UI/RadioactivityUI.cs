@@ -102,8 +102,16 @@ namespace Radioactivity.UI
         public void DrawMainWindow(int WindowID)
         {
             GUILayout.BeginVertical();
-            overlayShown = GUILayout.Toggle(overlayShown, "Overlay", buttonStyle);
-            rosterShown = GUILayout.Toggle(rosterShown, "Roster", buttonStyle);
+            if(GUILayout.Toggle(overlayShown, "Overlay", buttonStyle))
+            {
+                overlayShown = !overlayShown;
+                Radioactivity.Instance.ShowAllOverlays();
+            }
+            if(GUILayout.Toggle(rosterShown, "Roster", buttonStyle))
+            {
+              rosterShown = !rosterShown;
+
+            }
             GUILayout.EndVertical();
             GUI.DragWindow();
         }
@@ -117,125 +125,6 @@ namespace Radioactivity.UI
             rosterView.Draw();
         }
 
-
-        // OLD PAST HERE
-
-        private void DrawWindow(int windowID)
-        {
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Hide Overlay"))
-                Radioactivity.Instance.HideAllOverlays();
-            GUILayout.Space(40f);
-            if (GUILayout.Button("Show Overlay"))
-                Radioactivity.Instance.ShowAllOverlays();
-            GUILayout.EndHorizontal();
-
-            if (GUILayout.Button("Force Recalculate"))
-                Radioactivity.Instance.ForceRecomputeNetwork();
-
-            GUILayout.BeginHorizontal();
-
-
-            GUILayout.BeginVertical();
-            GUILayout.Label("Source List: Count = " + Radioactivity.Instance.AllSources.Count.ToString());
-            for (int i = 0; i <Radioactivity.Instance.AllSources.Count; i++)
-            {
-                DrawSourceInfo(Radioactivity.Instance.AllSources[i]);
-            }
-            GUILayout.EndVertical();
-
-            GUILayout.BeginVertical();
-            GUILayout.Label("Sink List: Count = " + Radioactivity.Instance.AllSinks.Count.ToString());
-            for (int i = 0; i <Radioactivity.Instance.AllSinks.Count; i++)
-            {
-                DrawSinkInfo(Radioactivity.Instance.AllSinks[i]);
-            }
-            GUILayout.EndVertical();
-
-            GUILayout.BeginVertical();
-            GUILayout.Label("Link List: Count = " + Radioactivity.Instance.AllLinks.Count.ToString());
-            for (int i = 0; i <Radioactivity.Instance.AllLinks.Count; i++)
-            {
-                DrawLinkInfo(Radioactivity.Instance.AllLinks[i]);
-            }
-            GUILayout.EndVertical();
-
-            GUILayout.EndHorizontal();
-            GUI.DragWindow();
-        }
-
-        private void DrawSourceInfo(RadioactiveSource src)
-        {
-            if (src != null)
-            {
-                GUILayout.BeginHorizontal(entryStyle);
-                GUILayout.BeginVertical();
-                GUILayout.Label("Emitter ID: " + src.SourceID);
-                GUILayout.Label("On Part: " + src.part.name);
-                GUILayout.EndVertical();
-                GUILayout.Label("Strength: " + src.CurrentEmission.ToString());
-                GUILayout.EndHorizontal();
-            }
-        }
-        private void DrawSinkInfo(RadioactiveSink snk)
-        {
-            if (snk != null)
-            {
-                GUILayout.BeginHorizontal(entryStyle);
-                GUILayout.BeginVertical();
-                GUILayout.Label("Sink: " + snk.SinkID);
-                GUILayout.Label("On: " + snk.part.name);
-                GUILayout.EndVertical();
-                GUILayout.EndHorizontal();
-            }
-        }
-        private void DrawLinkInfo(RadiationLink lnk)
-        {
-            GUILayout.BeginHorizontal(entryStyle);
-            GUILayout.BeginVertical();
-            GUILayout.Label(lnk.source.SourceID  + " to " + lnk.sink.SinkID);
-            GUILayout.Label("End intensity: " + lnk.fluxEndScale.ToString());
-            GUILayout.EndVertical();
-            GUILayout.BeginVertical();
-            GUILayout.Label("Zones: " + lnk.ZoneCount.ToString());
-            GUILayout.Label("Occluders: " + lnk.OccluderCount.ToString());
-            if (GUILayout.Button("Path Details"))
-            {
-                if (currentDrawnLink != null)
-                {
-                    currentDrawnLink = null;
-                } else
-                {
-                    Rect x = GUILayoutUtility.GetLastRect();
-                    linkWindowPos.y = x.y + windowPos.y;
-                    currentDrawnLink = lnk;
-                }
-            }
-            GUILayout.EndVertical();
-            GUILayout.EndHorizontal();
-        }
-
-        private void DrawLinkWindow(int windowID)
-        {
-                DrawPathDetails();
-        }
-
-
-        private void DrawPathDetails()
-        {
-            GUILayout.Label("Attenuation Path Details");
-            GUILayout.Label("Connectivity: " + currentDrawnLink.source.SourceID + " to " + currentDrawnLink.sink.SinkID);
-            GUILayout.Label("Final Intensity: " + currentDrawnLink.fluxEndScale.ToString());
-
-            GUILayout.BeginVertical();
-            int n = 1;
-            foreach (AttenuationZone z in currentDrawnLink.Path)
-            {
-                GUILayout.Label(n.ToString() + ". " + z.ToString(),entryStyle);
-                n++;
-            }
-            GUILayout.EndVertical();
-        }
 
         public void OnDestroy()
         {

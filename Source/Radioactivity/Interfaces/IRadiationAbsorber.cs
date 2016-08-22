@@ -15,7 +15,7 @@ namespace Radioactivity.Interfaces
         string GetSinkName();
 
         // Get a string specifying the state of the emitter
-        string GetDetails();
+        Dictionary<string, string> GetDetails();
 
         // Add radiation to a part. Should propagate radiation to kerbals, track it, etc.
         void AddRadiation(float amt);

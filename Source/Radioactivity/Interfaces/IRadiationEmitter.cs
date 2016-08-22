@@ -14,12 +14,12 @@ namespace Radioactivity.Interfaces
         string GetSourceName();
 
         // Get a string describing the emitter
-        string GetDetails();
+        Dictionary<string, string> GetDetails();
 
         // Return true if the source is emitting
         bool IsEmitting();
 
         // Get the current radiation emission from this module
-        float GetEmission(); 
+        float GetEmission();
     }
 }

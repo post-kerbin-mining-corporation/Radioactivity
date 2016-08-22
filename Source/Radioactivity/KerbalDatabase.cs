@@ -15,6 +15,27 @@ namespace Radioactivity
             Kerbals = new Dictionary<string, RadioactivityKerbal>();
         }
 
+        public List<RadioactivityKerbal> VesselKerbals(List<ProtoCrewMember> crew)
+        {
+
+          return new List<RadioactivityKerbal>(Kerbals.values);
+        }
+        public List<RadioactivityKerbal> NearbyKerbals(List<ProtoCrewMember> crew)
+        {
+          return new List<RadioactivityKerbal>(Kerbals.values);
+        }
+        public List<RadioactivityKerbal> AllKerbals()
+        {
+          return new List<RadioactivityKerbal>(Kerbals.values);
+        }
+        public List<RadioactivityKerbal> ActiveKerbals()
+        {
+          return new List<RadioactivityKerbal>(Kerbals.values);
+        }
+        public List<RadioactivityKerbal> KSCKerbals()
+        {
+          return new List<RadioactivityKerbal>(Kerbals.values);
+        }
 
         internal void Load(ConfigNode node)
         {
