@@ -42,11 +42,39 @@ namespace Radioactivity
       public string GetEmitterAliases()
       {
           string aliases = "";
-          foreach (IRadiationEmitter abs in associatedEmitters)
+          for (int i = 0; i<associatedEmitters.Count ;i++)
           {
-              aliases += abs.GetAlias() + "\n";
+              aliases += associatedEmitters[i].GetAlias();
+              if (i + 1 < associatedEmitters.Count)
+              {
+                  aliases += "\n";
+              }
           }
           return aliases;
+      }
+      public string GetEmitterDetails()
+      {
+          string details = "";
+          for (int i = 0; i < associatedEmitters.Count; i++)
+          {
+              details += associatedEmitters[i].GetDetails();
+              if (i + 1 < associatedEmitters.Count)
+              {
+                  details += "\n";
+              }
+          }
+          return details;
+
+      }
+      public List<RadiationLink> GetAssociatedLinks()
+      {
+          List<RadiationLink> lnks = new List<RadiationLink>();
+          for (int i = 0; i < Radioactivity.Instance.AllLinks.Count; i++)
+          {
+              if (Radioactivity.Instance.AllLinks[i].source == this)
+                  lnks.Add(Radioactivity.Instance.AllLinks[i]);
+          }
+          return lnks;
       }
 
       // Access the current emission

@@ -13,6 +13,9 @@ namespace Radioactivity.Interfaces
         // Get the name of the RadioactiveSource on this part to use
         string GetSourceName();
 
+        // Get a string describing the emitter
+        string GetDetails();
+
         // Return true if the source is emitting
         bool IsEmitting();
 

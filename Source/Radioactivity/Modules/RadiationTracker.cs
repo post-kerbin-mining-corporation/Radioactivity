@@ -33,6 +33,11 @@ namespace Radioactivity
     {
         return "Tracker";
     }
+    public string GetDetails()
+    {
+        return String.Format("<color=#ffffff><b>Lifetime Dose</b>:</color> {0,6:####.#}", LifetimeRadiation);
+    }
+
 
     public string GetSinkName()
     {

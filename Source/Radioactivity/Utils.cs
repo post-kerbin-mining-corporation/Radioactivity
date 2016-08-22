@@ -23,12 +23,33 @@ namespace Radioactivity
       float zPortion = areas[2] / (size.y * size.x);
       float xzPortion = (Math.Min(xPortion, zPortion) + 2f * (xPortion * zPortion)) * (1f / 3f);
       float cube = size.x * size.y * size.z;
+      Debug.Log("Displacement calculation: size of " + p.partName + ": " + size.ToString());
       return cube;// *xzPortion * yPortion;
     }
 
     public static float GetDensity(Part p)
     {
         return p.mass / GetDisplacement(p);
+    }
+    public static string ToSI(double d, string format = null)
+    {
+        if (d == 0.0)
+            return d.ToString(format);
+
+        char[] incPrefixes = new[] { 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
+        char[] decPrefixes = new[] { 'm', '\u03bc', 'n', 'p', 'f', 'a', 'z', 'y' };
+
+        int degree = (int)Math.Floor(Math.Log10(Math.Abs(d)) / 3);
+        double scaled = d * Math.Pow(1000, -degree);
+
+        char? prefix = null;
+        switch (Math.Sign(degree))
+        {
+            case 1:  prefix = incPrefixes[degree - 1]; break;
+            case -1: prefix = decPrefixes[-degree - 1]; break;
+        }
+
+        return scaled.ToString(format) + " " + prefix;
     }
     public static Vector3 getRelativePosition(Transform origin, Vector3 position)
     {

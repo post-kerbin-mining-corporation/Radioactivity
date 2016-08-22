@@ -116,6 +116,24 @@ namespace Radioactivity
             sink.AddRadiation((float)((double)source.CurrentEmission * timeScale * fluxEndScale));
         }
 
+        // Simulate the link in the editor
+        public void SimulateEditor(float timeScale)
+        {
+            TestRecompute();
+            if (needsGeometricRecalculation)
+            {
+                RadioactivityOverlay.Instance.Update(this);
+                ComputeGeometry(this.source, this.sink);
+            }
+            if (needsSimpleRecalculation)
+            {
+                RadioactivityOverlay.Instance.Update(this);
+                fluxEndScale = AttenuateFlux(Path, 1.0f);
+            }
+
+            sink.AddRadiation((float)((double)source.CurrentEmission * timeScale * fluxEndScale));
+        }
+
         // Tests to see whether the LOS needs to be recomputed
         public void TestRecompute()
         {

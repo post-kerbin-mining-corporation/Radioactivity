@@ -47,7 +47,10 @@ namespace Radioactivity
     {
         return "Nuclear Engine";
     }
-
+    public string GetDetails()
+    {
+        return String.Format("<color=#ffffff><b>Engine Emission</b>:</color> {0}Sv", Utils.ToSI(currentEmission,"F2").PadLeft(15));
+    }
 
     public override void OnStart(PartModule.StartState state)
     {

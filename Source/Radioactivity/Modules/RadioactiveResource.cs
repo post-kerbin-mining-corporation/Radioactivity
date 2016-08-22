@@ -40,6 +40,10 @@ namespace Radioactivity
       {
           return "Resource";
       }
+      public string GetDetails()
+      {
+          return "";
+      }
 
       float currentEmission = 0f;
       bool emitting = true;

@@ -80,6 +80,7 @@ namespace Radioactivity
              RadiationTracker tracker = p.gameObject.AddComponent<RadiationTracker>();
 
              sink.SinkID = "Kerbal";
+             sink.IconID = 3;
              tracker.AbsorberID = "Kerbal";
              evaModified = true;
          }
@@ -225,12 +226,13 @@ namespace Radioactivity
         {
             GameEvents.onEditorShipModified.Remove(new EventData<ShipConstruct>.OnEvent(onEditorVesselModified));
         }
-        StartCoroutine(WaitForInit(5));
+        StartCoroutine(WaitForInit(0.1f));
     }
 
-    protected IEnumerator WaitForInit(int frames)
+    protected IEnumerator WaitForInit(float t)
     {
-        yield return frames;
+        
+        yield return new WaitForSeconds(t);
         simulationReady = true;
         Utils.Log("Simulator: Ready");
     }
@@ -359,7 +361,14 @@ namespace Radioactivity
     {
         if (simulationReady)
         {
-            Simulate();
+            if (HighLogic.LoadedSceneIsEditor)
+            {
+                SimulateEditor();
+            }
+            else
+            {
+                Simulate();
+            }
         }
 
     }
@@ -401,5 +410,24 @@ namespace Radioactivity
     }
 
 
+    // Master method that simulates radiation
+    protected void SimulateEditor()
+    {
+        // Simulate point radiation
+        if (RadioactivitySettings.simulatePointRadiation)
+            SimulatePointRadiationEditor();
+
+        
+    }
+    // simulate point radiation
+    protected void SimulatePointRadiationEditor()
+    {
+        for (int i = 0; i < allLinks.Count; i++)
+        {
+            // Simulate the radiation based on precomputed pathways
+            allLinks[i].SimulateEditor(TimeWarp.fixedDeltaTime);
+        }
+
+    }
   }
 }

@@ -49,10 +49,30 @@ namespace Radioactivity
     public string GetAbsorberAliases()
     {
       string aliases = "";
-      foreach (IRadiationAbsorber abs in associatedAbsorbers) {
-        aliases += abs.GetAlias() + "\n";
+      for (int i = 0; i < associatedAbsorbers.Count; i++) 
+      {
+          aliases += associatedAbsorbers[i].GetAlias();
+
+          if (i + 1 < associatedAbsorbers.Count)
+          {
+              aliases += "\n";
+          }
       }
       return aliases;
+    }
+    public string GetAbsorberDetails()
+    {
+        string details = "";
+        for (int i = 0; i < associatedAbsorbers.Count; i++)
+        {
+            details += associatedAbsorbers[i].GetDetails();
+            if (i + 1 < associatedAbsorbers.Count)
+            {
+                details += "\n";
+            }
+        }
+        return details;
+        
     }
 
     private double currentRadiation;
@@ -73,10 +93,7 @@ namespace Radioactivity
     {
       currentRadiation = 0d;
     }
-    public void DrawUIDetails()
-    {
 
-    }
 
     public override void OnStart(PartModule.StartState state)
     {

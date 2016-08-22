@@ -37,6 +37,11 @@ namespace Radioactivity
     {
         return "Crew";
     }
+    public string GetDetails()
+    {
+        return String.Format("<color=#ffffff><b>Shielding</b>:</color> {0}% \n " +
+           "<color=#ffffff><b>Dose to Crew</b>:</color> {1}Sv ", (RadiationAttenuationFraction * 100f).ToString().PadLeft(15), Utils.ToSI(CurrentRadiation,"F2").PadLeft(15));
+        }
     public string GetSinkName()
     {
         return AbsorberID;
@@ -51,8 +56,8 @@ namespace Radioactivity
 
     public void FixedUpdate()
     {
-      CurrentRadiationString = String.Format("{0:F2}/s", CurrentRadiation);
-      LifetimeRadiationString = String.Format("{0:F2}/s", LifetimeRadiation);
+      CurrentRadiationString = Utils.ToSI(CurrentRadiation, "F2") + "Sv/s";
+      LifetimeRadiationString = Utils.ToSI(LifetimeRadiation, "F2") + "Sv";
 
       CurrentRadiation = LifetimeRadiation - prevRadiation;
       prevRadiation = LifetimeRadiation;

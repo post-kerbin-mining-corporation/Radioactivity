@@ -19,7 +19,7 @@ namespace Radioactivity.UI
 
     int windowID;
 
-    Vector2 iconDims = new Vector2(40f, 40f);
+    Vector2 iconDims = new Vector2(32f, 32f);
     Vector2 windowDims = new Vector2(200f, 120f);
 
 
@@ -59,16 +59,21 @@ namespace Radioactivity.UI
 
     internal void GetStyles()
     {
-      windowStyle = new GUIStyle(HighLogic.Skin.window);
-      groupStyle = new GUIStyle(HighLogic.Skin.textArea);
-      textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
-      textHeaderStyle.normal.textColor = Color.white;
-      textHeaderStyle.stretchWidth = true;
-      textHeaderStyle.alignment = TextAnchor.UpperLeft;
+        windowStyle = new GUIStyle(HighLogic.Skin.window);
+        windowStyle.fontSize = 10;
+        groupStyle = new GUIStyle(HighLogic.Skin.textArea);
+        textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
+        textHeaderStyle.normal.textColor = Color.white;
+        textHeaderStyle.fontSize = 10;
+        textHeaderStyle.stretchWidth = true;
+        textHeaderStyle.alignment = TextAnchor.UpperLeft;
+
         textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
         textDescriptorStyle.alignment = TextAnchor.UpperRight;
         textDescriptorStyle.stretchWidth = true;
+        textDescriptorStyle.fontSize = 10;
         buttonStyle = new GUIStyle(HighLogic.Skin.button);
+        buttonStyle.fontSize = 10;
 
     }
 
@@ -89,7 +94,7 @@ namespace Radioactivity.UI
     internal void DrawButton()
     {
       GUI.DrawTextureWithTexCoords(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), atlas, atlasIconRect);
-        if (GUI.Button(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), ""))
+        if (GUI.Button(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), "", new GUIStyle()))
         {
             showWindow = !showWindow;
         }
@@ -99,11 +104,11 @@ namespace Radioactivity.UI
     {
       GUILayout.BeginVertical(groupStyle);
       GUILayout.BeginHorizontal();
-      GUILayout.Label("Dose at surface", textHeaderStyle);
+      GUILayout.Label("<b>Dose at surface</b>", textHeaderStyle);
       GUILayout.Label(sink.CurrentRadiation.ToString(), textDescriptorStyle);
       GUILayout.EndHorizontal();
       GUILayout.BeginHorizontal();
-      GUILayout.Label("Affected", textHeaderStyle);
+      GUILayout.Label("<b>Affected</b>", textHeaderStyle);
       GUILayout.Label(sink.GetAbsorberAliases(),textDescriptorStyle);
       GUILayout.EndHorizontal();
       GUILayout.EndVertical();
@@ -120,7 +125,7 @@ namespace Radioactivity.UI
     internal void DrawDetails()
     {
       GUILayout.BeginVertical(groupStyle);
-
+      GUILayout.Label(sink.GetAbsorberDetails(), textDescriptorStyle);
       GUILayout.EndVertical();
     }
   }

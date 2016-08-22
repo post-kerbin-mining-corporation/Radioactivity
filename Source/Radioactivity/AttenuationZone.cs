@@ -88,6 +88,7 @@ namespace Radioactivity
 
             return data;
         }
+        
         public double Attenuate(double inStrength)
         {
             attenuationIn = inStrength;
