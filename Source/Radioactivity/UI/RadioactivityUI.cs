@@ -98,19 +98,21 @@ namespace Radioactivity.UI
                   DrawRoster();
             }
         }
-
+        bool overlayToggled = false;
+        bool rosterToggled = false;
         public void DrawMainWindow(int WindowID)
         {
             GUILayout.BeginVertical();
-            if(GUILayout.Toggle(overlayShown, "Overlay", buttonStyle))
+            overlayShown = GUILayout.Toggle(overlayShown, "Overlay", buttonStyle);
+            if (overlayShown != overlayToggled)
             {
-                overlayShown = !overlayShown;
+                overlayToggled = overlayShown;
                 Radioactivity.Instance.ShowAllOverlays();
             }
-            if(GUILayout.Toggle(rosterShown, "Roster", buttonStyle))
+            rosterShown = GUILayout.Toggle(rosterShown, "Roster", buttonStyle);
+            if (rosterShown != rosterToggled)
             {
-              rosterShown = !rosterShown;
-
+                rosterToggled = rosterShown;
             }
             GUILayout.EndVertical();
             GUI.DragWindow();

@@ -37,6 +37,11 @@ namespace Radioactivity
         {
             dist1 = d1;
             dist2 = d2;
+            if (HighLogic.LoadedSceneIsEditor)
+            {
+                part.DragCubes.SetDragWeights();
+            }
+
             volume = Utils.GetDisplacement(part);
             if (part.Rigidbody != null)
                 density = part.Rigidbody.mass / volume;

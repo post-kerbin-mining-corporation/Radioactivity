@@ -15,7 +15,7 @@ namespace Radioactivity.UI
 
     System.Random random;
     int windowIdentifier;
-    Rect windowPosition =  new Rect(210, 15, 350, 150);
+    Rect windowPosition =  new Rect(210, 15, 425, 250);
 
     int modeFlag = 0;
     string[] modeStrings = new string[] {"CURRENT","NEARBY","KSC","ACTIVE","ALL"};
@@ -66,7 +66,7 @@ namespace Radioactivity.UI
       barFGStyle.border = barBGStyle.border;
       barFGStyle.padding = barBGStyle.padding;
 
-
+      atlas = (Texture)GameDatabase.Instance.GetTexture("Radioactivity/UI/icon_atlas", false);
     }
 
 
@@ -82,6 +82,7 @@ namespace Radioactivity.UI
           break;
           case 2:
           GetKerbalsKSC();
+          break;
          case 3:
          GetKerbalsActive();
           break;
@@ -93,22 +94,32 @@ namespace Radioactivity.UI
      // Get kerbals in the vessel
      internal void GetKerbalsVessel()
      {
-       drawnKerbals = KerbalTracking.KerbalDatabase.VesselKerbals(FlightGlobals.activeVessel);
+         drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(FlightGlobals.ActiveVessel.GetVesselCrew());
      }
      // Get all kerbals in the physics bubble
      internal void GetKerbalsLocal()
      {
-       drawnKerbals = KerbalTracking.KerbalDatabase.NearbyKerbals(FlightGlobals.activeVessels);
+         List<ProtoCrewMember> nearbyCrew = new List<ProtoCrewMember>();
+         for (int i = 0; i < FlightGlobals.Vessels.Count; i++)
+         {
+             nearbyCrew.Concat(FlightGlobals.Vessels[i].GetVesselCrew());
+         }
+         
+         drawnKerbals = KerbalTracking.Instance.KerbalDB.NearbyKerbals(nearbyCrew);
      }
      // Get kerbals that are in flight
      internal void GetKerbalsActive()
      {
-       drawnKerbals = KerbalTracking.KerbalDatabase.ActiveKerbals();
+         drawnKerbals = KerbalTracking.Instance.KerbalDB.ActiveKerbals();
+     }
+     internal void GetKerbalsKSC()
+     {
+         drawnKerbals = KerbalTracking.Instance.KerbalDB.KSCKerbals();
      }
      // Get all kerbals
      internal void GetKerbalsAll()
      {
-       drawnKerbals = KerbalTracking.KerbalDatabase.AllKerbals();
+         drawnKerbals = KerbalTracking.Instance.KerbalDB.AllKerbals();
      }
 
 
@@ -120,7 +131,7 @@ namespace Radioactivity.UI
      void DrawWindow(int WindowID)
      {
         DrawModeBar();
-        scrollPosition = GUILayout.BeginScrollView(scrollPosition, groupStyle, GUILayout.Width(350), GUILayout.MinHeight(150));
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, groupStyle, GUILayout.Width(425), GUILayout.MinHeight(100));
         DrawKerbalList();
         GUILayout.EndScrollView();
         GUI.DragWindow();
@@ -152,15 +163,15 @@ namespace Radioactivity.UI
        GUILayout.BeginHorizontal(groupStyle);
 
 
-       GUILayout.Label(kerbal.Name, labelStyle);
+       GUILayout.Label("<b><color=#ffffff>" + kerbal.Name + "</color></b>", labelStyle);
 
-       float tempAreaWidth = 250f;
-       float tempBarWidth = 250f;
+       float tempAreaWidth = 325f;
+       float tempBarWidth = 200f;
        Rect tempArea = GUILayoutUtility.GetRect(tempAreaWidth, 50f);
        Rect barArea = new Rect(20f, 20f, tempBarWidth, 40f);
 
-       float sickIconPos = tempBarWidth * RadioactivitySettings.kerbalSicknessThreshold/Radioactivity.kerbalDeathThreshold;
-       float tempBarFGSize = tempBarWidth * Mathf.Clamp01(kerbal.TotalExposure / RadioactivitySettings.kerbalDeathThreshold);
+       float sickIconPos = tempBarWidth * RadioactivitySettings.kerbalSicknessThreshold/RadioactivitySettings.kerbalDeathThreshold;
+       float tempBarFGSize = (tempBarWidth-4f) * Mathf.Clamp01((float)kerbal.TotalExposure / RadioactivitySettings.kerbalDeathThreshold);
 
        // Bars
        GUI.BeginGroup(tempArea);
@@ -170,25 +181,25 @@ namespace Radioactivity.UI
        if (kerbal.TotalExposure < RadioactivitySettings.kerbalSicknessThreshold)
           GUI.color = Color.green;
        else if (kerbal.TotalExposure < RadioactivitySettings.kerbalDeathThreshold)
-          GUI.color = Color.orange;
+          GUI.color = Color.yellow;
        else
           GUI.color = Color.red;
           
-       GUI.Box(new Rect(0f, 11f, tempBarFGSize, 7f), "", barFGStyle);
+       GUI.Box(new Rect(2f, 11f, tempBarFGSize, 7f), "", barFGStyle);
        GUI.color = Color.white;
 
 
        // icons
-       GUI.DrawTextureWithTexCoords(new Rect(sickIconPos - iconDims.x / 2f,  iconDims.y / 2f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.5f,0.5f,0.5f));
-       GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth) - iconDims.x / 2f,  iconDims.y / 2f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.5f,0.5f,0.5f));
+       GUI.DrawTextureWithTexCoords(new Rect(sickIconPos - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.5f,0.5f,0.5f));
+       GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.5f,0.5f,0.5f));
 
        // icon labels
-       GUI.Label(new Rect(sickIconPos - iconDims.x / 2f, iconDims.y +2f, iconDims.x, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalSicknessThreshold,"F0")), labelStyle);
-       GUI.Label(new Rect(tempBarWidth - iconDims.x / 2f, iconDims.y +2f, iconDims.x, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalSicknessThreshold,"F0")), labelStyle);
+       GUI.Label(new Rect(sickIconPos - iconDims.x, iconDims.y +4f, iconDims.x*2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalSicknessThreshold,"F0")), labelStyle);
+       GUI.Label(new Rect(tempBarWidth - iconDims.x, iconDims.y +4f, iconDims.x*2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalDeathThreshold,"F0")), labelStyle);
 
        // End labels
-       GUI.Label(new Rect(tempBarWidth - 80f, 23f, 80f, 20f), String.Format("<b>Current:</b> {0}Sv/s", Utils.ToSI(kerbal.CurrentExposure,"F2")), labelStyle);
-       GUI.Label(new Rect(tempBarWidth - 80f, 38f, 80f, 20f), String.Format("<b>Total:</b> {0}Sv", Utils.ToSI(kerbal.TotalExposure,"F2")), labelStyle);
+       GUI.Label(new Rect(tempBarWidth + 20f, 2f, 120f, 20f), String.Format("<b><color=#ffffff>Current:</color></b> {0}Sv/s", Utils.ToSI(kerbal.CurrentExposure, "F2")), labelStyle);
+       GUI.Label(new Rect(tempBarWidth + 20f, 20f, 120f, 20f), String.Format("<b><color=#ffffff>Total:</color></b> {0}Sv", Utils.ToSI(kerbal.TotalExposure, "F2")), labelStyle);
 
        // GUI.Label(new Rect(20f+tempBarWidth, 30f, 40f, 20f), String.Format("{0:F0} K", meltdownTemp), gui_text);
        GUI.EndGroup();

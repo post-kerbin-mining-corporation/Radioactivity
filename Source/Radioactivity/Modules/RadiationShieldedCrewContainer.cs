@@ -44,8 +44,8 @@ namespace Radioactivity
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();
-        toReturn.Add("<color=#ffffff><b>Shielding</b>:</color>", String.Format( "{0}", RadiationAttenuationFraction * 100f))
-        toReturn.Add("<color=#ffffff><b>Crew Dose</b>:</color>", String.Format( "{0}Sv", Utils.ToSI(CurrentRadiation,"F2")))
+        toReturn.Add("<color=#ffffff><b>Shielding</b>:</color>", String.Format( "{0}", RadiationAttenuationFraction * 100f));
+        toReturn.Add("<color=#ffffff><b>Crew Dose</b>:</color>", String.Format("{0}Sv", Utils.ToSI(CurrentRadiation, "F2")));
         return toReturn;
       }
     public string GetSinkName()
@@ -59,7 +59,7 @@ namespace Radioactivity
       LifetimeRadiation = LifetimeRadiation + amt * (1f - RadiationAttenuationFraction);
 
       if (HighLogic.LoadedSceneIsFlight)
-        IrradiateCrew(amt);
+          IrradiateCrew(amt * (1f - RadiationAttenuationFraction));
     }
 
     public void FixedUpdate()

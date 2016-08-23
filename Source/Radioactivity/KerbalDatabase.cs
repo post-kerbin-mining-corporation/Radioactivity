@@ -17,42 +17,67 @@ namespace Radioactivity
 
         public List<RadioactivityKerbal> VesselKerbals(List<ProtoCrewMember> crew)
         {
-
-          return new List<RadioactivityKerbal>(Kerbals.values);
+            List<RadioactivityKerbal> toReturn = new List<RadioactivityKerbal>();
+            foreach (var kvp in Kerbals)
+            {
+                foreach (ProtoCrewMember c in crew)
+                {
+                    if (kvp.Value.Kerbal == c)
+                        toReturn.Add(kvp.Value);
+                }
+            }
+          return toReturn;
         }
+
         public List<RadioactivityKerbal> NearbyKerbals(List<ProtoCrewMember> crew)
         {
-          return new List<RadioactivityKerbal>(Kerbals.values);
+            return new List<RadioactivityKerbal>(Kerbals.Values);
         }
         public List<RadioactivityKerbal> AllKerbals()
         {
-          return new List<RadioactivityKerbal>(Kerbals.values);
+            return new List<RadioactivityKerbal>(Kerbals.Values);
         }
         public List<RadioactivityKerbal> ActiveKerbals()
         {
-          return new List<RadioactivityKerbal>(Kerbals.values);
+            return new List<RadioactivityKerbal>(Kerbals.Values);
         }
         public List<RadioactivityKerbal> KSCKerbals()
         {
-          return new List<RadioactivityKerbal>(Kerbals.values);
+            return new List<RadioactivityKerbal>(Kerbals.Values);
         }
 
         internal void Load(ConfigNode node)
         {
             Utils.Log("Kerbal Database: Loading...");
             Kerbals.Clear();
-
-            ConfigNode[] kNodes = node.GetNodes(RadioactivitySettings.pluginConfigNodeName);
+            Utils.Log("Kerbal Database: Loading from persistence");
+            ConfigNode mNode = node.GetNode(RadioactivitySettings.pluginConfigNodeName);
+            ConfigNode[] kNodes = mNode.GetNodes(RadioactivitySettings.kerbalConfigNodeName);
             foreach (ConfigNode kNode in kNodes)
             {
+                
                 if (kNode.HasValue("KerbalName"))
                 {
                     string idx = kNode.GetValue("KerbalName");
-                    Utils.Log(string.Format("Kerbal Database: Loading kerbal {0}", idx));
-                    RadioactivityKerbal kerbal = RadioactivityKerbal.Load(kNode, idx);
+                    Utils.Log(String.Format("Kerbal Database: Loading kerbal {0}", idx));
+                    RadioactivityKerbal kerbal = new RadioactivityKerbal(idx);
+                    kerbal.Load(kNode, idx);
                     Kerbals[idx] = kerbal;
                 }
             }
+            Utils.Log("Kerbal Database: Loading from roster");
+            var crewList = HighLogic.CurrentGame.CrewRoster.Crew.Concat(HighLogic.CurrentGame.CrewRoster.Applicants).Concat(HighLogic.CurrentGame.CrewRoster.Tourist).Concat(HighLogic.CurrentGame.CrewRoster.Unowned).ToList();
+            foreach (ProtoCrewMember crew in crewList)
+            {
+                if (!Kerbals.ContainsKey(crew.name))
+                {
+                    Utils.Log(String.Format("Kerbal Database: Loading kerbal {0}", crew.name));
+                    RadioactivityKerbal kerbal = new RadioactivityKerbal(crew.name);
+                    kerbal.Load(crew);
+                    Kerbals[crew.name] = kerbal;
+                }
+            }
+            Utils.Log(String.Format("Kerbal Database: Loaded {0} Kerbals",Kerbals.Count ));
             Utils.Log("Kerbal Database: Loading Complete!");
         }
 
@@ -110,25 +135,38 @@ namespace Radioactivity
           TotalExposure = TotalExposure + amt;
           CurrentExposure = amt;
         }
-
-        public static RadioactivityKerbal Load(ConfigNode config, string name)
+        // Load from confignode
+        public void Load(ConfigNode config, string name)
         {
-            RadioactivityKerbal newKerbal = new RadioactivityKerbal(name);
+
+            Name = name;
+            var crewList = HighLogic.CurrentGame.CrewRoster.Crew.Concat(HighLogic.CurrentGame.CrewRoster.Applicants).Concat(HighLogic.CurrentGame.CrewRoster.Tourist).Concat(HighLogic.CurrentGame.CrewRoster.Unowned).ToList();
+            Kerbal = crewList.FirstOrDefault(a => a.name == name);
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
-            newKerbal.TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
-            newKerbal.CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
-            return newKerbal;
+            TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
+            CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
+            
+        }
+        public void Load(ProtoCrewMember crewMember)
+        {
+            Name = crewMember.name;
+            Kerbal = crewMember;
+            
+            //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
+            TotalExposure = 0d;
+            CurrentExposure = 0d;
+            
         }
 
         public ConfigNode Save(ConfigNode config)
         {
             ConfigNode node = config.AddNode(RadioactivitySettings.kerbalConfigNodeName);
-            config.AddValue("lastUpdate", LastUpdate);
-            config.AddValue("Name", Name);
-            config.AddValue("Status", Status);
-            config.AddValue("Type", CrewType);
-            config.AddValue("TotalExposure", TotalExposure);
-            config.AddValue("CurrentExposure", CurrentExposure);
+            node.AddValue("lastUpdate", LastUpdate);
+            //node.AddValue("Name", Name);
+            node.AddValue("Status", Status);
+            node.AddValue("Type", CrewType);
+            node.AddValue("TotalExposure", TotalExposure);
+            node.AddValue("CurrentExposure", CurrentExposure);
 
             return node;
         }

@@ -40,7 +40,7 @@ namespace Radioactivity
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();
-        toReturn.Add("<color=#ffffff><b>Lifetime Dose</b>:</color>", String.Format( "{0}Sv", Utils.ToSI(LifetimeRadiation,"F2")))
+        toReturn.Add("<color=#ffffff><b>Lifetime Dose</b>:</color>", String.Format("{0}Sv", Utils.ToSI(LifetimeRadiation, "F2")));
         return toReturn;
     }
 

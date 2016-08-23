@@ -128,7 +128,7 @@ namespace Radioactivity
           }
       }
 
-      public override void OnFixedUpdate()
+      public void FixedUpdate()
       {
         PollEmitters();
       }
