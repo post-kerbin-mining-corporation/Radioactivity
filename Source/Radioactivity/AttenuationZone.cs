@@ -59,7 +59,7 @@ namespace Radioactivity
                 attenuationCoeff = (double)parameters.AttenuationCoefficient;
             }
             startPosition = start;
-            endPosition = end; 
+            endPosition = end;
         }
 
         public AttenuationZone(float d1, float d2, AttenuationType tp, Vector3 start, Vector3 end)
@@ -93,7 +93,7 @@ namespace Radioactivity
 
             return data;
         }
-        
+
         public double Attenuate(double inStrength)
         {
             attenuationIn = inStrength;
@@ -111,7 +111,7 @@ namespace Radioactivity
                 // Need -(u/p) * p*l , where p = density in g/cm3 and l=path length
                 // So atten * Mathf.Exp (-density*this.size * massAttenuationCoeff);
                 //attenuationOut = atten * Math.Exp(-1d * (double)(dist2-dist1) * attenuationCoeff);
-                attenuationOut = atten * Math.Exp(-1d * density * (double)(dist2 - dist1) * attenuationCoeff);
+                attenuationOut = atten * Math.Exp(-1d * (double)(associatedPart.Rigidbody.mass/volume * (dist2 - dist1)) * attenuationCoeff);
             }
             if (attenuationType == AttenuationType.Part)
             {
@@ -119,7 +119,7 @@ namespace Radioactivity
                 // TODO: as in ParameterizedPart
                 // attenuate the distance
                 //double distScale = inStrength / (double)(this.size * this.size);
-                double materialScale = Math.Exp(-1d * density * (double)(dist2 - dist1) * attenuationCoeff);
+                double materialScale = Math.Exp(-1d * (double)(associatedPart.Rigidbody.mass/volume * (dist2 - dist1)) * attenuationCoeff);
 
                 attenuationOut = materialScale * atten ;
                 // i0*e^(-ux), x = thickness (cm), u = linear attenuation coeff (cm-1). u values:
