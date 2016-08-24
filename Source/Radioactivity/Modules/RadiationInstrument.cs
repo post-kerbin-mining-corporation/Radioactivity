@@ -60,7 +60,7 @@ namespace Radioactivity
     {
         LifetimeRadiation = LifetimeRadiation + amt;
     }
-    public override void OnStart()
+    public override void OnStart(PartModule.StartState state)
     {
       experiment = this.GetComponent<ModuleScienceExperiment>();
       if (experiment != null)
@@ -77,7 +77,7 @@ namespace Radioactivity
        LifetimeRadiationString = String.Format("{0:F2}", LifetimeRadiation);
        if (HighLogic.LoadedSceneIsFlight && experiment != null)
        {
-         experiment.baseValue = baseValue * PenaltyCurve.Evaluate((float)CurrentRadiation);
+         experiment.experiment.baseValue = baseValue * PenaltyCurve.Evaluate((float)CurrentRadiation);
        }
     }
   }

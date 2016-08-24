@@ -51,7 +51,7 @@ namespace Radioactivity
 
     public int GetSASPenalty()
     {
-      float fPenalty = PenaltyCurve.Evaluate(CurrentRadiation);
+      float fPenalty = PenaltyCurve.Evaluate((float)CurrentRadiation);
       return (int)Mathf.Round(fPenalty);
     }
 
@@ -90,7 +90,7 @@ namespace Radioactivity
     void ApplySASPenalty()
     {
       if (drone != null)
-        drone.SASServiceLevel = Mathf.Clamp(baseSAS - GetSASPenalty, 0, 5);
+        drone.SASServiceLevel = Mathf.Clamp(baseSAS - GetSASPenalty(), 0, 5);
     }
   }
 }

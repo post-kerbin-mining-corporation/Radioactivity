@@ -23,7 +23,7 @@ namespace Radioactivity.UI
     int windowID;
 
     Vector2 iconDims = new Vector2(16f, 16f);
-    Vector2 windowDims = new Vector2(200f, 120f);
+    Vector2 windowDims = new Vector2(150f, 20f);
 
 
     Vector3 worldPosition;
@@ -64,17 +64,24 @@ namespace Radioactivity.UI
     {
         windowStyle = new GUIStyle(HighLogic.Skin.window);
         windowStyle.fontSize = 10;
+        windowStyle.normal.background = null;
+        windowStyle.padding = new RectOffset(0,0,0,0);
+
         groupStyle = new GUIStyle(HighLogic.Skin.textArea);
+        groupStyle.normal.background = HighLogic.Skin.window.normal.background;
+        groupStyle.padding = new RectOffset(0, 0, 0, 0);
+
         textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
         textHeaderStyle.normal.textColor = Color.white;
         textHeaderStyle.fontSize = 10;
         textHeaderStyle.stretchWidth = true;
         textHeaderStyle.alignment = TextAnchor.UpperLeft;
-
+        textHeaderStyle.padding = new RectOffset(0,0,0,0);
         textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
         textDescriptorStyle.alignment = TextAnchor.UpperRight;
         textDescriptorStyle.stretchWidth = true;
         textDescriptorStyle.fontSize = 10;
+        textDescriptorStyle.padding = new RectOffset(0, 0, 0, 0);
         buttonStyle = new GUIStyle(HighLogic.Skin.button);
         buttonStyle.fontSize = 10;
 
@@ -84,13 +91,13 @@ namespace Radioactivity.UI
     {
         // Set up screen position
         screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
-        windowPosition = new Rect(screenPosition.x + iconDims.x/2, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
+        windowPosition = new Rect(screenPosition.x + iconDims.x/2+5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
     }
 
     public void Draw()
     {
         if (showWindow)
-            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, "", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
         if (screenPosition.z > 0f)
             DrawButton();
     }
@@ -99,17 +106,19 @@ namespace Radioactivity.UI
     {
 
         Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
-        Rect labelRect = new Rect (buttonRect.xMax, buttonRect.yMin, 120f, iconDims.y);
+        Rect labelRect = new Rect (buttonRect.xMax+5f, buttonRect.yMin, 100f, iconDims.y);
 
         GUI.DrawTextureWithTexCoords(buttonRect, atlas, atlasIconRect);
-        GUILayout.BeginArea(labelRect);
-        GUILayout.Label (String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")) , textHeaderStyle);
+        GUILayout.BeginArea(labelRect,groupStyle);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")), textDescriptorStyle, GUILayout.MinWidth(50f));
         if (GUILayout.Button("><"))
         {
           showWindow = !showWindow;
         }
         //if (GUILayout.Button("*"))
         //  showDetails = !showDetails;
+        GUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
   
@@ -117,7 +126,7 @@ namespace Radioactivity.UI
     internal void DrawWindow(int WindowID)
     {
 
-      DrawDetails
+        DrawDetails();
 
     }
 

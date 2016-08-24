@@ -58,6 +58,8 @@
     <Compile Include="Interfaces\IRadiationEmitter.cs" />
     <Compile Include="KerbalDatabase.cs" />
     <Compile Include="KerbalTracking.cs" />
+    <Compile Include="Modules\RadiationDroneCore.cs" />
+    <Compile Include="Modules\RadiationInstrument.cs" />
     <Compile Include="Modules\RadiationParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiationLink.cs" />
