@@ -29,6 +29,8 @@ namespace Radioactivity
               KerbalDB.Load(node);
               RadioactivitySettings.Load();
               Utils.Log("Kerbal Tracking: Done Loading");
+              // Update the kerbals from the DB if time has passed
+              KerbalDB.PropagateExposure();
           }
 
           public override void OnSave(ConfigNode node)
@@ -37,6 +39,20 @@ namespace Radioactivity
               base.OnSave(node);
               KerbalDB.Save(node);
               Utils.Log("Kerbal Tracking: Finished Saving");
+          }
+
+          internal void FixedUpdate()
+          {
+
+          }
+
+          public void SimulateKerbals(float time)
+          {
+            foreach (KeyValuePair<string,RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
+            {
+              if (crew == kerbal.Value.Kerbal)
+                kerbal.Value.Heal();
+            }
           }
 
           // Irradiates a kerbal

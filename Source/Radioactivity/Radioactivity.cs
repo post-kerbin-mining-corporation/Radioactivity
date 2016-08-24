@@ -404,6 +404,8 @@ namespace Radioactivity
 
       if (RadioactivitySettings.simulateCosmicRadiation)
           SimulateCosmicRadiation();
+
+      SimulateKerbals();
     }
 
     // simulate point radiation
@@ -445,6 +447,13 @@ namespace Radioactivity
             // Simulate the radiation based on precomputed pathways
             allLinks[i].SimulateEditor(TimeWarp.fixedDeltaTime);
         }
+
+    }
+
+    // simulate everything we need to do with Kerbals
+    protected void SimulateKerbals()
+    {
+        KerbalTracking.Instance.SimulateKerbals(TimeWarp.fixedDeltaTime);
 
     }
   }

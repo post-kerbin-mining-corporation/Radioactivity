@@ -55,7 +55,7 @@ namespace Radioactivity
             ConfigNode[] kNodes = mNode.GetNodes(RadioactivitySettings.kerbalConfigNodeName);
             foreach (ConfigNode kNode in kNodes)
             {
-                
+
                 if (kNode.HasValue("KerbalName"))
                 {
                     string idx = kNode.GetValue("KerbalName");
@@ -103,6 +103,15 @@ namespace Radioactivity
             Utils.Log("Kerbal Database: Saving completed!");
 
         }
+
+        public void PropagateExposure()
+        {
+           double curTime = Planetarium.GetUniversalTime();
+           for (int i = 0; i < Kerbals.Count ;i++)
+           {
+             Kerbals[i].IrradiateOverTime(curTime);
+           }
+        }
     }
 
     class RadioactivityKerbal
@@ -129,11 +138,33 @@ namespace Radioactivity
             TotalExposure = 0d;
             CurrentExposure = 0d;
         }
-
+        // Add radiation to a kerbal
         public void Irradiate(double amt)
         {
+          LastUpdate = Planetarium.GetUniversalTime();
           TotalExposure = TotalExposure + amt;
           CurrentExposure = amt;
+        }
+        // Add radiation to a kerbal based on the latest exposure metrics
+        public void IrradiateOverTime(double curTime)
+        {
+          double catchupSeconds = curTime - LastUpdate;
+          double catchupExposure = catchupSeconds*CurrentExposure;
+          TotalExposure = TotalExposure + catchupSeconds;
+        }
+        public void Heal()
+        {
+          if (Kerbal.RosterStatus == RosterStatus.Available)
+          {
+              TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC;
+          } else
+          {
+            if (Kerbal.CurrentExposure <= RadioactivitySettings.kerbalHealThreshold)
+            {
+                TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate;
+            }
+          }
+
         }
         // Load from confignode
         public void Load(ConfigNode config, string name)
@@ -143,19 +174,20 @@ namespace Radioactivity
             var crewList = HighLogic.CurrentGame.CrewRoster.Crew.Concat(HighLogic.CurrentGame.CrewRoster.Applicants).Concat(HighLogic.CurrentGame.CrewRoster.Tourist).Concat(HighLogic.CurrentGame.CrewRoster.Unowned).ToList();
             Kerbal = crewList.FirstOrDefault(a => a.name == name);
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
+            LastUpdate = Utils.GetValue(config, "LastUpdate", 0d);
             TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
             CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
-            
+
         }
         public void Load(ProtoCrewMember crewMember)
         {
             Name = crewMember.name;
             Kerbal = crewMember;
-            
+
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
             TotalExposure = 0d;
             CurrentExposure = 0d;
-            
+
         }
 
         public ConfigNode Save(ConfigNode config)

@@ -54,6 +54,8 @@ namespace Radioactivity
     public static float kerbalSicknessThreshold = 1f;
     // Threshold before inducing death (Sv)
     public static float kerbalDeathThreshold = 10f;
+    // Threshold for kerbal radiation healing
+    public static double kerbalHealThreshold = 0.000001;
     // Rate at which radiation exposure "heals" when on a mission (Sv/s). Default is about 1 Sv/yr
     public static double kerbalHealRate = 0.00001157407407;
     // Rate at which radiation exposure "heals" at the KSC (Sv/s). Default is about 10 Sv/yr

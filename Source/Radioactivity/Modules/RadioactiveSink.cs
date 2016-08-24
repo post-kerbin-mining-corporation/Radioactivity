@@ -91,11 +91,16 @@ namespace Radioactivity
       //currentRadiation += (double)amt;
       sourceDictionary[src] = amt;
       currentRadiation = (double)sourceDictionary.Sum(k => k.Value.Sum(v => v.Value));
-      foreach (IRadiationAbsorber abs in associatedAbsorbers) {
-        abs.AddRadiation(amt);
+    }
+    void FixedUpdate()
+    {
+      if (associatedAbsorbers != null)
+      {
+        foreach (IRadiationAbsorber abs in associatedAbsorbers) {
+          abs.AddRadiation((float)currentRadiation);
+        }
       }
     }
-
 
     public override void OnStart(PartModule.StartState state)
     {
