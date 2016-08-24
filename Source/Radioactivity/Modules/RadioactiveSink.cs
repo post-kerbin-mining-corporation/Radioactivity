@@ -70,24 +70,30 @@ namespace Radioactivity
         }
         return toReturn;
     }
+    public Dictionary<string,float> GetSourceDictionary()
+    {
+      return sourceDictionary;
+    }
 
     private double currentRadiation;
     private Transform sinkTransform;
     private bool registered = false;
+    private Dictionary<string,float> sourceDictionary = new Dictionary<string,float>();
     private List<IRadiationAbsorber> associatedAbsorbers = new List<IRadiationAbsorber>();
 
     // Add radiation to the sink
     public void AddRadiation(float amt)
     {
-      currentRadiation += (double)amt;
+      AddRadiation("Null", amt);
+    }
+    public void AddRadiation(string src, float amt)
+    {
+      //currentRadiation += (double)amt;
+      sourceDictionary[src] = amt;
+      currentRadiation = (double)sourceDictionary.Sum(k => k.Value.Sum(v => v.Value));
       foreach (IRadiationAbsorber abs in associatedAbsorbers) {
         abs.AddRadiation(amt);
       }
-    }
-
-    protected void FixedUpdate()
-    {
-      currentRadiation = 0d;
     }
 
 

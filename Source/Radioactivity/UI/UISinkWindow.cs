@@ -114,26 +114,39 @@ namespace Radioactivity.UI
         GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")), textDescriptorStyle, GUILayout.MinWidth(50f));
         if (GUILayout.Button("><"))
         {
-          showWindow = !showWindow;
+          showSinkInfo = !showSinkInfo;
+          if (showSinkInfo && !showWindow)
+            showWindow = true;
+          if (!showSinkInfo && !showSourceInfo)
+              showWindow = false;
+        }
+        if (GUILayout.Button("||"))
+        {
+          showSourceInfo = !showSourceInfo
+          if (showSourceInfo && !showWindow)
+            showWindow = true;
+          if (!showSinkInfo && !showSourceInfo)
+              showWindow = false;
         }
         //if (GUILayout.Button("*"))
         //  showDetails = !showDetails;
         GUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
-  
+
 
     internal void DrawWindow(int WindowID)
     {
-
-        DrawDetails();
+        if (DrawSinkDetails)
+          DrawSinkDetails();
+        if (DrawSourceDetails)
+          DrawSourceDetails();
 
     }
 
-    internal void DrawDetails()
+    internal void DrawSinkDetails()
     {
       GUILayout.BeginVertical(groupStyle);
-
       foreach (var kvp in sink.GetAbsorberDetails())
       {
           GUILayout.BeginHorizontal();
@@ -141,7 +154,18 @@ namespace Radioactivity.UI
           GUILayout.Label(kvp.Value, textDescriptorStyle);
           GUILayout.EndHorizontal();
       }
-
+      GUILayout.EndVertical();
+    }
+    internal void DrawSourceDetails()
+    {
+      GUILayout.BeginVertical(groupStyle);
+      foreach (var kvp in sink.GetSourceDictionary())
+      {
+          GUILayout.BeginHorizontal();
+          GUILayout.Label(kvp.Key, textHeaderStyle);
+          GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(kvp.Value)), textDescriptorStyle);
+          GUILayout.EndHorizontal();
+      }
       GUILayout.EndVertical();
     }
   }

@@ -91,7 +91,7 @@ namespace Radioactivity
       private bool registered = false;
       private Transform emitterTransform;
       private List<IRadiationEmitter> associatedEmitters = new List<IRadiationEmitter>();
-
+      private List<ShadowShieldEffect> associatedShields = new List<ShadowShieldEffect>();
 
       public override void OnStart(PartModule.StartState state)
       {
@@ -110,12 +110,29 @@ namespace Radioactivity
               if (emit.GetSourceName() == SourceID)
                   associatedEmitters.Add(emit);
           }
+          foreach (RadiationShadowShield shld in this.GetComponents<RadiationShadowShield>())
+          {
+            associatedShields.Add( new ShadowShieldEffect(EmitterTransform) );
+          }
 
           if (HighLogic.LoadedSceneIsFlight && !registered)
           {
               Radioactivity.Instance.RegisterSource(this);
               registered = true;
           }
+      }
+
+      public double AttenuateShadowShields(Vector3 rayDir)
+      {
+        if (associatedShields == null || associatedShields.Count > 0)
+          return 1d;
+
+          double start = 1d;
+        for (int i = 0; i<associatedShields.Count;i++)
+        {
+          start = start*associatedShields.AttenuateShield(rayDir);
+        }
+        return start;
       }
 
       public void OnDestroy()
