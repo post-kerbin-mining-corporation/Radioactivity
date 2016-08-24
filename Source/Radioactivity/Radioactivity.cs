@@ -252,35 +252,32 @@ namespace Radioactivity
         Utils.Log("Editor: Vessel Changed, recalculate all parts");
         if (!HighLogic.LoadedSceneIsEditor) { return; }
 
-        for (int i= 0; i< allRadSources.Count ;i++)
-        {
-            UnregisterSource(allRadSources[i]);
-        }
-        for (int i= 0; i< allRadSinks.Count ;i++)
-        {
-            UnregisterSink(allRadSinks[i]);
-        }
-
-        for (int i = 0; i < ship.Parts.Count; i++)
-        {
-            RadioactiveSource src = ship.Parts[i].gameObject.GetComponent<RadioactiveSource>();
-            RadioactiveSink snk = ship.Parts[i].gameObject.GetComponent<RadioactiveSink>();
-
-            if (src != null)
-                RegisterSource(src);
-            if (snk != null)
-                RegisterSink(snk);
-
-        }
+        RecalculateEditorShip(ship);
 
     }
-    public void ForceRecomputeNetwork()
+    protected void RecalculateEditorShip()
     {
-        foreach (RadiationLink lnk in AllLinks)
-        {
+      for (int i= 0; i< allRadSources.Count ;i++)
+      {
+          UnregisterSource(allRadSources[i]);
+      }
+      for (int i= 0; i< allRadSinks.Count ;i++)
+      {
+          UnregisterSink(allRadSinks[i]);
+      }
 
-        }
+      for (int i = 0; i < ship.Parts.Count; i++)
+      {
+          RadioactiveSource src = ship.Parts[i].gameObject.GetComponent<RadioactiveSource>();
+          RadioactiveSink snk = ship.Parts[i].gameObject.GetComponent<RadioactiveSink>();
+
+          if (src != null)
+              RegisterSource(src);
+          if (snk != null)
+              RegisterSink(snk);
+      }
     }
+
     protected void TryAddSource(RadioactiveSource src)
     {
         bool exists = false;
@@ -381,6 +378,11 @@ namespace Radioactivity
         {
             if (HighLogic.LoadedSceneIsEditor)
             {
+                if (EditorLogic.fetch.ship == null)
+                {
+                  RecalculateEditorShip(EditorLogic.fetch.ship);
+                  return;
+                }
                 SimulateEditor();
             }
             else
