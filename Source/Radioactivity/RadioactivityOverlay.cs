@@ -10,7 +10,7 @@ namespace Radioactivity
   public class RadioactivityOverlay:MonoBehaviour
   {
 
-      private Gradient grad;
+    private Gradient grad;
     private List<RadiationLink> shownLinks = new List<RadiationLink>();
 
     public static RadioactivityOverlay Instance { get; private set; }

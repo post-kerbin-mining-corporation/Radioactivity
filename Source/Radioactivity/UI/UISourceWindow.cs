@@ -12,15 +12,15 @@ namespace Radioactivity.UI
         get { return source; }
     }
 
+    bool showSourceInfo = false;
+    bool showSinkInfo = false;
     bool showWindow = false;
-    bool showDetails = false;
     bool showRays = false;
-    bool showLinks = false;
 
     int windowID;
 
-    Vector2 iconDims = new Vector2(32f, 32f);
-    Vector2 windowDims = new Vector2(200f,120f);
+    Vector2 iconDims = new Vector2(16f, 16f);
+    Vector2 windowDims = new Vector2(150f,20f);
 
     Vector3 worldPosition;
     Vector3 screenPosition;
@@ -60,69 +60,72 @@ namespace Radioactivity.UI
     {
       windowStyle = new GUIStyle(HighLogic.Skin.window);
       windowStyle.fontSize = 10;
+      windowStyle.normal.background = null;
+      windowStyle.padding = new RectOffset(0,0,0,0);
+
       groupStyle = new GUIStyle(HighLogic.Skin.textArea);
+      groupStyle.normal.background = HighLogic.Skin.window.normal.background;
+      groupStyle.padding = new RectOffset(0, 0, 0, 0);
+
       textHeaderStyle = new GUIStyle(HighLogic.Skin.label);
       textHeaderStyle.normal.textColor = Color.white;
       textHeaderStyle.fontSize = 10;
       textHeaderStyle.stretchWidth = true;
       textHeaderStyle.alignment = TextAnchor.UpperLeft;
-
-    textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
-    textDescriptorStyle.alignment = TextAnchor.UpperRight;
-    textDescriptorStyle.stretchWidth = true;
-    textDescriptorStyle.fontSize = 10;
-    buttonStyle = new GUIStyle(HighLogic.Skin.button);
-    buttonStyle.fontSize = 10;
+      textHeaderStyle.padding = new RectOffset(0,0,0,0);
+      textDescriptorStyle = new GUIStyle(HighLogic.Skin.label);
+      textDescriptorStyle.alignment = TextAnchor.UpperRight;
+      textDescriptorStyle.stretchWidth = true;
+      textDescriptorStyle.fontSize = 10;
+      textDescriptorStyle.padding = new RectOffset(0, 0, 0, 0);
+      buttonStyle = new GUIStyle(HighLogic.Skin.button);
+      buttonStyle.fontSize = 10;
     }
 
     public void UpdatePositions()
     {
       screenPosition = Camera.main.WorldToScreenPoint(source.part.partTransform.position);
-      windowPosition = new Rect(screenPosition.x+50f, Screen.height-screenPosition.y - windowDims.y/2f, windowDims.x, windowDims.y);
+      windowPosition = new Rect(screenPosition.x + iconDims.x/2+5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
     }
 
     public void Draw()
     {
         if (showWindow)
-            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, new GUIContent(source.part.partInfo.title), windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, "", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
         if (screenPosition.z > 0f)
             DrawButton();
     }
     internal void DrawButton()
     {
-        GUI.DrawTextureWithTexCoords(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), atlas, atlasIconRect);
-        if (GUI.Button(new Rect(screenPosition.x - iconDims.x/2f, Screen.height-screenPosition.y-iconDims.y/2f, iconDims.x, iconDims.y), "",new GUIStyle()))
-        {
-            showWindow = !showWindow;
-        }
-    }
+        Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
+        Rect labelRect = new Rect (buttonRect.xMax+5f, buttonRect.yMin, 100f, iconDims.y);
 
+        GUI.DrawTextureWithTexCoords(buttonRect, atlas, atlasIconRect);
+        GUILayout.BeginArea(labelRect, groupStyle);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(source.CurrentEmission, "F2")), textDescriptorStyle, GUILayout.MinWidth(50f));
+
+        if (GUILayout.Button("*"))
+        {
+          showSourceInfo = !showSourceInfo
+          if (showSourceInfo && !showWindow)
+            showWindow = true;
+          if (!showSinkInfo && !showSourceInfo)
+              showWindow = false;
+        }
+
+        GUILayout.EndHorizontal();
+        GUILayout.EndArea();
+    }
     internal void DrawWindow(int WindowID)
     {
-      GUILayout.BeginVertical(groupStyle);
-      GUILayout.BeginHorizontal();
-      GUILayout.Label("<b>Dose at emitter</b>", textHeaderStyle);
-      GUILayout.Label(Utils.ToSI(source.CurrentEmission, "F2") + "Sv", textDescriptorStyle);
-      GUILayout.EndHorizontal();
-      GUILayout.BeginHorizontal();
-      GUILayout.Label("<b>Sources</b>", textHeaderStyle);
-      GUILayout.Label(source.GetEmitterAliases(),textDescriptorStyle);
-      GUILayout.EndHorizontal();
-      GUILayout.EndVertical();
-
-      GUILayout.BeginHorizontal();
-      showDetails = GUILayout.Toggle(showDetails, "DETAILS", buttonStyle);
-
-      showRays = GUILayout.Toggle(showRays, "RAYS", buttonStyle);
-      showLinks = GUILayout.Toggle(showLinks, "LINKS", buttonStyle);
-      GUILayout.EndHorizontal();
-      if (showDetails)
-          DrawDetails();
-      if (showLinks)
-          DrawLinks();
+        //if (DrawSinkDetails)
+        //  DrawSinkDetails();
+        if (DrawSourceDetails)
+          DrawSourceDetails();
     }
 
-    internal void DrawDetails()
+    internal void DrawSourceDetails()
     {
       GUILayout.BeginVertical(groupStyle);
 

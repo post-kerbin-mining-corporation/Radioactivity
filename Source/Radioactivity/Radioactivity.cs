@@ -106,8 +106,14 @@ namespace Radioactivity
       {
           get { return simulationReady; }
       }
+      public bool RayOverlayShown
+      {
+        get { return rayOverlayShown;}
+        set { rayOverlayShown = value;}
+      }
 
       bool simulationReady = false;
+      bool rayOverlayShown = false;
     List<RadioactiveSource> allRadSources = new List<RadioactiveSource>();
     List<RadioactiveSink> allRadSinks = new List<RadioactiveSink>();
     List<RadiationLink> allLinks = new List<RadiationLink>();
@@ -117,6 +123,8 @@ namespace Radioactivity
     {
       allRadSources.Add(src);
       BuildNewRadiationLink(src);
+
+
       if (RadioactivitySettings.debugNetwork)
         Utils.Log("Adding radiation source "+ src.SourceID +" on part " + src.part.name + " to simulator");
     }
@@ -155,6 +163,7 @@ namespace Radioactivity
       // Show the ray overlay for ALL links
     public void ShowAllOverlays()
     {
+        RayOverlayShown = true;
         for (int i = 0; i < allLinks.Count; i++)
         {
             allLinks[i].ShowOverlay();
@@ -163,6 +172,7 @@ namespace Radioactivity
     // Hide the ray overlay for ALL links
     public void HideAllOverlays()
     {
+        RayOverlayShown = false;
         for (int i = 0; i < allLinks.Count; i++)
         {
             allLinks[i].HideOverlay();
@@ -310,7 +320,11 @@ namespace Radioactivity
     {
         for (int i=0; i< allRadSources.Count; i++)
         {
-            allLinks.Add(new RadiationLink(allRadSources[i], snk));
+           RadiationLink l = new RadiationLink(allRadSources[i], snk);
+           allLinks.Add(l);
+
+           if (RayOverlayShown)
+              l.ShowOverlay();
         }
 
     }
@@ -319,7 +333,11 @@ namespace Radioactivity
     {
         for (int i=0; i< allRadSinks.Count; i++)
         {
-            allLinks.Add(new RadiationLink(src, allRadSinks[i]));
+          RadiationLink l = new RadiationLink(src, allRadSinks[i]);
+          allLinks.Add(l);
+          if (RayOverlayShown)
+             l.ShowOverlay();
+
         }
     }
     // Removes all links to a given radiation source

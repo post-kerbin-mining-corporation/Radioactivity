@@ -17,8 +17,6 @@ namespace Radioactivity.UI
       bool showSinkInfo = false;
 
     bool showWindow = false;
-    bool showDetails = false;
-    bool showRays = false;
 
     int windowID;
 
@@ -104,7 +102,6 @@ namespace Radioactivity.UI
 
     internal void DrawButton()
     {
-
         Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
         Rect labelRect = new Rect (buttonRect.xMax+5f, buttonRect.yMin, 100f, iconDims.y);
 
@@ -128,8 +125,7 @@ namespace Radioactivity.UI
           if (!showSinkInfo && !showSourceInfo)
               showWindow = false;
         }
-        //if (GUILayout.Button("*"))
-        //  showDetails = !showDetails;
+
         GUILayout.EndHorizontal();
         GUILayout.EndArea();
     }
