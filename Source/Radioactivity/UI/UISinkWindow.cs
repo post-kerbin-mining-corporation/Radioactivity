@@ -13,13 +13,16 @@ namespace Radioactivity.UI
           get { return sink; }
       }
 
+      bool showSourceInfo = false;
+      bool showSinkInfo = false;
+
     bool showWindow = false;
     bool showDetails = false;
     bool showRays = false;
 
     int windowID;
 
-    Vector2 iconDims = new Vector2(32f, 32f);
+    Vector2 iconDims = new Vector2(16f, 16f);
     Vector2 windowDims = new Vector2(200f, 120f);
 
 
@@ -81,45 +84,41 @@ namespace Radioactivity.UI
     {
         // Set up screen position
         screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
-        windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y - windowDims.y / 2f, windowDims.x, windowDims.y);
+        windowPosition = new Rect(screenPosition.x + iconDims.x/2, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
     }
 
     public void Draw()
     {
         if (showWindow)
-            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, new GUIContent(sink.part.partInfo.title), windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
         if (screenPosition.z > 0f)
             DrawButton();
     }
+
     internal void DrawButton()
     {
-      GUI.DrawTextureWithTexCoords(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), atlas, atlasIconRect);
-        if (GUI.Button(new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y), "", new GUIStyle()))
+
+        Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
+        Rect labelRect = new Rect (buttonRect.xMax, buttonRect.yMin, 120f, iconDims.y);
+
+        GUI.DrawTextureWithTexCoords(buttonRect, atlas, atlasIconRect);
+        GUILayout.BeginArea(labelRect);
+        GUILayout.Label (String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")) , textHeaderStyle);
+        if (GUILayout.Button("><"))
         {
-            showWindow = !showWindow;
+          showWindow = !showWindow;
         }
+        //if (GUILayout.Button("*"))
+        //  showDetails = !showDetails;
+        GUILayout.EndArea();
     }
+  
 
     internal void DrawWindow(int WindowID)
     {
-      GUILayout.BeginVertical(groupStyle);
-      GUILayout.BeginHorizontal();
-      GUILayout.Label("<b>Dose at surface</b>", textHeaderStyle);
-      GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")), textDescriptorStyle);
-      GUILayout.EndHorizontal();
-      GUILayout.BeginHorizontal();
-      GUILayout.Label("<b>Affected</b>", textHeaderStyle);
-      GUILayout.Label(sink.GetAbsorberAliases(),textDescriptorStyle);
-      GUILayout.EndHorizontal();
-      GUILayout.EndVertical();
 
-      GUILayout.BeginHorizontal();
-      showDetails = GUILayout.Toggle(showDetails, "DETAILS", buttonStyle);
-      showRays = GUILayout.Toggle(showRays, "RAYS", buttonStyle);
-      GUILayout.EndHorizontal();
+      DrawDetails
 
-      if (showDetails)
-          DrawDetails();
     }
 
     internal void DrawDetails()
