@@ -57,12 +57,12 @@ namespace Radioactivity
         return toReturn;
     }
 
-    public override void OnStart(PartModule.StartState state)
+    public void Start()
     {
-      base.OnStart(state);
+      //base.OnStart(state);
       SetupEngines();
     }
-    public override void OnFixedUpdate()
+    public void FixedUpdate()
     {
       if (useLegacyEngines)
         HandleEmissionLegacy();
@@ -72,6 +72,8 @@ namespace Radioactivity
     // Handles emission for engines using ModuleEngines
     protected void HandleEmissionLegacy()
     {
+        if (HighLogic.LoadedSceneIsEditor)
+            currentEmission = EmissionAtMax;
       if (engineLegacy == null)
         return;
 
@@ -83,8 +85,10 @@ namespace Radioactivity
     // Handles emission for engines using ModuleEnginesFX
     protected void HandleEmission()
     {
-      if (engine == null)
-        return;
+        if (HighLogic.LoadedSceneIsEditor)
+            currentEmission = EmissionAtMax;
+        if (engine == null)
+            return;
 
         if (HighLogic.LoadedSceneIsFlight)
           currentEmission = engine.requestedThrottle * EmissionAtMax;

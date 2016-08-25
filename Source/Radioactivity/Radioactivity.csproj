@@ -69,6 +69,7 @@
     <Compile Include="Modules\RadioactiveResource.cs" />
     <Compile Include="Modules\RadioactiveSink.cs" />
     <Compile Include="Modules\RadioactiveSource.cs" />
+    <Compile Include="RadiationShadowShield.cs" />
     <Compile Include="Radioactivity.cs" />
     <Compile Include="RadioactivitySettings.cs" />
     <Compile Include="RadioactivityOverlay.cs" />

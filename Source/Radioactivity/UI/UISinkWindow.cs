@@ -82,7 +82,7 @@ namespace Radioactivity.UI
         textDescriptorStyle.padding = new RectOffset(0, 0, 0, 0);
         buttonStyle = new GUIStyle(HighLogic.Skin.button);
         buttonStyle.fontSize = 10;
-
+        buttonStyle.padding = new RectOffset(0, 0, 0, 0);
     }
 
     public void UpdatePositions()
@@ -103,13 +103,13 @@ namespace Radioactivity.UI
     internal void DrawButton()
     {
         Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
-        Rect labelRect = new Rect (buttonRect.xMax+5f, buttonRect.yMin, 100f, iconDims.y);
+        Rect labelRect = new Rect (buttonRect.xMax+5f, buttonRect.yMin, 110f, iconDims.y);
 
         GUI.DrawTextureWithTexCoords(buttonRect, atlas, atlasIconRect);
         GUILayout.BeginArea(labelRect,groupStyle);
         GUILayout.BeginHorizontal();
-        GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")), textDescriptorStyle, GUILayout.MinWidth(50f));
-        if (GUILayout.Button("><"))
+        GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")), textDescriptorStyle, GUILayout.MinWidth(60f));
+        if (GUILayout.Button("><", buttonStyle))
         {
           showSinkInfo = !showSinkInfo;
           if (showSinkInfo && !showWindow)
@@ -117,9 +117,9 @@ namespace Radioactivity.UI
           if (!showSinkInfo && !showSourceInfo)
               showWindow = false;
         }
-        if (GUILayout.Button("||"))
+        if (GUILayout.Button("||", buttonStyle))
         {
-          showSourceInfo = !showSourceInfo
+            showSourceInfo = !showSourceInfo;
           if (showSourceInfo && !showWindow)
             showWindow = true;
           if (!showSinkInfo && !showSourceInfo)
@@ -133,15 +133,16 @@ namespace Radioactivity.UI
 
     internal void DrawWindow(int WindowID)
     {
-        if (DrawSinkDetails)
+        if (showSinkInfo)
           DrawSinkDetails();
-        if (DrawSourceDetails)
+        if (showSourceInfo)
           DrawSourceDetails();
 
     }
 
     internal void DrawSinkDetails()
     {
+        GUILayout.Space(2f);
       GUILayout.BeginVertical(groupStyle);
       foreach (var kvp in sink.GetAbsorberDetails())
       {
@@ -154,12 +155,13 @@ namespace Radioactivity.UI
     }
     internal void DrawSourceDetails()
     {
+        GUILayout.Space(2f);
       GUILayout.BeginVertical(groupStyle);
       foreach (var kvp in sink.GetSourceDictionary())
       {
           GUILayout.BeginHorizontal();
-          GUILayout.Label(kvp.Key, textHeaderStyle);
-          GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(kvp.Value)), textDescriptorStyle);
+          GUILayout.Label("<b>" + kvp.Key + "</b>", textHeaderStyle);
+          GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(kvp.Value,"F2")), textDescriptorStyle);
           GUILayout.EndHorizontal();
       }
       GUILayout.EndVertical();

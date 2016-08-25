@@ -109,7 +109,7 @@ namespace Radioactivity
            double curTime = Planetarium.GetUniversalTime();
            for (int i = 0; i < Kerbals.Count ;i++)
            {
-             Kerbals[i].IrradiateOverTime(curTime);
+             //Kerbals[i].IrradiateOverTime(curTime);
            }
         }
     }
@@ -142,7 +142,7 @@ namespace Radioactivity
         public void Irradiate(double amt)
         {
           LastUpdate = Planetarium.GetUniversalTime();
-          TotalExposure = TotalExposure + amt;
+          //TotalExposure = TotalExposure + amt;
           CurrentExposure = amt;
         }
         // Add radiation to a kerbal based on the latest exposure metrics
@@ -152,17 +152,21 @@ namespace Radioactivity
           double catchupExposure = catchupSeconds*CurrentExposure;
           TotalExposure = TotalExposure + catchupSeconds;
         }
-        public void Heal()
+        public void Simulate(float timeStep)
         {
-          if (Kerbal.RosterStatus == RosterStatus.Available)
+          if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
           {
               TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC;
           } else
           {
-            if (Kerbal.CurrentExposure <= RadioactivitySettings.kerbalHealThreshold)
-            {
-                TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate;
-            }
+              if (CurrentExposure <= RadioactivitySettings.kerbalHealThreshold)
+              {
+                  TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate;
+              }
+              else
+              {
+                  TotalExposure = TotalExposure + CurrentExposure*timeStep;
+              }
           }
 
         }

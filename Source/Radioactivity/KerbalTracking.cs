@@ -50,8 +50,7 @@ namespace Radioactivity
           {
             foreach (KeyValuePair<string,RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
             {
-              if (crew == kerbal.Value.Kerbal)
-                kerbal.Value.Heal();
+                kerbal.Value.Simulate(time);
             }
           }
 

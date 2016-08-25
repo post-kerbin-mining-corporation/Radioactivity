@@ -90,8 +90,9 @@ namespace Radioactivity
     {
       //currentRadiation += (double)amt;
       sourceDictionary[src] = amt;
-      currentRadiation = (double)sourceDictionary.Sum(k => k.Value.Sum(v => v.Value));
+      currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
     }
+
     void FixedUpdate()
     {
       if (associatedAbsorbers != null)

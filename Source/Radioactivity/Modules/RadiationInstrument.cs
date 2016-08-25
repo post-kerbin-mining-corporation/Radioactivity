@@ -45,7 +45,7 @@ namespace Radioactivity
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();
-        toReturn.Add("<color=#ffffff><b>Science Penalty</b>:</color>", String.Format("{0:F0}%", PenaltyCurve.Evaluate((float)CurrentRadiation)*100f ));
+        toReturn.Add("<color=#ffffff><b>Science Penalty</b>:</color>", String.Format("{0:F0}%", (1f-PenaltyCurve.Evaluate((float)CurrentRadiation))*100f ));
         return toReturn;
     }
 

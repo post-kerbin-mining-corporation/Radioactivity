@@ -57,7 +57,7 @@ namespace Radioactivity
         lr.SetColors(grad.Evaluate(valIn),grad.Evaluate(valOut));
 
         // Set up the geometry
-        float w = Mathf.Clamp(lnk.source.CurrentEmission * RadioactivitySettings.overlayRayWidthMult, RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMax);
+        float w = Mathf.Clamp(RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMax);
         lr.SetWidth(w, w);
 
         Vector3 pVec = Vector3.Cross((zn.startPosition - zn.endPosition), Camera.main.transform.forward).normalized;

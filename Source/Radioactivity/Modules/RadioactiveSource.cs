@@ -112,7 +112,7 @@ namespace Radioactivity
           }
           foreach (RadiationShadowShield shld in this.GetComponents<RadiationShadowShield>())
           {
-            associatedShields.Add( new ShadowShieldEffect(EmitterTransform) );
+            associatedShields.Add( shld.BuildShadowShield(EmitterTransform) );
           }
 
           if (HighLogic.LoadedSceneIsFlight && !registered)
@@ -130,7 +130,7 @@ namespace Radioactivity
           double start = 1d;
         for (int i = 0; i<associatedShields.Count;i++)
         {
-          start = start*associatedShields.AttenuateShield(rayDir);
+          start = start*associatedShields[i].AttenuateShield(rayDir);
         }
         return start;
       }
@@ -157,6 +157,7 @@ namespace Radioactivity
         bool isAllOff = false;
         foreach (IRadiationEmitter emit in associatedEmitters)
         {
+            
             isAllOff = emit.IsEmitting();
             emitSum = emitSum + emit.GetEmission();
         }

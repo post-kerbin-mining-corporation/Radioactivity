@@ -70,6 +70,8 @@ namespace Radioactivity
             fluxStart = RadioactivitySettings.defaultRaycastFluxStart;
             source = src;
             sink = snk;
+            if (Radioactivity.Instance.RayOverlayShown)
+                ShowOverlay();
             //ComputeConnection(src, snk);
         }
 
@@ -113,7 +115,7 @@ namespace Radioactivity
                 fluxEndScale = AttenuateFlux(Path, 1.0f);
             }
 
-            sink.AddRadiation((float)((double)source.CurrentEmission * timeScale * fluxEndScale));
+            sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * fluxEndScale));
         }
 
         // Simulate the link in the editor
@@ -131,7 +133,7 @@ namespace Radioactivity
                 fluxEndScale = AttenuateFlux(Path, 1.0f);
             }
 
-            sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * timeScale * fluxEndScale));
+            sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * fluxEndScale));
         }
 
         // Tests to see whether the LOS needs to be recomputed
@@ -185,7 +187,7 @@ namespace Radioactivity
             attenuationPath = GetLineOfSight(src, target);
 
             // Attenuate the ray between these
-            fluxStart = src.AttenuateShadowShields(src.SinkTransform.position- src.EmitterTransform.position);
+            fluxStart = src.AttenuateShadowShields(target.SinkTransform.position- src.EmitterTransform.position);
             fluxEndScale = AttenuateFlux(attenuationPath, fluxStart);
 
             needsGeometricRecalculation = false;

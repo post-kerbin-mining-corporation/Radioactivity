@@ -123,8 +123,6 @@ namespace Radioactivity
     {
       allRadSources.Add(src);
       BuildNewRadiationLink(src);
-
-
       if (RadioactivitySettings.debugNetwork)
         Utils.Log("Adding radiation source "+ src.SourceID +" on part " + src.part.name + " to simulator");
     }
@@ -255,7 +253,7 @@ namespace Radioactivity
         RecalculateEditorShip(ship);
 
     }
-    protected void RecalculateEditorShip()
+    protected void RecalculateEditorShip(ShipConstruct ship)
     {
       for (int i= 0; i< allRadSources.Count ;i++)
       {
@@ -320,8 +318,6 @@ namespace Radioactivity
            RadiationLink l = new RadiationLink(allRadSources[i], snk);
            allLinks.Add(l);
 
-           if (RayOverlayShown)
-              l.ShowOverlay();
         }
 
     }
@@ -332,8 +328,7 @@ namespace Radioactivity
         {
           RadiationLink l = new RadiationLink(src, allRadSinks[i]);
           allLinks.Add(l);
-          if (RayOverlayShown)
-             l.ShowOverlay();
+          
 
         }
     }
