@@ -254,7 +254,7 @@ namespace Radioactivity
             List<AttenuationZone> attens = new List<AttenuationZone>();
             if (RadioactivitySettings.debugRaycasting)
                 Utils.Log("Raycaster: Looking along a distance of " +totalPathLength.ToString() + " with "+ outgoing.Count +  " hits");
-            float curZoneStartDistance = 0.01f;
+            float curZoneStartDistance = RadioactivitySettings.defaultSourceFluxDistance;
             float curZoneEndDistance = 0.01f;
             Vector3 curZoneStartPoint = src.EmitterTransform.position;
             Vector3 curZoneEndPoint = target.SinkTransform.position;

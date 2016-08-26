@@ -17,6 +17,8 @@ namespace Radioactivity
     public static float fluxCutoff = 0f;
     // Starting default flux when propagating along paths
     public static float defaultRaycastFluxStart = 1.0f;
+    // Distance at which a source's emission is considered measured
+    public static float defaultSourceFluxDistance = 0.5f;
     // How far the geometry between two radiation link endpoints can change before we need to recalculate it
     public static float maximumPositionDelta = 0.5f;
       // How much the mass through a raypath can change before we need to recalculate it
@@ -27,6 +29,7 @@ namespace Radioactivity
     public static float defaultPartAttenuationCoefficient = 1.5f;
     // Default density for a part
     public static float defaultDensity = 1f;
+    
 
       // OVERLAY SETTINGS
     public static int overlayRayLayer = 0;
