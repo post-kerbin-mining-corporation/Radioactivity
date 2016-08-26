@@ -44,9 +44,9 @@ namespace Radioactivity
 
             volume = Utils.GetDisplacement(part);
             if (part.Rigidbody != null)
-                density = part.Rigidbody.mass / volume;
+                density = (part.mass + part.GetResourceMass()) / volume;
             else
-                density = part.mass / volume;
+                density = (part.mass + part.GetResourceMass()) / volume;
 
             attenuationCoeff = (double)RadioactivitySettings.defaultPartAttenuationCoefficient;
             attenuationType = AttenuationType.Part;
@@ -106,23 +106,23 @@ namespace Radioactivity
             }
             if (attenuationType == AttenuationType.ParameterizedPart)
             {
-                density = (associatedPart.resourceMass+associatedPart.mass) / volume;
+                density = (associatedPart.mass + associatedPart.GetResourceMass()) / volume;
                 double atten = attenuationIn* (dist1*dist1)/ (dist2*dist2);
                 // Note that size is in m, and attenuationCoeff is in m-1
                 // TODO: Change this to use the mass attenuation coeffecient in g/cm2. Currently we use attenuation coeff in cm-1
                 // Need -(u/p) * p*l , where p = density in g/cm3 and l=path length
                 // So atten * Mathf.Exp (-density*this.size * massAttenuationCoeff);
                 //attenuationOut = atten * Math.Exp(-1d * (double)(dist2-dist1) * attenuationCoeff);
-                attenuationOut = atten * Math.Exp(-1d * (double)((associatedPart.resourceMass + associatedPart.mass) / volume * (dist2 - dist1)) * attenuationCoeff);
+                attenuationOut = atten * Math.Exp(-1d * (double)((associatedPart.mass + associatedPart.GetResourceMass()) / volume * (dist2 - dist1)) * attenuationCoeff);
             }
             if (attenuationType == AttenuationType.Part)
             {
-                density = (associatedPart.resourceMass + associatedPart.mass) / volume;
+                density = (associatedPart.mass) / volume;
                 double atten = attenuationIn * (dist1 * dist1) / (dist2 * dist2);
                 // TODO: as in ParameterizedPart
                 // attenuate the distance
                 //double distScale = inStrength / (double)(this.size * this.size);
-                double materialScale = Math.Exp(-1d * (double)((associatedPart.resourceMass + associatedPart.mass) / volume * (dist2 - dist1)) * attenuationCoeff);
+                double materialScale = Math.Exp(-1d * (double)((associatedPart.mass + associatedPart.GetResourceMass()) / volume * (dist2 - dist1)) * attenuationCoeff);
 
                 attenuationOut = materialScale * atten ;
                 // i0*e^(-ux), x = thickness (cm), u = linear attenuation coeff (cm-1). u values:

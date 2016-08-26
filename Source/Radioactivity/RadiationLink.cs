@@ -168,7 +168,7 @@ namespace Radioactivity
                 {
                     if (Path[i].associatedPart != null && Path[i].associatedPart.Rigidbody != null)
                     {
-                        m += Path[i].associatedPart.Rigidbody.mass;
+                        m += (Path[i].associatedPart.mass + Path[i].associatedPart.GetResourceMass());
                     }
                 }
             }
