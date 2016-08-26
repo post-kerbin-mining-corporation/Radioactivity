@@ -100,7 +100,8 @@ namespace Radioactivity
               EmitterTransform = part.FindModelTransform(EmitterTransformName);
           if (EmitterTransform == null)
           {
-              Utils.LogWarning("Couldn't find Emitter transform, using part root transform");
+              if (RadioactivitySettings.debugSourceSinks)
+                Utils.LogWarning("Couldn't find Emitter transform, using part root transform");
               EmitterTransform = part.transform;
           }
 
@@ -157,7 +158,7 @@ namespace Radioactivity
         bool isAllOff = false;
         foreach (IRadiationEmitter emit in associatedEmitters)
         {
-            
+
             isAllOff = emit.IsEmitting();
             emitSum = emitSum + emit.GetEmission();
         }

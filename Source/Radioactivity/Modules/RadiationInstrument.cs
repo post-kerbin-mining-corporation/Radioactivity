@@ -75,7 +75,7 @@ namespace Radioactivity
 
        CurrentRadiationString = String.Format("{0:F2} /s", LifetimeRadiation-prevRadiation);
        LifetimeRadiationString = String.Format("{0:F2}", LifetimeRadiation);
-       if (HighLogic.LoadedSceneIsFlight && experiment != null)
+       if (HighLogic.LoadedSceneIsFlight && RadioactivitySettings.enableScienceEffects && experiment != null)
        {
          experiment.experiment.baseValue = baseValue * PenaltyCurve.Evaluate((float)CurrentRadiation);
        }

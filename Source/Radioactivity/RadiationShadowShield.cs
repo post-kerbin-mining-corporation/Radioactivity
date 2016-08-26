@@ -35,9 +35,8 @@ namespace Radioactivity
 
     public ShadowShieldEffect BuildShadowShield(Transform emitter)
     {
-      return new ShadowShieldEffect(Density, Thickness, MassAttenuationCoeffecient, emitter.position, shieldPosition-emitter.position, shieldPosition,ShieldRadius);
+      return new ShadowShieldEffect(Density, Thickness, MassAttenuationCoeffecient, emitter.localPosition, shieldPosition-emitter.localPosition, shieldPosition, ShieldRadius);
     }
-
 
   }
 

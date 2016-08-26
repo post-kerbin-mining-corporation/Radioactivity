@@ -110,7 +110,8 @@ namespace Radioactivity
             SinkTransform = part.FindModelTransform(SinkTransformName);
         if (SinkTransform == null)
         {
-            Utils.LogWarning("Couldn't find Source transform, using part root transform");
+            if (RadioactivitySettings.debugSourceSinks)
+              Utils.LogWarning("Couldn't find Source transform, using part root transform");
             SinkTransform = part.transform;
         }
 

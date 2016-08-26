@@ -83,7 +83,7 @@ namespace Radioactivity
       CurrentRadiationString = String.Format("{0:F2} /s", LifetimeRadiation-prevRadiation);
       LifetimeRadiationString = String.Format("{0:F2}", LifetimeRadiation);
 
-      if (HighLogic.LoadedSceneIsFlight)
+      if (HighLogic.LoadedSceneIsFlight && RadioactivitySettings.enableProbeEffects)
         ApplySASPenalty();
     }
 

@@ -156,19 +156,38 @@ namespace Radioactivity
         {
           if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
           {
-              TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC;
+              TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC*timeStep;
+              if (TotalExposure < 0d)
+                TotalExposure = 0d;
           } else
           {
               if (CurrentExposure <= RadioactivitySettings.kerbalHealThreshold)
               {
-                  TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate;
+                  TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate*timeStep;
+                  if (TotalExposure < 0d)
+                    TotalExposure = 0d;
               }
               else
               {
                   TotalExposure = TotalExposure + CurrentExposure*timeStep;
               }
           }
+          if (RadioactivitySettings.enableKerbalEffects)
+            HandleExposure();
 
+        }
+        void HandleExposure()
+        {
+          if (TotalExposure >= RadioactivitySettings.kerbalDeathThreshold)
+          {
+            Utils.LogWarning(Name + " died of radiation exposure");
+            return;
+          }
+          if (TotalExposure >= RadioactivitySettings.kerbalSicknessThreshold)
+          {
+            Utils.LogWarning(Name + " got radiation sickness");
+            return;
+          }
         }
         // Load from confignode
         public void Load(ConfigNode config, string name)
@@ -191,7 +210,6 @@ namespace Radioactivity
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
             TotalExposure = 0d;
             CurrentExposure = 0d;
-
         }
 
         public ConfigNode Save(ConfigNode config)

@@ -103,7 +103,8 @@ namespace Radioactivity
 
       if (enginesLegacy.Length > 0)
       {
-        Utils.Log("RadioactiveEngine: Using legacy engine module");
+        if (RadioactivitySettings.debugModules)
+          Utils.Log("RadioactiveEngine: Using legacy engine module");
         useLegacyEngines = true;
         engineLegacy = enginesLegacy[0];
       } else

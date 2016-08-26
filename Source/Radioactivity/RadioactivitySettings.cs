@@ -116,6 +116,7 @@ namespace Radioactivity
 
            enableKerbalDeath = Utils.GetValue(settingsNode, "EnableKerbalDeath", false);
            kerbalSicknessThreshold = Utils.GetValue(settingsNode, "RadiationSicknessThreshold", 1f);
+           kerbalHealThreshold = Utils.GetValue(settingsNode,"RadiationHealThreshold", 0.000001);
            kerbalDeathThreshold = Utils.GetValue(settingsNode, "RadiationDeathThreshold", 10f);
            kerbalHealRate = Utils.GetValue(settingsNode, "RadiationHealRate", 0.00001157407407);
            kerbalHealRateKSC = Utils.GetValue(settingsNode, "RadiationHealRateKSC", 0.0001157407407);
@@ -131,7 +132,7 @@ namespace Radioactivity
        {
            Utils.Log("Settings: Couldn't find settings file, using defaults");
        }
-        Utils.Log("Settings: Finished loading");
+       Utils.Log("Settings: Finished loading");
     }
 
   }
