@@ -77,11 +77,12 @@ namespace Radioactivity
          {
              Utils.Log("EVA: Adding modules");
              RadioactiveSink sink = p.gameObject.AddComponent<RadioactiveSink>();
-             RadiationTracker tracker = p.gameObject.AddComponent<RadiationTracker>();
+             RadiationShieldedCrewContainer tracker = p.gameObject.AddComponent<RadiationShieldedCrewContainer>();
 
              sink.SinkID = "Kerbal";
              sink.IconID = 3;
              tracker.AbsorberID = "Kerbal";
+             tracker.RadiationAttenuationFraction = 0.0f;
              evaModified = true;
          }
      }
@@ -106,6 +107,11 @@ namespace Radioactivity
       {
           get { return simulationReady; }
       }
+      public bool RadiationNetworkChanged
+      {
+          get { return pointRadiationNetworkChanged; }
+          set { pointRadiationNetworkChanged = value; }
+      }
       public bool RayOverlayShown
       {
         get { return rayOverlayShown;}
@@ -114,6 +120,8 @@ namespace Radioactivity
 
       bool simulationReady = false;
       bool rayOverlayShown = false;
+      bool pointRadiationNetworkChanged = false;
+
     List<RadioactiveSource> allRadSources = new List<RadioactiveSource>();
     List<RadioactiveSink> allRadSinks = new List<RadioactiveSink>();
     List<RadiationLink> allLinks = new List<RadiationLink>();
@@ -123,6 +131,7 @@ namespace Radioactivity
     {
       allRadSources.Add(src);
       BuildNewRadiationLink(src);
+      pointRadiationNetworkChanged = true;
       if (RadioactivitySettings.debugNetwork)
         Utils.Log("Adding radiation source "+ src.SourceID +" on part " + src.part.name + " to simulator");
     }
@@ -132,9 +141,10 @@ namespace Radioactivity
     {
         if (allRadSources.Count > 0)
         {
-
+            pointRadiationNetworkChanged = true;
             RemoveRadiationLink(src);
             allRadSources.Remove(src);
+            
             if (RadioactivitySettings.debugNetwork && src != null)
                 Utils.Log("Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
         }
@@ -142,8 +152,10 @@ namespace Radioactivity
     // Add a radiation sink to the sink list
     public void RegisterSink(RadioactiveSink snk)
     {
+
       allRadSinks.Add(snk);
       BuildNewRadiationLink(snk);
+      pointRadiationNetworkChanged = true;
       if (RadioactivitySettings.debugNetwork)
           Utils.Log("Adding radiation sink "+ snk.SinkID +" on part " + snk.part.name + " to simulator");
     }
@@ -152,8 +164,10 @@ namespace Radioactivity
     {
         if (allRadSinks.Count > 0)
         {
+            pointRadiationNetworkChanged = true;
             RemoveRadiationLink(snk);
             allRadSinks.Remove(snk);
+            
             if (RadioactivitySettings.debugNetwork && snk != null)
                 Utils.Log("Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
         }
@@ -229,6 +243,11 @@ namespace Radioactivity
         {
             Utils.Log("Editor: Starting monitor");
             GameEvents.onEditorShipModified.Add(new EventData<ShipConstruct>.OnEvent(onEditorVesselModified));
+            GameEvents.onEditorRestart.Add(new EventVoid.OnEvent(onEditorVesselReset));
+            GameEvents.onEditorStarted.Add(new EventVoid.OnEvent(onEditorVesselStart));
+            GameEvents.onEditorLoad.Add(new EventData<ShipConstruct, KSP.UI.Screens.CraftBrowserDialog.LoadType>.OnEvent(onEditorVesselLoad));
+
+            GameEvents.onPartRemove.Add(new EventData<GameEvents.HostTargetAction<Part, Part>>.OnEvent(onEditorVesselPartRemoved));
         }
         else
         {
@@ -244,17 +263,51 @@ namespace Radioactivity
         simulationReady = true;
         Utils.Log("Simulator: Ready");
     }
-
-    public void onEditorVesselModified(ShipConstruct ship)
+    public void onEditorVesselReset()
     {
-        Utils.Log("Editor: Vessel Changed, recalculate all parts");
+        Utils.Log("Editor: Vessel RESET, recalculate all parts");
+        if (!HighLogic.LoadedSceneIsEditor) { return; }
+
+        RecalculateEditorShip(EditorLogic.fetch.ship);
+
+    }
+    public void onEditorVesselStart()
+    {
+        Utils.Log("Editor: Vessel START, recalculate all parts");
+        if (!HighLogic.LoadedSceneIsEditor) { return; }
+
+        RecalculateEditorShip(EditorLogic.fetch.ship);
+
+    }
+    public void onEditorVesselLoad(ShipConstruct ship, KSP.UI.Screens.CraftBrowserDialog.LoadType type)
+    {
+        Utils.Log("Editor: Vessel LOAD, recalculate all parts");
         if (!HighLogic.LoadedSceneIsEditor) { return; }
 
         RecalculateEditorShip(ship);
 
     }
+    public void onEditorVesselPartRemoved(GameEvents.HostTargetAction<Part, Part> p)
+    {
+        Utils.Log("Editor: Vessel PART REMOVE, recalculate all parts");
+        if (!HighLogic.LoadedSceneIsEditor) { return; }
+
+        RecalculateEditorShip(EditorLogic.fetch.ship);
+
+    }
+    public void onEditorVesselModified(ShipConstruct ship)
+    {
+        Utils.Log("Editor: Vessel MODIFIED, recalculate all parts");
+        if (!HighLogic.LoadedSceneIsEditor) { return; }
+
+        RecalculateEditorShip(ship);
+
+    }
+   
     protected void RecalculateEditorShip(ShipConstruct ship)
     {
+        if (ship != null)
+        {
       for (int i= 0; i< allRadSources.Count ;i++)
       {
           UnregisterSource(allRadSources[i]);
@@ -273,7 +326,7 @@ namespace Radioactivity
               RegisterSource(src);
           if (snk != null)
               RegisterSink(snk);
-      }
+      }}
     }
 
     protected void TryAddSource(RadioactiveSource src)
@@ -373,14 +426,19 @@ namespace Radioactivity
         {
             if (HighLogic.LoadedSceneIsEditor)
             {
-                if (EditorLogic.fetch.ship == null)
+                if (EditorLogic.fetch != null)
                 {
-                  RecalculateEditorShip(EditorLogic.fetch.ship);
-                  return;
+                    if (EditorLogic.fetch.ship != null)
+                    {
+                        SimulateEditor();
+                    }
+                  //RecalculateEditorShip(EditorLogic.fetch.ship);
+                  //return;
                 }
-                SimulateEditor();
+                 
+                
             }
-            else
+            else if (HighLogic.LoadedScene == GameScenes.FLIGHT || HighLogic.LoadedScene == GameScenes.SPACECENTER || HighLogic.LoadedScene == GameScenes.TRACKSTATION)
             {
                 Simulate();
             }
@@ -450,7 +508,10 @@ namespace Radioactivity
     // simulate everything we need to do with Kerbals
     protected void SimulateKerbals()
     {
-        KerbalTracking.Instance.SimulateKerbals(TimeWarp.fixedDeltaTime);
+        if (KerbalTracking.Instance != null)
+        {
+            KerbalTracking.Instance.SimulateKerbals(TimeWarp.fixedDeltaTime);
+        }
 
     }
   }

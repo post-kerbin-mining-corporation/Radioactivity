@@ -180,12 +180,12 @@ namespace Radioactivity
         {
           if (TotalExposure >= RadioactivitySettings.kerbalDeathThreshold)
           {
-            Utils.LogWarning(Name + " died of radiation exposure");
+            //Utils.LogWarning(Name + " died of radiation exposure");
             return;
           }
           if (TotalExposure >= RadioactivitySettings.kerbalSicknessThreshold)
           {
-            Utils.LogWarning(Name + " got radiation sickness");
+            //Utils.LogWarning(Name + " got radiation sickness");
             return;
           }
         }

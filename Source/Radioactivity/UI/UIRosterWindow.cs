@@ -64,9 +64,9 @@ namespace Radioactivity.UI
       barBGStyle.active = barBGStyle.hover = barBGStyle.normal;
       barFGStyle.active = barBGStyle.hover = barBGStyle.normal;
       barFGStyle.border = barBGStyle.border;
-      barFGStyle.padding = barBGStyle.padding;
+      barFGStyle.padding = new RectOffset(0,0,0,0);
 
-      atlas = (Texture)GameDatabase.Instance.GetTexture("Radioactivity/UI/icon_atlas", false);
+      atlas = (Texture)GameDatabase.Instance.GetTexture("Radioactivity/UI/icon_kerbal_state", false);
     }
 
 
@@ -131,7 +131,7 @@ namespace Radioactivity.UI
      void DrawWindow(int WindowID)
      {
         DrawModeBar();
-        scrollPosition = GUILayout.BeginScrollView(scrollPosition, groupStyle, GUILayout.Width(425), GUILayout.MinHeight(100));
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, groupStyle, GUILayout.Width(425), GUILayout.MinHeight(100),GUILayout.MaxHeight(300),GUILayout.ExpandHeight(true));
         DrawKerbalList();
         GUILayout.EndScrollView();
         GUI.DragWindow();
@@ -166,8 +166,8 @@ namespace Radioactivity.UI
        GUILayout.Label("<b><color=#ffffff>" + kerbal.Name + "</color></b>", labelStyle);
 
        float tempAreaWidth = 325f;
-       float tempBarWidth = 200f;
-       Rect tempArea = GUILayoutUtility.GetRect(tempAreaWidth, 50f);
+       float tempBarWidth = 180f;
+       Rect tempArea = GUILayoutUtility.GetRect(tempAreaWidth, 40f);
        Rect barArea = new Rect(20f, 20f, tempBarWidth, 40f);
 
        float sickIconPos = tempBarWidth * RadioactivitySettings.kerbalSicknessThreshold/RadioactivitySettings.kerbalDeathThreshold;
@@ -190,8 +190,8 @@ namespace Radioactivity.UI
 
 
        // icons
-       GUI.DrawTextureWithTexCoords(new Rect(sickIconPos - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.5f,0.5f,0.5f));
-       GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.5f,0.5f,0.5f));
+       GUI.DrawTextureWithTexCoords(new Rect(sickIconPos - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.0f,0.5f,0.5f));
+       GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.5f,0.0f,0.5f,0.5f));
 
        // icon labels
        GUI.Label(new Rect(sickIconPos - iconDims.x, iconDims.y +4f, iconDims.x*2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalSicknessThreshold,"F0")), labelStyle);

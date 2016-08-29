@@ -12,7 +12,7 @@ namespace Radioactivity
           public static KerbalTracking Instance { get; private set; }
 
           internal KerbalDatabase KerbalDB;
-
+          internal bool databaseReady = false;
           public override void OnAwake()
           {
               Utils.Log("Kerbal Tracking: Init");
@@ -29,8 +29,9 @@ namespace Radioactivity
               KerbalDB.Load(node);
               RadioactivitySettings.Load();
               Utils.Log("Kerbal Tracking: Done Loading");
+              databaseReady = true;
               // Update the kerbals from the DB if time has passed
-              KerbalDB.PropagateExposure();
+              //KerbalDB.PropagateExposure();
           }
 
           public override void OnSave(ConfigNode node)
@@ -48,10 +49,13 @@ namespace Radioactivity
 
           public void SimulateKerbals(float time)
           {
-            foreach (KeyValuePair<string,RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
-            {
-                kerbal.Value.Simulate(time);
-            }
+              if (databaseReady)
+              {
+                  foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
+                  {
+                      kerbal.Value.Simulate(time);
+                  }
+              }
           }
 
           // Irradiates a kerbal

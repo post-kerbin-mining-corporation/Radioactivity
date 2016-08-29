@@ -19,7 +19,8 @@ namespace Radioactivity.UI
 
     int windowID;
 
-    Vector2 iconDims = new Vector2(16f, 16f);
+    Vector2 iconDims = new Vector2(32f, 32f);
+    Vector2 infoBarDims = new Vector2(16,16);
     Vector2 windowDims = new Vector2(150f,20f);
 
     Vector3 worldPosition;
@@ -79,8 +80,9 @@ namespace Radioactivity.UI
       textDescriptorStyle.fontSize = 10;
       textDescriptorStyle.padding = new RectOffset(0, 0, 0, 0);
       buttonStyle = new GUIStyle(HighLogic.Skin.button);
-      buttonStyle.fontSize = 10;
+      buttonStyle.fontSize = 8;
       buttonStyle.padding = new RectOffset(0, 0, 0, 0);
+        
     }
 
     public void UpdatePositions()
@@ -99,14 +101,14 @@ namespace Radioactivity.UI
     internal void DrawButton()
     {
         Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
-        Rect labelRect = new Rect (buttonRect.xMax+5f, buttonRect.yMin, 90f, iconDims.y);
+        Rect labelRect = new Rect(buttonRect.xMax + 5f, buttonRect.yMin+buttonRect.height/2-infoBarDims.y/2f, 90f, infoBarDims.y);
 
         GUI.DrawTextureWithTexCoords(buttonRect, atlas, atlasIconRect);
         GUILayout.BeginArea(labelRect, groupStyle);
         GUILayout.BeginHorizontal();
         GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(source.CurrentEmission, "F2")), textDescriptorStyle, GUILayout.MinWidth(60f));
 
-        if (GUILayout.Button("*", buttonStyle))
+        if (GUILayout.Button("...", buttonStyle, GUILayout.Width(12), GUILayout.Height(12)))
         {
             showSourceInfo = !showSourceInfo;
           if (showSourceInfo && !showWindow)
