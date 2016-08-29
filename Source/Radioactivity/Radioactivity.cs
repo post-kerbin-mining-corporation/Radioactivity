@@ -246,12 +246,15 @@ namespace Radioactivity
             GameEvents.onEditorRestart.Add(new EventVoid.OnEvent(onEditorVesselReset));
             GameEvents.onEditorStarted.Add(new EventVoid.OnEvent(onEditorVesselStart));
             GameEvents.onEditorLoad.Add(new EventData<ShipConstruct, KSP.UI.Screens.CraftBrowserDialog.LoadType>.OnEvent(onEditorVesselLoad));
-
             GameEvents.onPartRemove.Add(new EventData<GameEvents.HostTargetAction<Part, Part>>.OnEvent(onEditorVesselPartRemoved));
         }
         else
         {
             GameEvents.onEditorShipModified.Remove(new EventData<ShipConstruct>.OnEvent(onEditorVesselModified));
+            GameEvents.onEditorRestart.Remove(new EventVoid.OnEvent(onEditorVesselReset));
+            GameEvents.onEditorStarted.Remove(new EventVoid.OnEvent(onEditorVesselStart));
+            GameEvents.onEditorLoad.Remove(new EventData<ShipConstruct, KSP.UI.Screens.CraftBrowserDialog.LoadType>.OnEvent(onEditorVesselLoad));
+            GameEvents.onPartRemove.Remove(new EventData<GameEvents.HostTargetAction<Part, Part>>.OnEvent(onEditorVesselPartRemoved));
         }
         StartCoroutine(WaitForInit(0.1f));
     }
@@ -398,9 +401,11 @@ namespace Radioactivity
         }
         if (toRm.Count> 0)
         {
-          for (int i =0; i < toRm.Count ; i++)
-            toRm[i].HideOverlay();
-            allLinks.Remove(toRm[i]);
+            for (int i = 0; i < toRm.Count; i++)
+            {
+                toRm[i].HideOverlay();
+                allLinks.Remove(toRm[i]);
+            }
         }
     }
     // Removes a link to a given radiation sink
@@ -416,9 +421,12 @@ namespace Radioactivity
         }
         if (toRm.Count> 0)
         {
-          for (int i =0; i < toRm.Count ; i++)
-            toRm[i].HideOverlay();
-            allLinks.Remove(toRm[i]);
+            for (int i = 0; i < toRm.Count; i++)
+            {
+                toRm[i].HideOverlay();
+                toRm[i].CleanupSink();
+                allLinks.Remove(toRm[i]);
+            }
         }
     }
 

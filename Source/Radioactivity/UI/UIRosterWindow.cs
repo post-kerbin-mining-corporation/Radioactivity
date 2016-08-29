@@ -190,8 +190,8 @@ namespace Radioactivity.UI
 
 
        // icons
-       GUI.DrawTextureWithTexCoords(new Rect(sickIconPos - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.0f,0.5f,0.5f));
-       GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.5f,0.0f,0.5f,0.5f));
+       GUI.DrawTextureWithTexCoords(new Rect(sickIconPos - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.0f,0.0f,0.5f,1f));
+       GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth - iconDims.x / 2f,  iconDims.y / 2f-1f, iconDims.x, iconDims.y), atlas, new Rect(0.5f,0.0f,0.5f,1f));
 
        // icon labels
        GUI.Label(new Rect(sickIconPos - iconDims.x, iconDims.y +4f, iconDims.x*2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalSicknessThreshold,"F0")), labelStyle);

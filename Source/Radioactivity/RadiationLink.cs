@@ -140,6 +140,10 @@ namespace Radioactivity
 
             sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * fluxEndScale));
         }
+        public void CleanupSink()
+        {
+            sink.CleanupRadiation(source.SourceID);
+        }
 
         // Tests to see whether the LOS needs to be recomputed
         public void TestRecompute()

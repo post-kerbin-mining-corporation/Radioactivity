@@ -86,13 +86,18 @@ namespace Radioactivity
     {
       AddRadiation("Null", amt);
     }
+    
     public void AddRadiation(string src, float amt)
     {
       
       sourceDictionary[src] = amt;
       currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
     }
-
+    public void CleanupRadiation(string src)
+    {
+        sourceDictionary.Remove(src);
+        currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
+    }
     void FixedUpdate()
     {
       if (associatedAbsorbers != null)
