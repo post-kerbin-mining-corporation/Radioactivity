@@ -40,7 +40,16 @@ namespace Radioactivity
     {
       lnk.GO = new GameObject("RadioactiveLinkRendererRoot");
       if (HighLogic.LoadedSceneIsFlight)
+      {
         lnk.GO.transform.parent = lnk.source.vessel.vesselTransform;
+      }
+      else if (HighLogic.LoadedSceneIsEditor)
+      {
+        if (EditorLogic.fetch.ship != null)
+        {
+          
+        }
+      }
       for (int i = 0; i < lnk.Path.Count; i++)
       {
             CreateZoneLineRenderer(lnk, lnk.Path[i]);

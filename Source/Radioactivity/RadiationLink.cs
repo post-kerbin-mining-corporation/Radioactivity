@@ -72,6 +72,7 @@ namespace Radioactivity
             sink = snk;
             if (Radioactivity.Instance.RayOverlayShown)
                 ShowOverlay();
+
             //ComputeConnection(src, snk);
         }
 
@@ -85,19 +86,14 @@ namespace Radioactivity
         }
         public void ShowOverlay()
         {
-            if (!overlayShown)
-            {
-                overlayShown = true;
-                RadioactivityOverlay.Instance.Show(this);
-            }
+            RadioactivityOverlay.Instance.Show(this);
+            overlayShown = true;
+
         }
         public void HideOverlay()
         {
-            if (overlayShown)
-            {
-                overlayShown = false;
-                RadioactivityOverlay.Instance.Hide(this);
-            }
+            RadioactivityOverlay.Instance.Hide(this);
+            overlayShown = false;
         }
 
         // Simulate the link, that is, compute the flux from the source and add it to the sink
@@ -106,13 +102,17 @@ namespace Radioactivity
             TestRecompute();
             if (needsGeometricRecalculation)
             {
-                RadioactivityOverlay.Instance.Update(this);
+
                 ComputeGeometry(this.source, this.sink);
+                if (overlayShown)
+                  RadioactivityOverlay.Instance.Update(this);
             }
             if (needsSimpleRecalculation)
             {
-                RadioactivityOverlay.Instance.Update(this);
-                fluxEndScale = AttenuateFlux(Path, 1.0f);
+              fluxEndScale = AttenuateFlux(Path, 1.0f);
+                if (overlayShown)
+                  RadioactivityOverlay.Instance.Update(this);
+
             }
 
             sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * fluxEndScale));
@@ -124,13 +124,18 @@ namespace Radioactivity
             TestRecompute();
             if (needsGeometricRecalculation)
             {
-                RadioactivityOverlay.Instance.Update(this);
-                ComputeGeometry(this.source, this.sink);
+              ComputeGeometry(this.source, this.sink);
+                if (overlayShown)
+                  RadioactivityOverlay.Instance.Update(this);
+
+
             }
             if (needsSimpleRecalculation)
             {
-                RadioactivityOverlay.Instance.Update(this);
                 fluxEndScale = AttenuateFlux(Path, 1.0f);
+                if (overlayShown)
+                  RadioactivityOverlay.Instance.Update(this);
+
             }
 
             sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * fluxEndScale));

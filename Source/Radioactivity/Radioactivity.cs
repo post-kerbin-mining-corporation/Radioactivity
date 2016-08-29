@@ -144,7 +144,7 @@ namespace Radioactivity
             pointRadiationNetworkChanged = true;
             RemoveRadiationLink(src);
             allRadSources.Remove(src);
-            
+
             if (RadioactivitySettings.debugNetwork && src != null)
                 Utils.Log("Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
         }
@@ -167,7 +167,7 @@ namespace Radioactivity
             pointRadiationNetworkChanged = true;
             RemoveRadiationLink(snk);
             allRadSinks.Remove(snk);
-            
+
             if (RadioactivitySettings.debugNetwork && snk != null)
                 Utils.Log("Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
         }
@@ -303,7 +303,7 @@ namespace Radioactivity
         RecalculateEditorShip(ship);
 
     }
-   
+
     protected void RecalculateEditorShip(ShipConstruct ship)
     {
         if (ship != null)
@@ -381,42 +381,44 @@ namespace Radioactivity
         {
           RadiationLink l = new RadiationLink(src, allRadSinks[i]);
           allLinks.Add(l);
-          
+
 
         }
     }
     // Removes all links to a given radiation source
     protected void RemoveRadiationLink(RadioactiveSource src)
     {
-        RadiationLink toRm = null;
+        List <RadiationLink> toRm = new List<RadiationLink>();
         for (int i = 0; i < allLinks.Count; i++)
         {
             if (allLinks[i].source == src)
             {
-                toRm = allLinks[i];
+                toRm.Add(allLinks[i]);
             }
         }
-        if (toRm != null)
+        if (toRm.Count> 0)
         {
-            toRm.HideOverlay();
-            allLinks.Remove(toRm);
+          for (int i =0; i < toRm.Count ; i++)
+            toRm[i].HideOverlay();
+            allLinks.Remove(toRm[i]);
         }
     }
     // Removes a link to a given radiation sink
     protected void RemoveRadiationLink(RadioactiveSink snk)
     {
-        RadiationLink toRm = null;
+       List <RadiationLink> toRm = new List<RadiationLink>();
         for (int i = 0; i < allLinks.Count; i++)
         {
             if (allLinks[i].sink == snk)
             {
-                toRm = allLinks[i];
+                toRm.Add(allLinks[i]);
             }
         }
-        if (toRm != null)
+        if (toRm.Count> 0)
         {
-            toRm.HideOverlay();
-            allLinks.Remove(toRm);
+          for (int i =0; i < toRm.Count ; i++)
+            toRm[i].HideOverlay();
+            allLinks.Remove(toRm[i]);
         }
     }
 
@@ -435,8 +437,8 @@ namespace Radioactivity
                   //RecalculateEditorShip(EditorLogic.fetch.ship);
                   //return;
                 }
-                 
-                
+
+
             }
             else if (HighLogic.LoadedScene == GameScenes.FLIGHT || HighLogic.LoadedScene == GameScenes.SPACECENTER || HighLogic.LoadedScene == GameScenes.TRACKSTATION)
             {
