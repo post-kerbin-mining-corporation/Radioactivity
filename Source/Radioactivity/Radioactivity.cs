@@ -134,8 +134,9 @@ namespace Radioactivity
       pointRadiationNetworkChanged = true;
       if (rayOverlayShown && src.ShadowShields.Count > 0)
           RadioactivityOverlay.Instance.ShowShield(src);
+
       if (RadioactivitySettings.debugNetwork)
-        Utils.Log("Adding radiation source "+ src.SourceID +" on part " + src.part.name + " to simulator");
+        Utils.Log("Network: Adding radiation source "+ src.SourceID +" on part " + src.part.name + " to simulator");
     }
 
     // Remove a radiation source from the source list
@@ -148,8 +149,9 @@ namespace Radioactivity
             allRadSources.Remove(src);
             if (rayOverlayShown && src.ShadowShields.Count > 0)
                 RadioactivityOverlay.Instance.HideShield(src);
+
             if (RadioactivitySettings.debugNetwork && src != null)
-                Utils.Log("Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
+                Utils.Log("Network: Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
         }
     }
     // Add a radiation sink to the sink list
@@ -160,7 +162,7 @@ namespace Radioactivity
       BuildNewRadiationLink(snk);
       pointRadiationNetworkChanged = true;
       if (RadioactivitySettings.debugNetwork)
-          Utils.Log("Adding radiation sink "+ snk.SinkID +" on part " + snk.part.name + " to simulator");
+          Utils.Log("Network: Adding radiation sink "+ snk.SinkID +" on part " + snk.part.name + " to simulator");
     }
     // Remove a radiation sink from the sink list
     public void UnregisterSink(RadioactiveSink snk)
@@ -172,7 +174,7 @@ namespace Radioactivity
             allRadSinks.Remove(snk);
 
             if (RadioactivitySettings.debugNetwork && snk != null)
-                Utils.Log("Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
+                Utils.Log("Network: Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
         }
     }
       // Show the ray overlay for ALL links
@@ -192,10 +194,10 @@ namespace Radioactivity
     // Hide the ray overlay for ALL links
     public void HideAllOverlays()
     {
-      
+
         for (int i = 0; i < allLinks.Count; i++)
         {
-            
+
             RadioactivityOverlay.Instance.Hide(allLinks[i]);
         }
         RadioactivityOverlay.Instance.HideShields();

@@ -63,7 +63,6 @@ namespace Radioactivity
     }
     public static Vector3 Vector3FromString(string str)
     {
-        Debug.Log(str);
         Vector3 outVector3;
         string[] splitString = str.Split(',');
         outVector3.x = float.Parse(splitString[0]);

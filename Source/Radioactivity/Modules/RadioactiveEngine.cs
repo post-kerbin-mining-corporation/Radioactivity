@@ -59,7 +59,7 @@ namespace Radioactivity
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();
-        toReturn.Add("<color=#ffffff><b>Engine Emission</b>:</color>", String.Format("{0}Sv", Utils.ToSI(currentEmission,"F2")));
+        toReturn.Add("<color=#ffffff><b>Engine Emission</b>:</color>", String.Format("{0}Sv/s", Utils.ToSI(currentEmission,"F2")));
         return toReturn;
     }
 

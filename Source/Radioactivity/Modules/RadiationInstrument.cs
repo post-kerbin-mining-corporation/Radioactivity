@@ -44,8 +44,10 @@ namespace Radioactivity
     }
     public override string GetInfo()
     {
-        string toRet = "Science instrument return is affected by radiation \n\n <b>Penalties:</b>\n";      
-
+        string toRet = "Science instrument return is affected by radiation \n\n Penalties\n";
+        toRet += String.Format("-{0}Sv/s: {1}",Utils.ToSI(0),(1f-PenaltyCurve.Evaluate(0f))*100f);
+        toRet += String.Format("-{0}Sv/s: {1}",Utils.ToSI(1),(1f-PenaltyCurve.Evaluate(1f)*100f);
+        toRet += String.Format("-{0}Sv/s: {1}",Utils.ToSI(5),(1f-PenaltyCurve.Evaluate(5f)*100f);
         return toRet;
     }
     public Dictionary<string, string> GetDetails()

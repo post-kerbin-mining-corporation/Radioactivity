@@ -86,10 +86,10 @@ namespace Radioactivity
     {
       AddRadiation("Null", amt);
     }
-    
+
     public void AddRadiation(string src, float amt)
     {
-      
+
       sourceDictionary[src] = amt;
       currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
     }
@@ -116,7 +116,7 @@ namespace Radioactivity
         if (SinkTransform == null)
         {
             if (RadioactivitySettings.debugSourceSinks)
-              Utils.LogWarning("Couldn't find Source transform, using part root transform");
+              Utils.LogWarning("Sink: Couldn't find Source transform, using part root transform");
             SinkTransform = part.transform;
         }
 

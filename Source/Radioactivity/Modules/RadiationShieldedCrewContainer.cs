@@ -43,7 +43,7 @@ namespace Radioactivity
     }
     public override string GetInfo()
     {
-        string toRet = String.Format("Shielded container protects crew from radiation \n\n <b>Shielding:</b> {0:F0}%",RadiationAttenuationFraction*100f);
+        string toRet = String.Format("Shielded container protects crew from radiation \n\n <b>Shielding:</b> {0:F1}%",RadiationAttenuationFraction*100f);
 
         return toRet;
     }

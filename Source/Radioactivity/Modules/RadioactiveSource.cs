@@ -103,7 +103,7 @@ namespace Radioactivity
           if (EmitterTransform == null)
           {
               if (RadioactivitySettings.debugSourceSinks)
-                Utils.LogWarning("Couldn't find Emitter transform, using part root transform");
+                Utils.LogWarning("Source: Couldn't find Emitter transform, using part root transform");
               EmitterTransform = part.transform;
           }
 

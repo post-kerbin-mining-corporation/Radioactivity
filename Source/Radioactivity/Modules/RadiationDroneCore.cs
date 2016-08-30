@@ -35,6 +35,7 @@ namespace Radioactivity
     public string UIName = "Drone Core";
 
     protected int baseSAS = 0;
+
     protected double prevRadiation = 0d;
     protected ModuleSAS drone;
 
@@ -44,8 +45,10 @@ namespace Radioactivity
     }
     public override string GetInfo()
     {
-        string toRet = "Probe core is affected by radiation \n\n <b>Penalties:</b>\n";
-
+        string toRet = "Probe core is affected by radiation \n\n Penalties\n";
+        toRet += String.Format("-{0}Sv/s: -{1} SAS levels\n",Utils.ToSI(0), Mathf.Clamp(GetSASPenalty(0f),0,3));
+        toRet += String.Format("-{0}Sv/s: -{1} SAS levels\n",Utils.ToSI(1), Mathf.Clamp(GetSASPenalty(1f),0,3));
+        toRet += String.Format("-{0}Sv/s: -{1} SAS levels\n",Utils.ToSI(5), Mathf.Clamp(GetSASPenalty(5f),0,3));
         return toRet;
     }
     public Dictionary<string, string> GetDetails()
@@ -58,6 +61,11 @@ namespace Radioactivity
     public int GetSASPenalty()
     {
       float fPenalty = PenaltyCurve.Evaluate((float)CurrentRadiation);
+      return (int)Mathf.Round(fPenalty);
+    }
+    public int GetSASPenalty(float dose)
+    {
+      float fPenalty = PenaltyCurve.Evaluate(dose);
       return (int)Mathf.Round(fPenalty);
     }
 
@@ -76,7 +84,10 @@ namespace Radioactivity
       {
           drone = this.GetComponent<ModuleSAS>();
           if (drone != null)
+          {
             baseSAS = drone.SASServiceLevel;
+
+          }
       }
 
     }
@@ -97,8 +108,18 @@ namespace Radioactivity
     {
         if (drone != null)
         {
-            
-            drone.SASServiceLevel = Mathf.Clamp(baseSAS - GetSASPenalty(), 0, 3);
+            int frameSAS = Mathf.Clamp(baseSAS - GetSASPenalty(), 0, 3);
+            if (drone.SASServiceLevel != frameSAS)
+            {
+              drone.SASServiceLevel = frameSAS;
+              if (this.vessel != null)
+              {
+                if (RadioactivitySettings.debugModules)
+                  Utils.Log(String.Format("RadiationDroneCore: Set SAS level to {0:F0}", frameSAS));
+                this.vessel.Autopilot.ModuleSetup();
+              }
+            }
+
         }
     }
   }

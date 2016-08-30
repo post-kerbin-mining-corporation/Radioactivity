@@ -187,7 +187,7 @@ namespace Radioactivity
         public void ComputeGeometry(RadioactiveSource src, RadioactiveSink target)
         {
             if (RadioactivitySettings.debugNetwork)
-                Utils.Log("Creating connection from " + src.part.name + " to " + target.part.name);
+                Utils.Log("Network: Creating connection from " + src.part.name + " to " + target.part.name);
 
             // Store the relative position of both endpoints
             relPos = Utils.getRelativePosition(src.EmitterTransform, target.SinkTransform.position);//src.EmitterTransform.position - target.SinkTransform.position;
@@ -338,7 +338,7 @@ namespace Radioactivity
                         Utils.Log("Raycaster: No incoming hits with " + outgoing[i].collider.name + ", discarding...");
                 }
 
-                
+
             }
 
             curZoneEndPoint = target.SinkTransform.position;

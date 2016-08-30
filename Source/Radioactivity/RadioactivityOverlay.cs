@@ -34,8 +34,8 @@ namespace Radioactivity
             SetupShadowShieldRenderer(shld, src);
             shadowShields.Add(shld);
         }
-        
-        
+
+
     }
     public void HideShield(RadioactiveSource src)
     {
@@ -88,9 +88,10 @@ namespace Radioactivity
         m.material = new Material(Shader.Find(RadioactivitySettings.overlayRayMaterial));
         m.material.color = Color.blue;
         m.material.renderQueue = 3000;
+
         if (RadioactivitySettings.debugOverlay)
             Utils.Log("Overlay: Showing shadow shield on " + parent.SourceID );
-        
+
     }
     protected void DestroyShadowShieldRenderer(GameObject shld)
     {
@@ -108,7 +109,7 @@ namespace Radioactivity
       {
         if (EditorLogic.fetch.ship != null)
         {
-          
+
         }
       }
       for (int i = 0; i < lnk.Path.Count; i++)
