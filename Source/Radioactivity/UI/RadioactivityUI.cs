@@ -107,7 +107,10 @@ namespace Radioactivity.UI
             if (overlayShown != overlayToggled)
             {
                 overlayToggled = overlayShown;
-                Radioactivity.Instance.ShowAllOverlays();
+                if (overlayShown)
+                    Radioactivity.Instance.ShowAllOverlays();
+                else
+                    Radioactivity.Instance.HideAllOverlays();
             }
             rosterShown = GUILayout.Toggle(rosterShown, "Roster", buttonStyle);
             if (rosterShown != rosterToggled)
@@ -150,15 +153,18 @@ namespace Radioactivity.UI
 
         void OnGUIAppLauncherReady()
         {
-            stockToolbarButton = ApplicationLauncher.Instance.AddModApplication(
-                OnToolbarButtonToggle,
-                OnToolbarButtonToggle,
-                DummyVoid,
-                DummyVoid,
-                DummyVoid,
-                DummyVoid,
-                ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH | ApplicationLauncher.AppScenes.FLIGHT,
-                (Texture)GameDatabase.Instance.GetTexture("Radioactivity/UI/toolbar_off", false));
+            if (stockToolbarButton == null)
+            {
+                stockToolbarButton = ApplicationLauncher.Instance.AddModApplication(
+                    OnToolbarButtonToggle,
+                    OnToolbarButtonToggle,
+                    DummyVoid,
+                    DummyVoid,
+                    DummyVoid,
+                    DummyVoid,
+                    ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH | ApplicationLauncher.AppScenes.FLIGHT,
+                    (Texture)GameDatabase.Instance.GetTexture("Radioactivity/UI/toolbar_off", false));
+            }
         }
 
         void OnGUIAppLauncherDestroyed()

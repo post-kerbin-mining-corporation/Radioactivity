@@ -42,6 +42,12 @@ namespace Radioactivity
     {
         return UIName;
     }
+    public override string GetInfo()
+    {
+        string toRet = "Science instrument return is affected by radiation \n\n <b>Penalties:</b>\n";      
+
+        return toRet;
+    }
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();

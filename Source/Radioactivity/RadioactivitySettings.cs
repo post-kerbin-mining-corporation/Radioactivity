@@ -18,7 +18,7 @@ namespace Radioactivity
     // Starting default flux when propagating along paths
     public static float defaultRaycastFluxStart = 1.0f;
     // Distance at which a source's emission is considered measured
-    public static float defaultSourceFluxDistance = 0.5f;
+    public static float defaultSourceFluxDistance = 0.25f;
     // How far the geometry between two radiation link endpoints can change before we need to recalculate it
     public static float maximumPositionDelta = 0.5f;
       // How much the mass through a raypath can change before we need to recalculate it
@@ -58,7 +58,7 @@ namespace Radioactivity
     // Threshold before inducing death (Sv)
     public static float kerbalDeathThreshold = 10f;
     // Threshold for kerbal radiation healing
-    public static double kerbalHealThreshold = 0.000001;
+    public static double kerbalHealThreshold = 0.000000;
     // Rate at which radiation exposure "heals" when on a mission (Sv/s). Default is about 1 Sv/yr
     public static double kerbalHealRate = 0.00001157407407;
     // Rate at which radiation exposure "heals" at the KSC (Sv/s). Default is about 10 Sv/yr
@@ -100,7 +100,7 @@ namespace Radioactivity
            defaultRaycastFluxStart = Utils.GetValue(settingsNode, "RaycastFluxStart", 1.0f);
            maximumPositionDelta = Utils.GetValue(settingsNode, "RaycastPositionDelta", 0.5f);
            maximumMassDelta = Utils.GetValue(settingsNode, "RaycastMassDelta", 0.05f);
-           defaultPartAttenuationCoefficient = Utils.GetValue(settingsNode, "DefaultMassAttenuationCoefficient", 1.5f);
+           defaultPartAttenuationCoefficient = Utils.GetValue(settingsNode, "DefaultMassAttenuationCoefficient", 6f);
            defaultDensity = Utils.GetValue(settingsNode, "DefaultDensity", 0.5f);
 
            overlayRayWidthMult = Utils.GetValue(settingsNode, "OverlayRayWidthMultiplier", 0.005f);
@@ -119,7 +119,7 @@ namespace Radioactivity
 
            enableKerbalDeath = Utils.GetValue(settingsNode, "EnableKerbalDeath", false);
            kerbalSicknessThreshold = Utils.GetValue(settingsNode, "RadiationSicknessThreshold", 1f);
-           kerbalHealThreshold = Utils.GetValue(settingsNode,"RadiationHealThreshold", 0.000001);
+           kerbalHealThreshold = Utils.GetValue(settingsNode,"RadiationHealThreshold", 0.000000);
            kerbalDeathThreshold = Utils.GetValue(settingsNode, "RadiationDeathThreshold", 10f);
            kerbalHealRate = Utils.GetValue(settingsNode, "RadiationHealRate", 0.00001157407407);
            kerbalHealRateKSC = Utils.GetValue(settingsNode, "RadiationHealRateKSC", 0.0001157407407);

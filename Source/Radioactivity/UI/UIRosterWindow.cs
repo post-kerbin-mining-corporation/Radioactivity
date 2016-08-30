@@ -94,7 +94,15 @@ namespace Radioactivity.UI
      // Get kerbals in the vessel
      internal void GetKerbalsVessel()
      {
-         drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(FlightGlobals.ActiveVessel.GetVesselCrew());
+         if (HighLogic.LoadedSceneIsFlight)
+             drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(FlightGlobals.ActiveVessel.GetVesselCrew());
+         else if (HighLogic.LoadedSceneIsEditor)
+             if (ShipConstruction.ShipManifest == null)
+                drawnKerbals = new List<RadioactivityKerbal>();
+             else
+                drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(ShipConstruction.ShipManifest.GetAllCrew(true));
+         else 
+            drawnKerbals = new List<RadioactivityKerbal>();
      }
      // Get all kerbals in the physics bubble
      internal void GetKerbalsLocal()

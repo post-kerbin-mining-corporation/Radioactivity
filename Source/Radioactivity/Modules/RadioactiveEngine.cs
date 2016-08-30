@@ -50,6 +50,12 @@ namespace Radioactivity
     {
         return UIName;
     }
+    public override string GetInfo()
+    {
+        string toRet = String.Format("Emits radiation when running \n\n <b>Maximum emission:</b> {0}Sv/s", Utils.ToSI(EmissionAtMax,"F2"));
+
+        return toRet;
+    }
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();

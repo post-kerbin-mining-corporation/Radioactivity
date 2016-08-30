@@ -265,7 +265,7 @@ namespace Radioactivity
                 Utils.Log("Raycaster: Looking along a distance of " +totalPathLength.ToString() + " with "+ outgoing.Count +  " hits");
             float curZoneStartDistance = RadioactivitySettings.defaultSourceFluxDistance;
             float curZoneEndDistance = 0.01f;
-            Vector3 curZoneStartPoint = src.EmitterTransform.position;
+            Vector3 curZoneStartPoint = src.EmitterTransform.position + (target.SinkTransform.position - src.EmitterTransform.position).normalized*curZoneStartDistance;
             Vector3 curZoneEndPoint = target.SinkTransform.position;
 
             int hitNum = 0;
@@ -330,6 +330,7 @@ namespace Radioactivity
                         curZoneEndDistance = totalPathLength - found.distance;
                         attens.Add(new AttenuationZone(outgoing[i].distance, totalPathLength - found.distance, AttenuationType.Terrain, outgoing[i].point, found.point));
                     }
+                    hitNum++;
                 }
                 else
                 {
@@ -337,11 +338,12 @@ namespace Radioactivity
                         Utils.Log("Raycaster: No incoming hits with " + outgoing[i].collider.name + ", discarding...");
                 }
 
-                hitNum++;
+                
             }
 
             curZoneEndPoint = target.SinkTransform.position;
-            curZoneStartDistance = curZoneEndDistance;
+            if (hitNum > 0)
+                curZoneStartDistance = curZoneEndDistance;
             curZoneEndDistance = totalPathLength;
             attens.Add(new AttenuationZone(curZoneStartDistance, curZoneEndDistance, curZoneStartPoint, curZoneEndPoint));
 

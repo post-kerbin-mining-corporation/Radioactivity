@@ -12,6 +12,7 @@ namespace Radioactivity
 
     private Gradient grad;
     private List<RadiationLink> shownLinks = new List<RadiationLink>();
+    private List<ShadowShieldEffect> shadowShields = new List<ShadowShieldEffect>();
 
     public static RadioactivityOverlay Instance { get; private set; }
 
@@ -26,6 +27,45 @@ namespace Radioactivity
       DestroyRenderer(lnk);
       shownLinks.Remove(lnk);
     }
+    public void ShowShield(RadioactiveSource src)
+    {
+        foreach (ShadowShieldEffect shld in src.ShadowShields)
+        {
+            SetupShadowShieldRenderer(shld, src);
+            shadowShields.Add(shld);
+        }
+        
+        
+    }
+    public void HideShield(RadioactiveSource src)
+    {
+        List<ShadowShieldEffect> toClear = new List<ShadowShieldEffect>();
+        foreach (ShadowShieldEffect shld in shadowShields)
+        {
+            foreach (ShadowShieldEffect shldSrc in src.ShadowShields)
+            {
+                if (shld == shldSrc)
+                {
+                    toClear.Add(shld);
+                    DestroyShadowShieldRenderer(shld.renderer);
+                }
+            }
+        }
+        for (int i = 0; i < toClear.Count ; i++)
+        {
+            shadowShields.Remove(toClear[i]);
+        }
+
+    }
+
+    public void HideShields()
+    {
+        foreach (ShadowShieldEffect shld in shadowShields)
+        {
+            DestroyShadowShieldRenderer(shld.renderer);
+        }
+        shadowShields.Clear();
+    }
     public void Update(RadiationLink lnk)
     {
        for (int i = 0; i < shownLinks.Count; i++)
@@ -35,6 +75,27 @@ namespace Radioactivity
         }
     }
 
+    protected void SetupShadowShieldRenderer(ShadowShieldEffect shld, RadioactiveSource parent)
+    {
+        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        shld.renderer = go;
+        Destroy(go.GetComponent<Collider>());
+        go.transform.parent = parent.part.partTransform;
+        go.transform.localPosition = shld.localPosition;
+        go.transform.localScale = shld.dimensions;
+        go.transform.LookAt(go.transform.TransformDirection(shld.localPosition-shld.orientation));
+        MeshRenderer m = go.GetComponent<MeshRenderer>();
+        m.material = new Material(Shader.Find(RadioactivitySettings.overlayRayMaterial));
+        m.material.color = Color.blue;
+        m.material.renderQueue = 3000;
+        if (RadioactivitySettings.debugOverlay)
+            Utils.Log("Overlay: Showing shadow shield on " + parent.SourceID );
+        
+    }
+    protected void DestroyShadowShieldRenderer(GameObject shld)
+    {
+        GameObject.Destroy(shld);
+    }
     // Create and set up the line renderer
     protected void SetupRenderer(RadiationLink lnk)
     {

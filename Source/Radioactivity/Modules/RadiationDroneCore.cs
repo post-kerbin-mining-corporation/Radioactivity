@@ -42,10 +42,16 @@ namespace Radioactivity
     {
         return UIName;
     }
+    public override string GetInfo()
+    {
+        string toRet = "Probe core is affected by radiation \n\n <b>Penalties:</b>\n";
+
+        return toRet;
+    }
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();
-        toReturn.Add("<color=#ffffff><b>SAS degredation</b>:</color>", String.Format("{0} Levels", GetSASPenalty() ));
+        toReturn.Add("<color=#ffffff><b>SAS degredation</b>:</color>", String.Format("{0} Levels", Mathf.Clamp(GetSASPenalty(),0,3) ));
         return toReturn;
     }
 
@@ -89,8 +95,11 @@ namespace Radioactivity
 
     void ApplySASPenalty()
     {
-      if (drone != null)
-        drone.SASServiceLevel = Mathf.Clamp(baseSAS - GetSASPenalty(), 0, 5);
+        if (drone != null)
+        {
+            
+            drone.SASServiceLevel = Mathf.Clamp(baseSAS - GetSASPenalty(), 0, 3);
+        }
     }
   }
 }

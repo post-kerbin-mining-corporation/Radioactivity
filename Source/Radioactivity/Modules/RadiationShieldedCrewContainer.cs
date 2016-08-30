@@ -41,6 +41,12 @@ namespace Radioactivity
     {
         return UIName;
     }
+    public override string GetInfo()
+    {
+        string toRet = String.Format("Shielded container protects crew from radiation \n\n <b>Shielding:</b> {0:F0}%",RadiationAttenuationFraction*100f);
+
+        return toRet;
+    }
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();

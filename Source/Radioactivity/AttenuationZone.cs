@@ -108,7 +108,7 @@ namespace Radioactivity
             {
                 density = (associatedPart.mass + associatedPart.GetResourceMass()) / volume;
                 double atten = attenuationIn* (dist1*dist1)/ (dist2*dist2);
-                // Note that size is in m, and attenuationCoeff is in m-1
+                // Note that size is in m, and mass is in t
                 // TODO: Change this to use the mass attenuation coeffecient in g/cm2. Currently we use attenuation coeff in cm-1
                 // Need -(u/p) * p*l , where p = density in g/cm3 and l=path length
                 // So atten * Mathf.Exp (-density*this.size * massAttenuationCoeff);

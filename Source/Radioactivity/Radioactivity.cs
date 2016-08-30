@@ -132,6 +132,8 @@ namespace Radioactivity
       allRadSources.Add(src);
       BuildNewRadiationLink(src);
       pointRadiationNetworkChanged = true;
+      if (rayOverlayShown && src.ShadowShields.Count > 0)
+          RadioactivityOverlay.Instance.ShowShield(src);
       if (RadioactivitySettings.debugNetwork)
         Utils.Log("Adding radiation source "+ src.SourceID +" on part " + src.part.name + " to simulator");
     }
@@ -144,7 +146,8 @@ namespace Radioactivity
             pointRadiationNetworkChanged = true;
             RemoveRadiationLink(src);
             allRadSources.Remove(src);
-
+            if (rayOverlayShown && src.ShadowShields.Count > 0)
+                RadioactivityOverlay.Instance.HideShield(src);
             if (RadioactivitySettings.debugNetwork && src != null)
                 Utils.Log("Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
         }
@@ -178,17 +181,25 @@ namespace Radioactivity
         RayOverlayShown = true;
         for (int i = 0; i < allLinks.Count; i++)
         {
-            allLinks[i].ShowOverlay();
+            RadioactivityOverlay.Instance.Show(allLinks[i]);
+        }
+        for (int i = 0; i<AllSources.Count; i++)
+        {
+            if (allRadSources[i].ShadowShields.Count > 0)
+                RadioactivityOverlay.Instance.ShowShield(allRadSources[i]);
         }
     }
     // Hide the ray overlay for ALL links
     public void HideAllOverlays()
     {
-        RayOverlayShown = false;
+      
         for (int i = 0; i < allLinks.Count; i++)
         {
-            allLinks[i].HideOverlay();
+            
+            RadioactivityOverlay.Instance.Hide(allLinks[i]);
         }
+        RadioactivityOverlay.Instance.HideShields();
+        RayOverlayShown = false;
     }
     // Show the ray overlay for a given source or sink
     public void ShowOverlay(RadioactiveSource src)
@@ -404,6 +415,7 @@ namespace Radioactivity
             for (int i = 0; i < toRm.Count; i++)
             {
                 toRm[i].HideOverlay();
+                toRm[i].CleanupSink();
                 allLinks.Remove(toRm[i]);
             }
         }

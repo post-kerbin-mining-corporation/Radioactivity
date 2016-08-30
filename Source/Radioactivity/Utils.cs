@@ -61,6 +61,16 @@ namespace Radioactivity
 
         return relativePosition;
     }
+    public static Vector3 Vector3FromString(string str)
+    {
+        Debug.Log(str);
+        Vector3 outVector3;
+        string[] splitString = str.Split(',');
+        outVector3.x = float.Parse(splitString[0]);
+        outVector3.y = float.Parse(splitString[1]);
+        outVector3.z = float.Parse(splitString[2]);
+        return outVector3;
+    }
     // Node loading
       // several variants for data types
     public static string GetValue(ConfigNode node, string nodeID, string defaultValue)

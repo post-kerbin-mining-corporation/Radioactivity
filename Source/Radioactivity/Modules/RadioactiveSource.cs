@@ -28,6 +28,8 @@ namespace Radioactivity
       [KSPField(isPersistant = false)]
       public int IconID = 0;
 
+
+
       // Show or hide the radioactive overlay from this source
       [KSPEvent(guiActive = false, guiName = "Toggle Rays")]
       public void ToggleOverlay()
@@ -38,7 +40,7 @@ namespace Radioactivity
         else
           Radioactivity.Instance.HideOverlay(this);
       }
-
+      public List<ShadowShieldEffect> ShadowShields { get { return associatedShields; } }
       public string GetEmitterAliases()
       {
           string aliases = "";
