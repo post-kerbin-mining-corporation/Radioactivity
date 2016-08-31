@@ -116,7 +116,13 @@ namespace Radioactivity
               {
                 if (RadioactivitySettings.debugModules)
                   Utils.Log(String.Format("RadiationDroneCore: Set SAS level to {0:F0}", frameSAS));
-                this.vessel.Autopilot.ModuleSetup();
+                    this.vessel.Autopilot.SAS.ModuleSetup();
+                  this.vessel.Autopilot.SAS.Update();
+                  drone.OnStart(StartState.Flying);
+                  this.vessel.Autopilot.SetupModules();
+                  this.vessel.Autopilot.Update() ;
+                  this.vessel.Autopilot.Disable();
+                  this.vessel.Autopilot.Enable();
               }
             }
 

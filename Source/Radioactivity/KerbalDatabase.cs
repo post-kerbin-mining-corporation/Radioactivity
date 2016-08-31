@@ -190,7 +190,7 @@ namespace Radioactivity
           {
             if (HealthState != RadioactivityKerbalState.Sick)
             {
-              Sicken()
+              Sicken();
             }
             //Utils.LogWarning(Name + " died of radiation exposure");
             return;
@@ -199,7 +199,7 @@ namespace Radioactivity
           {
             if (HealthState != RadioactivityKerbalState.Dead)
             {
-              Die()
+                Die();
             }
             //Utils.LogWarning(Name + " got radiation sickness");
             return;
@@ -210,14 +210,15 @@ namespace Radioactivity
         {
           HealthState = RadioactivityKerbalState.Sick;
           if (RadioactivitySettings.debugKerbalEvents)
-            Debug.LogWarning(String.Fomat("Kerbals: {0} got radiation sickness", Name));
+            
+            Utils.LogWarning(String.Format("Kerbals: {0} got radiation sickness", Name));
         }
         /// "kills" a kerbal
         void Die()
         {
           HealthState = RadioactivityKerbalState.Dead;
           if (RadioactivitySettings.debugKerbalEvents)
-            Debug.LogWarning(String.Fomat("Kerbals: {0} died of radiation exposure", Name));
+            Utils.LogWarning(String.Format("Kerbals: {0} died of radiation exposure", Name));
         }
 
         // Load from confignode
@@ -231,7 +232,7 @@ namespace Radioactivity
             LastUpdate = Utils.GetValue(config, "LastUpdate", 0d);
             TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
             CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
-            HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), Utils.GetValue(config,"HealthState","Healthy"))
+            HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), Utils.GetValue(config, "HealthState", "Healthy"));
 
         }
         public void Load(ProtoCrewMember crewMember)
