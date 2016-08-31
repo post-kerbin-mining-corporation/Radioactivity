@@ -46,6 +46,12 @@ namespace Radioactivity
             return new List<RadioactivityKerbal>(Kerbals.Values);
         }
 
+        public void RemoveKerbal(RadioactivityKerbal k)
+        {
+          Kerbals.Remove(k.Name);
+          Utils.Log(String.Format("Kerbal Database: {0} removed from database", k.Name));
+        }
+
         internal void Load(ConfigNode node)
         {
             Utils.Log("Kerbal Database: Loading...");
@@ -162,8 +168,14 @@ namespace Radioactivity
 
         public void Simulate(float timeStep)
         {
+          if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Dead || kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Missing)
+          {
+            KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
+            return;
+          }
           if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
           {
+              HealthState == RadioactivityKerbalState.Home;
               TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC*timeStep;
               if (TotalExposure < 0d)
                 TotalExposure = 0d;
@@ -188,7 +200,7 @@ namespace Radioactivity
         {
           if (TotalExposure >= RadioactivitySettings.kerbalDeathThreshold)
           {
-            if (HealthState != RadioactivityKerbalState.Sick)
+            if (HealthState != RadioactivityKerbalState.Sick && HealthState != RadioactivityKerbalState.Dead)
             {
               Sicken();
             }
@@ -204,19 +216,44 @@ namespace Radioactivity
             //Utils.LogWarning(Name + " got radiation sickness");
             return;
           }
+          if (TotalExposure < RadioactivitySettings.kerbalSicknessThreshold)
+          {
+            if (HealthState == RadioactivityKerbalState.Sick)
+            {
+                Heal();
+            }
+            //Utils.LogWarning(Name + " got radiation sickness");
+            return;
+          }
         }
 
         void Sicken()
         {
           HealthState = RadioactivityKerbalState.Sick;
+          ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{} now has radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
           if (RadioactivitySettings.debugKerbalEvents)
-            
             Utils.LogWarning(String.Format("Kerbals: {0} got radiation sickness", Name));
+        }
+        void Heal()
+        {
+          HealthState = RadioactivityKerbalState.Healthy;
+          ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{} recovered from radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
+          if (RadioactivitySettings.debugKerbalEvents)
+            Utils.LogWarning(String.Format("Kerbals: {0} recovered from radiation sickness", Name));
         }
         /// "kills" a kerbal
         void Die()
         {
+
           HealthState = RadioactivityKerbalState.Dead;
+          KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
+          ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} has died of radiation exposure", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
+
+          if (RadioactivitySettings.enableKerbalDeath)
+            HighLogic.CurrentGame.CrewRoster.RemoveDead(Kerbal);
+          else
+            HighLogic.CurrentGame.CrewRoster.RemoveMIA(Kerbal);
+
           if (RadioactivitySettings.debugKerbalEvents)
             Utils.LogWarning(String.Format("Kerbals: {0} died of radiation exposure", Name));
         }
