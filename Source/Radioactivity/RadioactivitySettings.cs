@@ -29,7 +29,7 @@ namespace Radioactivity
     public static float defaultPartAttenuationCoefficient = 1.5f;
     // Default density for a part
     public static float defaultDensity = 1f;
-    
+
 
       // OVERLAY SETTINGS
     public static int overlayRayLayer = 0;
@@ -83,7 +83,10 @@ namespace Radioactivity
     public static bool debugNetwork = true;
       // If on, generates debug messages when building raycast paths
     public static bool debugRaycasting = true;
-
+    // If on, generates debug messages when building raycast paths
+     public static bool debugKerbalDatabase = true;
+    // If on, generates debug messages when building raycast paths
+     public static bool debugKerbalEvents = true;
 
     public static void Load()
     {

@@ -114,7 +114,10 @@ namespace Radioactivity
         }
     }
 
-    class RadioactivityKerbal
+    public enum RadioactivityKerbalState {
+      Healthy, Sick, Dead, Home
+    }
+    public class RadioactivityKerbal
     {
         public double LastUpdate;
         public ProtoCrewMember.RosterStatus Status = ProtoCrewMember.RosterStatus.Available;
@@ -125,8 +128,12 @@ namespace Radioactivity
         public int SeatIdx;  //Probably not required - currently not used.
         public string SeatName = string.Empty;  //Probably not required - currently not used.
 
+        // Kerbal's total exposure
         public double TotalExposure;
+        // Kerbal's current exposure
         public double CurrentExposure;
+        // Kerbal's health state
+        public RadioactivityKerbalState HealthState;
 
         public ProtoCrewMember Kerbal { get; set; }
         public bool IsNew { get; set; }
@@ -152,6 +159,7 @@ namespace Radioactivity
           double catchupExposure = catchupSeconds*CurrentExposure;
           TotalExposure = TotalExposure + catchupSeconds;
         }
+
         public void Simulate(float timeStep)
         {
           if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
@@ -180,15 +188,38 @@ namespace Radioactivity
         {
           if (TotalExposure >= RadioactivitySettings.kerbalDeathThreshold)
           {
+            if (HealthState != RadioactivityKerbalState.Sick)
+            {
+              Sicken()
+            }
             //Utils.LogWarning(Name + " died of radiation exposure");
             return;
           }
           if (TotalExposure >= RadioactivitySettings.kerbalSicknessThreshold)
           {
+            if (HealthState != RadioactivityKerbalState.Dead)
+            {
+              Die()
+            }
             //Utils.LogWarning(Name + " got radiation sickness");
             return;
           }
         }
+
+        void Sicken()
+        {
+          HealthState = RadioactivityKerbalState.Sick;
+          if (RadioactivitySettings.debugKerbalEvents)
+            Debug.LogWarning(String.Fomat("Kerbals: {0} got radiation sickness", Name));
+        }
+        /// "kills" a kerbal
+        void Die()
+        {
+          HealthState = RadioactivityKerbalState.Dead;
+          if (RadioactivitySettings.debugKerbalEvents)
+            Debug.LogWarning(String.Fomat("Kerbals: {0} died of radiation exposure", Name));
+        }
+
         // Load from confignode
         public void Load(ConfigNode config, string name)
         {
@@ -200,16 +231,18 @@ namespace Radioactivity
             LastUpdate = Utils.GetValue(config, "LastUpdate", 0d);
             TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
             CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
+            HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), Utils.GetValue(config,"HealthState","Healthy"))
 
         }
         public void Load(ProtoCrewMember crewMember)
         {
             Name = crewMember.name;
             Kerbal = crewMember;
-
+            //Status = crewMember
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
             TotalExposure = 0d;
             CurrentExposure = 0d;
+            HealthState = RadioactivityKerbalState.Healthy;
         }
 
         public ConfigNode Save(ConfigNode config)
@@ -221,7 +254,7 @@ namespace Radioactivity
             node.AddValue("Type", CrewType);
             node.AddValue("TotalExposure", TotalExposure);
             node.AddValue("CurrentExposure", CurrentExposure);
-
+            node.AddValue("HealthState",HealthState.ToString());
             return node;
         }
 
