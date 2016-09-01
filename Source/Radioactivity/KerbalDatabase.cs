@@ -31,7 +31,16 @@ namespace Radioactivity
 
         public List<RadioactivityKerbal> NearbyKerbals(List<ProtoCrewMember> crew)
         {
-            return new List<RadioactivityKerbal>(Kerbals.Values);
+          List<RadioactivityKerbal> toReturn = new List<RadioactivityKerbal>();
+          foreach (var kvp in Kerbals)
+          {
+              foreach (ProtoCrewMember c in crew)
+              {
+                  if (kvp.Value.Kerbal == c)
+                      toReturn.Add(kvp.Value);
+              }
+          }
+          return toReturn;
         }
         public List<RadioactivityKerbal> AllKerbals()
         {
@@ -39,11 +48,24 @@ namespace Radioactivity
         }
         public List<RadioactivityKerbal> ActiveKerbals()
         {
-            return new List<RadioactivityKerbal>(Kerbals.Values);
+            List<RadioactivityKerbal> toReturn = new List<RadioactivityKerbal>();
+            foreach (var kvp in Kerbals)
+            {
+                  if (kvp.Value.Kerbal.Status == ProtoCrewMember.RosterStatus.Active)
+                      toReturn.Add(kvp.Value);
+            }
+            return toReturn;
+
         }
         public List<RadioactivityKerbal> KSCKerbals()
         {
-            return new List<RadioactivityKerbal>(Kerbals.Values);
+          List<RadioactivityKerbal> toReturn = new List<RadioactivityKerbal>();
+          foreach (var kvp in Kerbals)
+          {
+                if (kvp.Value.Kerbal.Status == ProtoCrewMember.RosterStatus.Available)
+                    toReturn.Add(kvp.Value);
+          }
+          return toReturn;
         }
 
         public void RemoveKerbal(RadioactivityKerbal k)
@@ -174,7 +196,7 @@ namespace Radioactivity
           {
               CurrentVessel = null;
             KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
-              
+
             return;
           }
           if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
@@ -186,7 +208,7 @@ namespace Radioactivity
                 TotalExposure = 0d;
           } else
           {
-              
+
               if (CurrentExposure <= RadioactivitySettings.kerbalHealThreshold)
               {
                   TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate*timeStep;
@@ -229,7 +251,7 @@ namespace Radioactivity
                 Heal();
             }
             //Utils.LogWarning(Name + " got radiation sickness");
-            
+
           }
         }
 
@@ -251,7 +273,7 @@ namespace Radioactivity
         /// "kills" a kerbal
         void Die()
         {
-            
+
           HealthState = RadioactivityKerbalState.Dead;
           KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
           ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} has died of radiation exposure", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
@@ -263,7 +285,7 @@ namespace Radioactivity
             if (RadioactivitySettings.enableKerbalDeath)
             {
                 // Do nothing
-            } else 
+            } else
             {
                 if (HighLogic.CurrentGame.Parameters.Difficulty.MissingCrewsRespawn)
                 {
@@ -303,9 +325,9 @@ namespace Radioactivity
                   }
               }
           }
-          
 
-          
+
+
         }
 
         // Load from confignode
@@ -319,7 +341,7 @@ namespace Radioactivity
             LastUpdate = Utils.GetValue(config, "LastUpdate", 0d);
             TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
             CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
-            
+
             HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), Utils.GetValue(config, "HealthState", "Healthy"));
 
 
@@ -330,12 +352,12 @@ namespace Radioactivity
             }
             else
             {
-                
+
                 Vessel tryVessel = FlightGlobals.Vessels.FirstOrDefault(a => a.id == VesselID);
                 if (tryVessel != null && tryVessel.loaded)
                 {
                     CurrentVessel = tryVessel;
-                    
+
                 }
             }
         }

@@ -95,14 +95,24 @@ namespace Radioactivity.UI
      internal void GetKerbalsVessel()
      {
          if (HighLogic.LoadedSceneIsFlight)
+         {
              drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(FlightGlobals.ActiveVessel.GetVesselCrew());
+         }
          else if (HighLogic.LoadedSceneIsEditor)
+         {
              if (ShipConstruction.ShipManifest == null)
-                drawnKerbals = new List<RadioactivityKerbal>();
+             {
+                drawnKerbals.Clear();
+             }
              else
+             {
                 drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(ShipConstruction.ShipManifest.GetAllCrew(true));
-         else 
-            drawnKerbals = new List<RadioactivityKerbal>();
+             }
+         }
+         else
+         {
+            drawnKerbals.Clear();
+         }
      }
      // Get all kerbals in the physics bubble
      internal void GetKerbalsLocal()
@@ -110,9 +120,9 @@ namespace Radioactivity.UI
          List<ProtoCrewMember> nearbyCrew = new List<ProtoCrewMember>();
          for (int i = 0; i < FlightGlobals.Vessels.Count; i++)
          {
-             nearbyCrew.Concat(FlightGlobals.Vessels[i].GetVesselCrew());
+             if (FlightGlobals.Vessels[i].loaded)
+                nearbyCrew.Concat(FlightGlobals.Vessels[i].GetVesselCrew());
          }
-         
          drawnKerbals = KerbalTracking.Instance.KerbalDB.NearbyKerbals(nearbyCrew);
      }
      // Get kerbals that are in flight
@@ -192,7 +202,7 @@ namespace Radioactivity.UI
           GUI.color = Color.yellow;
        else
           GUI.color = Color.red;
-          
+
        GUI.Box(new Rect(2f, 11f, tempBarFGSize, 7f), "", barFGStyle);
        GUI.color = Color.white;
 
