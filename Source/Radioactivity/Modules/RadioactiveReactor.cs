@@ -17,7 +17,7 @@ namespace Radioactivity
 
       // Amount of emission at full reactor throttle
       [KSPField(isPersistant = false)]
-      public float MaxEmission = 1f;
+      public float EmissionAtMax = 1f;
       // Amount of emission when meltdown is total
       [KSPField(isPersistant = false)]
       public float MeltdownEmission = 1f;
@@ -45,7 +45,8 @@ namespace Radioactivity
       }
       public override string GetInfo()
       {
-          string toRet = String.Format("Emits radiation when running \n\n <b>Maximum emission:</b> {0}Sv/s", Utils.ToSI(EmissionAtMax,"F2"));
+          string toRet = String.Format("Emits radiation when running \n\n <b>Maximum emission:</b> {0}Sv/s\n", Utils.ToSI(EmissionAtMax,"F2"));
+          toRet += String.Format("<b>Meltdown emission:</b> {0}Sv/s", Utils.ToSI(MeltdownEmission, "F2"));
 
           return toRet;
       }
@@ -53,6 +54,7 @@ namespace Radioactivity
       {
           Dictionary<string, string> toReturn = new Dictionary<string, string>();
           toReturn.Add("<color=#ffffff><b>Reactor Emission</b>:</color>", String.Format("{0}Sv/s", Utils.ToSI(currentEmission,"F2")));
+
           return toReturn;
       }
 
@@ -80,14 +82,14 @@ namespace Radioactivity
       {
         if (partFields != null)
         {
-          float reactorThrottle = partFields.GetValue("CurrentPowerPercent")*0.01f;
-          float reactorIntegrity = 1f-partFields.GetValue("CoreIntegrity")*0.01f;
+          float reactorThrottle = (float)(partFields.GetValue("CurrentPowerPercent"))*0.01f;
+          float reactorIntegrity = 1f - (float)(partFields.GetValue("CoreIntegrity")) * 0.01f;
           if (HighLogic.LoadedSceneIsFlight)
           {
-            currentEmission = reactorThrottle*MaxEmission + reactorIntegrity*MeltdownEmission;
+            currentEmission = reactorThrottle*EmissionAtMax + reactorIntegrity*MeltdownEmission;
           } else
           {
-            currentEmission =MaxEmission
+              currentEmission = EmissionAtMax;
           }
         }
 

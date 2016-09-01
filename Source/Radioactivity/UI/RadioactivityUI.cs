@@ -103,14 +103,17 @@ namespace Radioactivity.UI
         public void DrawMainWindow(int WindowID)
         {
             GUILayout.BeginVertical();
-            overlayShown = GUILayout.Toggle(overlayShown, "Overlay", buttonStyle);
-            if (overlayShown != overlayToggled)
+            if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
             {
-                overlayToggled = overlayShown;
-                if (overlayShown)
-                    Radioactivity.Instance.ShowAllOverlays();
-                else
-                    Radioactivity.Instance.HideAllOverlays();
+                overlayShown = GUILayout.Toggle(overlayShown, "Overlay", buttonStyle);
+                if (overlayShown != overlayToggled)
+                {
+                    overlayToggled = overlayShown;
+                    if (overlayShown)
+                        Radioactivity.Instance.ShowAllOverlays();
+                    else
+                        Radioactivity.Instance.HideAllOverlays();
+                }
             }
             rosterShown = GUILayout.Toggle(rosterShown, "Roster", buttonStyle);
             if (rosterShown != rosterToggled)
@@ -162,7 +165,7 @@ namespace Radioactivity.UI
                     DummyVoid,
                     DummyVoid,
                     DummyVoid,
-                    ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH | ApplicationLauncher.AppScenes.FLIGHT,
+                    ApplicationLauncher.AppScenes.SPACECENTER | ApplicationLauncher.AppScenes.TRACKSTATION | ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH | ApplicationLauncher.AppScenes.FLIGHT,
                     (Texture)GameDatabase.Instance.GetTexture("Radioactivity/UI/toolbar_off", false));
             }
         }

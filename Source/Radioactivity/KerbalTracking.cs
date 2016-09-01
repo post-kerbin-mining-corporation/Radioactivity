@@ -59,12 +59,12 @@ namespace Radioactivity
           }
 
           // Irradiates a kerbal
-          public void IrradiateKerbal(ProtoCrewMember crew, double amount)
+          public void IrradiateKerbal(ProtoCrewMember crew, Vessel crewVessel, double amount)
           {
             foreach (KeyValuePair<string,RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
             {
               if (crew == kerbal.Value.Kerbal)
-                kerbal.Value.Irradiate(amount);
+                kerbal.Value.Irradiate(crewVessel, amount);
             }
           }
     }

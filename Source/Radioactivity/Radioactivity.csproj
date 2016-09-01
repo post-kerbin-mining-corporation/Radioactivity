@@ -61,6 +61,7 @@
     <Compile Include="Modules\RadiationDroneCore.cs" />
     <Compile Include="Modules\RadiationInstrument.cs" />
     <Compile Include="Modules\RadiationParameters.cs" />
+    <Compile Include="Modules\RadioactiveReactor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiationLink.cs" />
     <Compile Include="Modules\RadiationShieldedCrewContainer.cs" />

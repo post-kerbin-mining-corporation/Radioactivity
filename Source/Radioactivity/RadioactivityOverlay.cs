@@ -83,7 +83,9 @@ namespace Radioactivity
         go.transform.parent = parent.part.partTransform;
         go.transform.localPosition = shld.localPosition;
         go.transform.localScale = shld.dimensions;
-        go.transform.LookAt(go.transform.TransformDirection(shld.localPosition-shld.orientation));
+
+        go.transform.up = parent.EmitterTransform.position - go.transform.position;
+
         MeshRenderer m = go.GetComponent<MeshRenderer>();
         m.material = new Material(Shader.Find(RadioactivitySettings.overlayRayMaterial));
         m.material.color = Color.blue;

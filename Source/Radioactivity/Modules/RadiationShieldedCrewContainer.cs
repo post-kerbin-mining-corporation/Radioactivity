@@ -84,7 +84,7 @@ namespace Radioactivity
       {
           for (int i = 0; i < this.part.protoModuleCrew.Count ;i++)
           {
-            KerbalTracking.Instance.IrradiateKerbal(this.part.protoModuleCrew[i], (double)amt);
+            KerbalTracking.Instance.IrradiateKerbal(this.part.protoModuleCrew[i], part.vessel, (double)amt);
           }
       }
     }

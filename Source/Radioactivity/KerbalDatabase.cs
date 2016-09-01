@@ -128,7 +128,8 @@ namespace Radioactivity
         public double LastUpdate;
         public ProtoCrewMember.RosterStatus Status = ProtoCrewMember.RosterStatus.Available;
         public ProtoCrewMember.KerbalType CrewType = ProtoCrewMember.KerbalType.Crew;
-        public Guid VesselId = Guid.Empty;
+        public Guid VesselID = Guid.Empty;
+        public Vessel CurrentVessel;
         public string VesselName = " ";
         public uint PartId;  //Probably not required - currently not used.
         public int SeatIdx;  //Probably not required - currently not used.
@@ -152,9 +153,10 @@ namespace Radioactivity
             CurrentExposure = 0d;
         }
         // Add radiation to a kerbal
-        public void Irradiate(double amt)
+        public void Irradiate(Vessel curVessel, double amt)
         {
           LastUpdate = Planetarium.GetUniversalTime();
+          CurrentVessel = curVessel;
           //TotalExposure = TotalExposure + amt;
           CurrentExposure = amt;
         }
@@ -168,19 +170,23 @@ namespace Radioactivity
 
         public void Simulate(float timeStep)
         {
-          if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Dead || kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Missing)
+          if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Dead || Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Missing)
           {
+              CurrentVessel = null;
             KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
+              
             return;
           }
           if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
           {
-              HealthState == RadioactivityKerbalState.Home;
+              CurrentVessel = null;
+              HealthState = RadioactivityKerbalState.Home;
               TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC*timeStep;
               if (TotalExposure < 0d)
                 TotalExposure = 0d;
           } else
           {
+              
               if (CurrentExposure <= RadioactivitySettings.kerbalHealThreshold)
               {
                   TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate*timeStep;
@@ -198,23 +204,23 @@ namespace Radioactivity
         }
         void HandleExposure()
         {
-          if (TotalExposure >= RadioactivitySettings.kerbalDeathThreshold)
+          if (TotalExposure >= RadioactivitySettings.kerbalSicknessThreshold)
           {
             if (HealthState != RadioactivityKerbalState.Sick && HealthState != RadioactivityKerbalState.Dead)
             {
               Sicken();
+              return;
             }
             //Utils.LogWarning(Name + " died of radiation exposure");
-            return;
           }
-          if (TotalExposure >= RadioactivitySettings.kerbalSicknessThreshold)
+          if (TotalExposure >= RadioactivitySettings.kerbalDeathThreshold)
           {
             if (HealthState != RadioactivityKerbalState.Dead)
             {
                 Die();
+                return;
             }
             //Utils.LogWarning(Name + " got radiation sickness");
-            return;
           }
           if (TotalExposure < RadioactivitySettings.kerbalSicknessThreshold)
           {
@@ -223,39 +229,83 @@ namespace Radioactivity
                 Heal();
             }
             //Utils.LogWarning(Name + " got radiation sickness");
-            return;
+            
           }
         }
 
         void Sicken()
         {
           HealthState = RadioactivityKerbalState.Sick;
-          ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{} now has radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
+          ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} now has radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
           if (RadioactivitySettings.debugKerbalEvents)
             Utils.LogWarning(String.Format("Kerbals: {0} got radiation sickness", Name));
         }
         void Heal()
         {
           HealthState = RadioactivityKerbalState.Healthy;
-          ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{} recovered from radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
+          ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} recovered from radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
           if (RadioactivitySettings.debugKerbalEvents)
             Utils.LogWarning(String.Format("Kerbals: {0} recovered from radiation sickness", Name));
         }
+
         /// "kills" a kerbal
         void Die()
         {
-
+            
           HealthState = RadioactivityKerbalState.Dead;
           KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
           ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} has died of radiation exposure", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
 
-          if (RadioactivitySettings.enableKerbalDeath)
-            HighLogic.CurrentGame.CrewRoster.RemoveDead(Kerbal);
+          if (CurrentVessel.isEVA)
+          {
+              // If we are EVA, have to handle this more carefully
+            CurrentVessel.rootPart.Die();
+            if (RadioactivitySettings.enableKerbalDeath)
+            {
+                // Do nothing
+            } else 
+            {
+                if (HighLogic.CurrentGame.Parameters.Difficulty.MissingCrewsRespawn)
+                {
+                    Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
+                }
+            }
+            if (RadioactivitySettings.debugKerbalEvents)
+                Utils.LogWarning(String.Format("Kerbals: {0} died on EVA of radiation exposure", Name));
+          }
           else
-            HighLogic.CurrentGame.CrewRoster.RemoveMIA(Kerbal);
+          {
+              if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
+              {
+                  Kerbal.Die();
+                  if (HighLogic.CurrentGame.Parameters.Difficulty.MissingCrewsRespawn)
+                  {
+                      Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
+                  }
+                  if (RadioactivitySettings.debugKerbalEvents)
+                      Utils.LogWarning(String.Format("Kerbals: {0} died at home of radiation exposure", Name));
+              }
+              else
+              {
 
-          if (RadioactivitySettings.debugKerbalEvents)
-            Utils.LogWarning(String.Format("Kerbals: {0} died of radiation exposure", Name));
+                  Part part = CurrentVessel.Parts.Find(p => p.protoModuleCrew.Contains(Kerbal));
+                  if (part != null)
+                  {
+                      part.RemoveCrewmember(Kerbal);
+                      Kerbal.Die();
+                      if (HighLogic.CurrentGame.Parameters.Difficulty.MissingCrewsRespawn)
+                      {
+                          Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
+                      }
+                      if (RadioactivitySettings.debugKerbalEvents)
+                          Utils.LogWarning(String.Format("Kerbals: {0} died in his vessel of radiation exposure", Name));
+                      //HighLogic.CurrentGame.CrewRoster.RemoveDead(Kerbal);
+                  }
+              }
+          }
+          
+
+          
         }
 
         // Load from confignode
@@ -269,8 +319,25 @@ namespace Radioactivity
             LastUpdate = Utils.GetValue(config, "LastUpdate", 0d);
             TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
             CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
+            
             HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), Utils.GetValue(config, "HealthState", "Healthy"));
 
+
+            VesselID = Utils.GetValue(config, "VesselID", Guid.Empty);
+            if (Guid.Empty.Equals(VesselID))
+            {
+                CurrentVessel = null;
+            }
+            else
+            {
+                
+                Vessel tryVessel = FlightGlobals.Vessels.FirstOrDefault(a => a.id == VesselID);
+                if (tryVessel != null && tryVessel.loaded)
+                {
+                    CurrentVessel = tryVessel;
+                    
+                }
+            }
         }
         public void Load(ProtoCrewMember crewMember)
         {
@@ -293,6 +360,7 @@ namespace Radioactivity
             node.AddValue("TotalExposure", TotalExposure);
             node.AddValue("CurrentExposure", CurrentExposure);
             node.AddValue("HealthState",HealthState.ToString());
+            node.AddValue("VesselID",VesselID.ToString());
             return node;
         }
 

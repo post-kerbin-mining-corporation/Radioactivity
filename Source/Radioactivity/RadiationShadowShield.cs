@@ -42,7 +42,7 @@ namespace Radioactivity
     }
     public ShadowShieldEffect BuildShadowShield(Transform emitter)
     {
-        shieldPosition = Utils.Vector3FromString(ShieldPosition);
+      shieldPosition = Utils.Vector3FromString(ShieldPosition);
       return new ShadowShieldEffect(Density, Thickness, MassAttenuationCoeffecient, emitter.localPosition, shieldPosition-emitter.localPosition, shieldPosition, ShieldRadius);
     }
 
@@ -65,13 +65,14 @@ namespace Radioactivity
       orientation = shieldOrient;
       localPosition = shieldPos;
       dimensions = new Vector3(shieldRad, thickness, shieldRad);
+
       if (RadioactivitySettings.debugModules)
-          Utils.Log("Shadow Shield: created new with position " + shieldPos.ToString() + ", thickness " + thickness.ToString()+ ", radius" + shieldRad.ToString());
+          Utils.Log(String.Format("Shadow Shield: created new with position {0}, radius {1:F1}, angular size {2:F1}",localPosition.ToString(),shieldRad, angle));
     }
 
     public double AttenuateShield(Vector3 rayDir)
     {
-
+        
       if (Vector3.Angle(rayDir, orientation) <= angle)
       {
           if (RadioactivitySettings.debugModules)

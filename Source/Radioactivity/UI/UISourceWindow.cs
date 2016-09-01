@@ -87,7 +87,7 @@ namespace Radioactivity.UI
 
     public void UpdatePositions()
     {
-      screenPosition = Camera.main.WorldToScreenPoint(source.part.partTransform.position);
+      screenPosition = Camera.main.WorldToScreenPoint(source.EmitterTransform.position);
       windowPosition = new Rect(screenPosition.x + iconDims.x/2+5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
     }
 

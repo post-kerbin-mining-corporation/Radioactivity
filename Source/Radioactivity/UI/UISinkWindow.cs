@@ -45,7 +45,7 @@ namespace Radioactivity.UI
       atlas = iconAtlas;
       windowID = random.Next();
       // Set up screen position
-      screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
+      screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
       windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
       GetStyles();
 

@@ -90,6 +90,15 @@ namespace Radioactivity
         }
         return defaultValue;
     }
+    public static Guid GetValue(ConfigNode node, string nodeID, Guid defaultValue)
+    {
+        if (node.HasValue(nodeID))
+        {
+            int val;
+            return new Guid(node.GetValue(nodeID));
+        }
+        return defaultValue;
+    }
     public static float GetValue(ConfigNode node, string nodeID, float defaultValue)
     {
         if (node.HasValue(nodeID))
