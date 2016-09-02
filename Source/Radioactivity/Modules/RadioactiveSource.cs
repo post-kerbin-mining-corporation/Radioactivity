@@ -127,10 +127,10 @@ namespace Radioactivity
 
       public double AttenuateShadowShields(Vector3 rayDir)
       {
-        if (associatedShields == null || associatedShields.Count > 0)
+        if (associatedShields == null || associatedShields.Count == 0)
           return 1d;
 
-          double start = 1d;
+         double start = 1d;
         for (int i = 0; i<associatedShields.Count;i++)
         {
           start = start*associatedShields[i].AttenuateShield(rayDir);

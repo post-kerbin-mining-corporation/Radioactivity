@@ -43,27 +43,39 @@ namespace Radioactivity
     public ShadowShieldEffect BuildShadowShield(Transform emitter)
     {
       shieldPosition = Utils.Vector3FromString(ShieldPosition);
-      return new ShadowShieldEffect(Density, Thickness, MassAttenuationCoeffecient, emitter.localPosition, shieldPosition-emitter.localPosition, shieldPosition, ShieldRadius);
+      return new ShadowShieldEffect(this.part, Density, Thickness, MassAttenuationCoeffecient, emitter, shieldPosition-emitter.localPosition, shieldPosition, ShieldRadius);
     }
 
   }
 
   public class ShadowShieldEffect
   {
+    public Part host;
+    public Transform emitterTransform;
     public Vector3 orientation;
+
+    public Vector3 realPosition;
     public Vector3 localPosition;
     public Vector3 dimensions;
+    
+    
     float angle;
     double outAttenuation;
     public GameObject renderer;
 
 
-    public ShadowShieldEffect(float density, float thickness, float coeff, Vector3 emitterPos, Vector3 shieldOrient, Vector3 shieldPos, float shieldRad)
+    public ShadowShieldEffect(Part p, float density, float thickness, float coeff, Transform emitter, Vector3 shieldOrient, Vector3 shieldPos, float shieldRad)
     {
+      host = p;
+      emitterTransform = emitter;
+
       outAttenuation = Math.Exp(-1d * (double)(density * thickness * coeff));
-      angle = Mathf.Atan((shieldRad*2f)/(2f*Vector3.Distance(emitterPos, shieldPos)));
-      orientation = shieldOrient;
+
       localPosition = shieldPos;
+      realPosition = host.partTransform.TransformPoint(localPosition);
+      
+      angle = Mathf.Atan((shieldRad)/(2f*Vector3.Distance(emitterTransform.position, realPosition)))*Mathf.Rad2Deg;
+      
       dimensions = new Vector3(shieldRad, thickness, shieldRad);
 
       if (RadioactivitySettings.debugModules)
@@ -72,7 +84,7 @@ namespace Radioactivity
 
     public double AttenuateShield(Vector3 rayDir)
     {
-        
+        orientation = host.partTransform.TransformPoint(localPosition) - emitterTransform.position;
       if (Vector3.Angle(rayDir, orientation) <= angle)
       {
           if (RadioactivitySettings.debugModules)

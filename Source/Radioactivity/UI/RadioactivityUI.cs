@@ -152,6 +152,20 @@ namespace Radioactivity.UI
             stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
 
         }
+        private void OnToolbarButtonOn()
+        {
+            uiShown = true;
+            stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
+            if (overlayShown)
+                Radioactivity.Instance.ShowAllOverlays();
+        }
+        private void OnToolbarButtonOff()
+        {
+            uiShown = false;
+            stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
+            Radioactivity.Instance.HideAllOverlays();
+
+        }
 
 
         void OnGUIAppLauncherReady()
@@ -159,8 +173,8 @@ namespace Radioactivity.UI
             if (stockToolbarButton == null)
             {
                 stockToolbarButton = ApplicationLauncher.Instance.AddModApplication(
-                    OnToolbarButtonToggle,
-                    OnToolbarButtonToggle,
+                    OnToolbarButtonOn,
+                    OnToolbarButtonOff,
                     DummyVoid,
                     DummyVoid,
                     DummyVoid,

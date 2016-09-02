@@ -51,7 +51,7 @@ namespace Radioactivity
             List<RadioactivityKerbal> toReturn = new List<RadioactivityKerbal>();
             foreach (var kvp in Kerbals)
             {
-                  if (kvp.Value.Kerbal.Status == ProtoCrewMember.RosterStatus.Active)
+                  if (kvp.Value.Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Assigned)
                       toReturn.Add(kvp.Value);
             }
             return toReturn;
@@ -62,7 +62,7 @@ namespace Radioactivity
           List<RadioactivityKerbal> toReturn = new List<RadioactivityKerbal>();
           foreach (var kvp in Kerbals)
           {
-                if (kvp.Value.Kerbal.Status == ProtoCrewMember.RosterStatus.Available)
+                if (kvp.Value.Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
                     toReturn.Add(kvp.Value);
           }
           return toReturn;
@@ -145,6 +145,8 @@ namespace Radioactivity
     public enum RadioactivityKerbalState {
       Healthy, Sick, Dead, Home
     }
+
+    // The concept for some of these functions is taken from RosterManager
     public class RadioactivityKerbal
     {
         public double LastUpdate;
@@ -201,14 +203,15 @@ namespace Radioactivity
           }
           if (Kerbal.rosterStatus == ProtoCrewMember.RosterStatus.Available)
           {
+              
               CurrentVessel = null;
-              HealthState = RadioactivityKerbalState.Home;
+              //HealthState = RadioactivityKerbalState.Home;
               TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC*timeStep;
               if (TotalExposure < 0d)
                 TotalExposure = 0d;
+
           } else
           {
-
               if (CurrentExposure <= RadioactivitySettings.kerbalHealThreshold)
               {
                   TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate*timeStep;
@@ -222,8 +225,9 @@ namespace Radioactivity
           }
           if (RadioactivitySettings.enableKerbalEffects)
             HandleExposure();
-
         }
+
+
         void HandleExposure()
         {
           if (TotalExposure >= RadioactivitySettings.kerbalSicknessThreshold)
@@ -278,7 +282,7 @@ namespace Radioactivity
           KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
           ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} has died of radiation exposure", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
 
-          if (CurrentVessel.isEVA)
+          if (CurrentVessel != null && CurrentVessel.isEVA)
           {
               // If we are EVA, have to handle this more carefully
             CurrentVessel.rootPart.Die();

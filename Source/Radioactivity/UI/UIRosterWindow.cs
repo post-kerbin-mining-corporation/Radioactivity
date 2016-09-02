@@ -149,7 +149,7 @@ namespace Radioactivity.UI
      void DrawWindow(int WindowID)
      {
         DrawModeBar();
-        scrollPosition = GUILayout.BeginScrollView(scrollPosition, groupStyle, GUILayout.Width(425), GUILayout.MinHeight(100),GUILayout.MaxHeight(300),GUILayout.ExpandHeight(true));
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition, HighLogic.Skin.verticalScrollbar, HighLogic.Skin.verticalScrollbar,GUILayout.Width(425), GUILayout.MinHeight(100), GUILayout.MaxHeight(300), GUILayout.ExpandHeight(true));
         DrawKerbalList();
         GUILayout.EndScrollView();
         GUI.DragWindow();
