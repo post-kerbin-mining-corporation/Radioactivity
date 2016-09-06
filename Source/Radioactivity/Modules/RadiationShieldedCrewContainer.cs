@@ -44,14 +44,13 @@ namespace Radioactivity
     public override string GetInfo()
     {
         string toRet = String.Format("Shielded container protects crew from radiation \n\n <b>Shielding:</b> {0:F1}%",RadiationAttenuationFraction*100f);
-
         return toRet;
     }
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();
         toReturn.Add("<color=#ffffff><b>Crew Shielding</b>:</color>", String.Format( "{0}%", RadiationAttenuationFraction * 100f));
-        toReturn.Add("<color=#ffffff><b>Crew Dose</b>:</color>", String.Format("{0}Sv", Utils.ToSI(CurrentRadiation, "F2")));
+        toReturn.Add("<color=#ffffff><b>Crew Dose</b>:</color>", String.Format("{0}Sv/s", Utils.ToSI(CurrentRadiation, "F2")));
         return toReturn;
       }
     public string GetSinkName()

@@ -27,6 +27,13 @@ namespace Radioactivity
     [KSPField(isPersistant = true)]
     public double CurrentRadiation = 0d;
 
+    // Show or hide the radioactive overlay from this source
+    [KSPEvent(guiActive = false, guiName = "Reset Counter")]
+    public void Reset()
+    {
+      LifetimeRadiation = 0d;
+    }
+
     // Alias for UI
     [KSPField(isPersistant = false)]
     public string UIName = "Radiation Tracker";
@@ -37,6 +44,7 @@ namespace Radioactivity
     {
         return UIName;
     }
+
     public Dictionary<string, string> GetDetails()
     {
         Dictionary<string, string> toReturn = new Dictionary<string, string>();
@@ -53,16 +61,15 @@ namespace Radioactivity
 
     public void AddRadiation(float amt)
     {
-        LifetimeRadiation = LifetimeRadiation + amt;
+      CurrentRadiation = amt;
+      if (HighLogic.LoadedSceneIsFlight)
+          LifetimeRadiation = LifetimeRadiation + amt;
     }
 
     public void FixedUpdate()
     {
-        CurrentRadiation = LifetimeRadiation - prevRadiation;
-        prevRadiation = LifetimeRadiation;
-
-       CurrentRadiationString = String.Format("{0:F2} /s", LifetimeRadiation-prevRadiation);
-       LifetimeRadiationString = String.Format("{0:F2}", LifetimeRadiation);
+       CurrentRadiationString = String.Format("{0}Sv/s", Utils.ToSI(CurrentRadiation,"F2"));
+       LifetimeRadiationString = String.Format("{0} Sv", Utils.ToSI(LifetimeRadiation, "F2"));
     }
   }
 }
