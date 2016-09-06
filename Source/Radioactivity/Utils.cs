@@ -39,10 +39,14 @@ namespace Radioactivity
         char[] incPrefixes = new[] { 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
         char[] decPrefixes = new[] { 'm', '\u03bc', 'n', 'p', 'f', 'a', 'z', 'y' };
 
-        int degree = (int)Math.Floor(Math.Log10(Math.Abs(d)) / 3);
-        double scaled = d * Math.Pow(1000, -degree);
+        int degree = Mathf.Clamp((int)Math.Floor(Math.Log10(Math.Abs(d)) / 3),-8,8);
+        if (degree == 0)
+            return d.ToString(format);
 
+        double scaled = d * Math.Pow(1000, -degree);
+            
         char? prefix = null;
+
         switch (Math.Sign(degree))
         {
             case 1:  prefix = incPrefixes[degree - 1]; break;

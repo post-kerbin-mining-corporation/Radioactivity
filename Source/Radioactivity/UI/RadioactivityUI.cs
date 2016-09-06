@@ -126,7 +126,12 @@ namespace Radioactivity.UI
 
         internal void DrawOverlay()
         {
-            overlayView.Draw();
+
+            if (!HighLogic.LoadedSceneIsFlight)
+                overlayView.Draw();
+            else
+                if (!MapView.MapIsEnabled)
+                    overlayView.Draw();
         }
         internal void DrawRoster()
         {

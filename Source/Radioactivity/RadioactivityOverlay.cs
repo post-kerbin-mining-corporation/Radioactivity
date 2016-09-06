@@ -105,7 +105,8 @@ namespace Radioactivity
       lnk.GO = new GameObject("RadioactiveLinkRendererRoot");
       if (HighLogic.LoadedSceneIsFlight)
       {
-        lnk.GO.transform.parent = lnk.source.vessel.vesselTransform;
+          lnk.GO.transform.SetParent(lnk.source.vessel.vesselTransform, true);
+          //lnk.GO.transform.localRotation = Quaternion.identity;
       }
       else if (HighLogic.LoadedSceneIsEditor)
       {
@@ -178,7 +179,9 @@ namespace Radioactivity
     protected LineRenderer CreateBasicRenderer(Transform parent)
     {
         GameObject child = new GameObject("RadioactiveLinkRendererChild");
-        child.transform.parent = parent;
+        child.transform.SetParent(parent, true);
+        //child.transform.localRotation = Quaternion.identity;
+
         LineRenderer lr = child.AddComponent<LineRenderer>();
         // Set up the material
         lr.material = new Material(Shader.Find(RadioactivitySettings.overlayRayMaterial));

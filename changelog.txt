@@ -1,3 +1,8 @@
+v0.1.1
+------
+- Fixed UI overflow with very small dose rates
+- Fixed overlay info windows being shown in the map view
+
 v0.1.0
 ------
 - Initial Release
