@@ -105,7 +105,7 @@ namespace Radioactivity
       lnk.GO = new GameObject("RadioactiveLinkRendererRoot");
       if (HighLogic.LoadedSceneIsFlight)
       {
-          lnk.GO.transform.SetParent(lnk.source.vessel.vesselTransform, true);
+          lnk.GO.transform.SetParent(lnk.source.part.partTransform, true);
           //lnk.GO.transform.localRotation = Quaternion.identity;
       }
       else if (HighLogic.LoadedSceneIsEditor)
@@ -134,11 +134,17 @@ namespace Radioactivity
         float w = Mathf.Clamp(RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMin, RadioactivitySettings.overlayRayWidthMax);
         lr.SetWidth(w, w);
 
+        Vector3 zoneStart = lnk.source.EmitterTransform.position;
+
         Vector3 pVec = Vector3.Cross((zn.startPosition - zn.endPosition), Camera.main.transform.forward).normalized;
 
-        //lr.useWorldSpace = true;
-        lr.SetPosition(0, zn.startPosition + pVec*w*0f);
-        lr.SetPosition(1, zn.endPosition + pVec * w*0f);
+        lr.useWorldSpace = true;
+        lr.SetPosition(0, zoneStart + (lnk.sink.SinkTransform.position - lnk.source.EmitterTransform.position).normalized * zn.dist1);
+        lr.SetPosition(1, zoneStart + (lnk.sink.SinkTransform.position - lnk.source.EmitterTransform.position).normalized * zn.dist2);
+        lr.useWorldSpace = false;
+
+        //lr.SetPosition(0, zoneStart + zn.dist1 + pVec*w*0f);
+        //lr.SetPosition(1, zoneStart + zn.dist2 + pVec * w * 0f);
     }
     protected Gradient ConstructGradient()
     {
@@ -181,6 +187,7 @@ namespace Radioactivity
         GameObject child = new GameObject("RadioactiveLinkRendererChild");
         child.transform.SetParent(parent, true);
         //child.transform.localRotation = Quaternion.identity;
+        //child.transform.localPosition = Vector3.zero;
 
         LineRenderer lr = child.AddComponent<LineRenderer>();
         // Set up the material
@@ -189,7 +196,7 @@ namespace Radioactivity
         lr.material.renderQueue = 3000;
         lr.gameObject.layer = 0;
         lr.SetVertexCount(2);
-        lr.useWorldSpace = false;
+        
         return lr;
     }
 

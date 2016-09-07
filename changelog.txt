@@ -1,5 +1,6 @@
 v0.1.1
 ------
+- Fixed rendering of overlay rays in non-static situations
 - Fixed UI overflow with very small dose rates
 - Fixed overlay info windows being shown in the map view
 - Added placeholder Geiger Counter (thermometer) science part, which can track current and total radiation doses (resettable)

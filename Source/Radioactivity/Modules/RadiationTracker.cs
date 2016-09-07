@@ -28,7 +28,7 @@ namespace Radioactivity
     public double CurrentRadiation = 0d;
 
     // Show or hide the radioactive overlay from this source
-    [KSPEvent(guiActive = false, guiName = "Reset Counter")]
+    [KSPEvent(guiActive = true, guiName = "Reset Counter")]
     public void Reset()
     {
       LifetimeRadiation = 0d;
