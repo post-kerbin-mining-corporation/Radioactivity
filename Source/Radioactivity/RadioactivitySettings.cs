@@ -24,12 +24,14 @@ namespace Radioactivity
       // How much the mass through a raypath can change before we need to recalculate it
     public static float maximumMassDelta = 0.05f;
 
-    // DEFAULT PART SETTINGS
+    // DEFAULT SETTINGS
     // Default value for the linear attenuation coefficient for parts, in cm2/g
     public static float defaultPartAttenuationCoefficient = 1.5f;
     // Default density for a part
     public static float defaultDensity = 1f;
 
+    // Default dose in Sv/s from galactic cosmic rays
+    public static double cosmicRadiationFlux = 0.00005073566;
 
       // OVERLAY SETTINGS
     public static int overlayRayLayer = 0;
@@ -41,7 +43,10 @@ namespace Radioactivity
       // SIMULATOR SETTINGS
     // do we simulate these?
     public static bool simulatePointRadiation = true;
+    public static bool simulateAmbientRadiation = false;
     public static bool simulateSolarRadiation = false;
+    public static bool simulateBeltRadiation = false;
+    public static bool simulateLocalRadiation = false;
     public static bool simulateCosmicRadiation = false;
 
       // TRACKING SETTINGS
@@ -105,6 +110,7 @@ namespace Radioactivity
            maximumMassDelta = Utils.GetValue(settingsNode, "RaycastMassDelta", 0.05f);
            defaultPartAttenuationCoefficient = Utils.GetValue(settingsNode, "DefaultMassAttenuationCoefficient", 6f);
            defaultDensity = Utils.GetValue(settingsNode, "DefaultDensity", 0.5f);
+           cosmicRadiationFlux = Utils.GetValue(settingsNode, "CosmicRadiationFlux", 0.00005073566);
 
            overlayRayWidthMult = Utils.GetValue(settingsNode, "OverlayRayWidthMultiplier", 0.005f);
            overlayRayWidthMin = Utils.GetValue(settingsNode, "OverlayRayMinimumWidth", 0.05f);
@@ -114,6 +120,8 @@ namespace Radioactivity
 
            simulatePointRadiation = Utils.GetValue(settingsNode, "EnablePointRadiation", true);
            simulateCosmicRadiation = Utils.GetValue(settingsNode, "EnableCosmicRadiation", false);
+           simulateLocalRadiation = Utils.GetValue(settingsNode, "EnableLocalRadiation", false);
+           simulateBeltRadiation = Utils.GetValue(settingsNode, "EnableBeltRadiation", false);
            simulateSolarRadiation = Utils.GetValue(settingsNode, "EnableSolarRadiation", false);
 
            enableKerbalEffects = Utils.GetValue(settingsNode, "EnableKerbalEffects", true);
@@ -133,6 +141,12 @@ namespace Radioactivity
            debugRaycasting = Utils.GetValue(settingsNode, "DebugRaycasting", true);
            debugSourceSinks = Utils.GetValue(settingsNode, "DebugSourcesAndSinks", true);
            debugModules = Utils.GetValue(settingsNode, "DebugModules", true);
+
+           if (simulateBeltRadiation || simulateLocalRadiation || simulateCosmicRadiation || simulateSolarRadiation)
+           {
+             simulateAmbientRadiation = true;
+           }
+
        }
        else
        {
@@ -146,5 +160,9 @@ namespace Radioactivity
   // Types of zone for attenuation
   public enum AttenuationType {
     Part, ParameterizedPart, Terrain, Empty
+  }
+
+  public enum RadiationType {
+    Point, Cosmic, Solar, Belt, Local
   }
 }

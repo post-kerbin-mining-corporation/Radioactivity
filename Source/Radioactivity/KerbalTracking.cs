@@ -30,8 +30,7 @@ namespace Radioactivity
               RadioactivitySettings.Load();
               Utils.Log("Kerbal Tracking: Done Loading");
               databaseReady = true;
-              // Update the kerbals from the DB if time has passed
-              //KerbalDB.PropagateExposure();
+
           }
 
           public override void OnSave(ConfigNode node)
@@ -58,14 +57,42 @@ namespace Radioactivity
               }
           }
 
+          public List<RadioactivityKerbal> GetKerbals(List<ProtoCrewMember> crew)
+          {
+            List<RadioactivityKerbal> toReturn = new List<RadioactivityKerbal>();
+
+            foreach (KeyValuePair<string,RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
+            {
+              foreach (ProtoCrewMember crewMember in crew)
+              {
+                if (crew == kerbal.Value.Kerbal)
+                  toReturn.Add(kerbal.Value);
+              }
+            }
+            return toReturn;
+          }
+
           // Irradiates a kerbal
-          public void IrradiateKerbal(ProtoCrewMember crew, Vessel crewVessel, double amount)
+          public void IrradiateKerbal(ProtoCrewMember crew, Vessel crewVessel, double pointAmount)
           {
             foreach (KeyValuePair<string,RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
             {
               if (crew == kerbal.Value.Kerbal)
-                kerbal.Value.Irradiate(crewVessel, amount);
+                kerbal.Value.IrradiatePoint(crewVessel, pointAmount);
             }
           }
+          public void IrradiateKerbal(ProtoCrewMember crew, Vessel crewVessel, double pointAmount, double bodyFraction, double skyFraction, double partFraction)
+          {
+            foreach (KeyValuePair<string,RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
+            {
+              if (crew == kerbal.Value.Kerbal)
+              {
+                kerbal.Value.IrradiatePoint(crewVessel, amount);
+                kerbal.Value.SetAmbientExposure(bodyFraction, skyFraction, partFraction);
+              }
+            }
+          }
+
+
     }
 }

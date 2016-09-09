@@ -11,9 +11,9 @@ namespace Radioactivity
 
   public class RadioactiveEngine: PartModule, IRadiationEmitter
   {
-      // RadioactiveSource to use for emission
-      [KSPField(isPersistant = true)]
-      public string SourceID = "";
+    // RadioactiveSource to use for emission
+    [KSPField(isPersistant = true)]
+    public string SourceID = "";
 
     // Engine ID to link to (only valid using ModuleEnginesFX
     [KSPField(isPersistant = true)]
@@ -23,11 +23,28 @@ namespace Radioactivity
     [KSPField(isPersistant = false)]
     public float EmissionAtMax = 100f;
 
+    // Decayed emission in Sv/s
+    [KSPField(isPersistant = true)]
+    public float DecayedEmission = 0f;
+
+    // Rate at which emission decays, in Sv/s/s
+    [KSPField(isPersistant = false)]
+    public float EmissionDecayRate = 1f;
+
+    // Decayed emission in Sv/s
+    [KSPField(isPersistant = false)]
+    public float MinDecayedEmission = 0f;
+
     // Alias for UI
     [KSPField(isPersistant = false)]
     public string UIName = "Nuclear Engine";
 
+    // last recorded throttle reading
+    [KSPField(isPersistant = true)]
+    public float SavedThrottle = 0f;
+
     float currentEmission = 0f;
+
     protected bool useLegacyEngines = false;
 
     protected ModuleEnginesFX engine;
@@ -78,28 +95,64 @@ namespace Radioactivity
     // Handles emission for engines using ModuleEngines
     protected void HandleEmissionLegacy()
     {
-        if (HighLogic.LoadedSceneIsEditor)
+      if (HighLogic.LoadedSceneIsEditor)
             currentEmission = EmissionAtMax;
       if (engineLegacy == null)
         return;
-
         if (HighLogic.LoadedSceneIsFlight)
-          currentEmission = engineLegacy.requestedThrottle * EmissionAtMax;
-        else
-          currentEmission = EmissionAtMax;
+        {
+          // if the frame emission is less than the last emission...
+          if ((engineLegacy.requestedThrottle) < SavedThrottle)
+          {
+            // set the emission to the delta from the last one or the last saved decay, whichever is higher
+            DecayedEmission = Mathf.Max((SavedThrottle * EmissionAtMax), DecayedEmission );
+            SavedThrottle = engineLegacy.requestedThrottle;
+          } else {
+
+          }
+          // if the computed decay emission is higher than the one provided by the throttle, decay it
+          // if not, set the decay emission to the throttle emission
+          if (DecayedEmission > engineLegacy.requestedThrottle * EmissionAtMax)
+            DecayedEmission = Mathf.Clamp( DecayedEmission - EmissionDecayRate*(TimeWarp.fixedDeltaTime), MinDecayedEmission, EmissionAtMax);
+          else
+            DecayedEmission = engineLegacy.requestedThrottle * EmissionAtMax
+          // Decay the emission
+
+          currentEmission = DecayedEmission;
+        }
     }
     // Handles emission for engines using ModuleEnginesFX
     protected void HandleEmission()
     {
-        if (HighLogic.LoadedSceneIsEditor)
-            currentEmission = EmissionAtMax;
         if (engine == null)
             return;
+        if (HighLogic.LoadedSceneIsEditor)
+            currentEmission = EmissionAtMax;
+
 
         if (HighLogic.LoadedSceneIsFlight)
-          currentEmission = engine.requestedThrottle * EmissionAtMax;
-        else
-          currentEmission = EmissionAtMax;
+        {
+
+          // if the frame emission is less than the last emission...
+          if ((engine.requestedThrottle) < SavedThrottle)
+          {
+            // set the emission to the delta from the last one or the last saved decay, whichever is higher
+            DecayedEmission = Mathf.Max((SavedThrottle * EmissionAtMax), DecayedEmission );
+            SavedThrottle = engine.requestedThrottle;
+          } else {
+
+          }
+          // if the computed decay emission is higher than the one provided by the throttle, decay it
+          // if not, set the decay emission to the throttle emission
+          if (DecayedEmission > engine.requestedThrottle * EmissionAtMax)
+            DecayedEmission = Mathf.Clamp( DecayedEmission - EmissionDecayRate*(TimeWarp.fixedDeltaTime), MinDecayedEmission, EmissionAtMax);
+          else
+            DecayedEmission = engine.requestedThrottle * EmissionAtMax
+          // Decay the emission
+
+          currentEmission = DecayedEmission;
+        }
+
     }
 
     protected void SetupEngines()

@@ -44,7 +44,7 @@ namespace Radioactivity
             return d.ToString(format);
 
         double scaled = d * Math.Pow(1000, -degree);
-            
+
         char? prefix = null;
 
         switch (Math.Sign(degree))
@@ -65,6 +65,23 @@ namespace Radioactivity
 
         return relativePosition;
     }
+    // Solid angle of a body relative to a vessel
+    public static double ComputeBodySolidAngle(Vessel vessel, CelestialBody body)
+    {
+      double dist = FlightGlobals.GetAltitudeAtPos(vessel.position, body) + body.Radius;
+      return 2.0*Math.PI* (1.0-Math.cos(dist));
+    }
+    // Solid angle of the sky, that is, the total area minus all bodies
+    public static double ComputeSkySolidAngle(Vessel vessel)
+    {
+      double totalBodyAngle = 0d;
+      foreach (CelestialBody body in FlightGlobals.bodies)
+      {
+        totalBodyAngle += Utils.ComputeBodySolidAngle(vessel, body);
+      }
+      return 4d*Math.PI - totalBodyAngle;
+    }
+
     public static Vector3 Vector3FromString(string str)
     {
         Vector3 outVector3;

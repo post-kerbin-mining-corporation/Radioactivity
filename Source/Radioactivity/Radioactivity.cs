@@ -470,6 +470,7 @@ namespace Radioactivity
 
     }
 
+    // FLIGHT/KSC simulation
     // Master method that simulates radiation
     protected void Simulate()
     {
@@ -477,12 +478,8 @@ namespace Radioactivity
       if (RadioactivitySettings.simulatePointRadiation)
         SimulatePointRadiation();
 
-      // Simulate solar radiation
-      if (RadioactivitySettings.simulateSolarRadiation)
-          SimulateSolarRadiation();
-
-      if (RadioactivitySettings.simulateCosmicRadiation)
-          SimulateCosmicRadiation();
+      if (RadioactivitySettings.simulateAmbientRadiation)
+        SimulateAmbientRadiation();
 
       SimulateKerbals();
     }
@@ -492,31 +489,90 @@ namespace Radioactivity
     {
        for (int i = 0; i < allLinks.Count; i++)
         {
-
           // Simulate the radiation based on precomputed pathways
           allLinks[i].Simulate(TimeWarp.fixedDeltaTime);
         }
-
     }
 
-    protected void SimulateSolarRadiation()
+    protected void SimulateAmbientRadiation()
     {
+      // Update the occlusion of all sinks
+      UpdateAmbientRadiation();
 
+      foreach (Vessel ves in HighLogic.Vessels)
+      {
+
+        double skyFraction = Utils.ComputeSkySolidAngle(part.vessel);
+        double bodyFraction = Utils.ComputeBodySolidAngle(part.vessel, part.vessel.mainBody)/(4d*System.Math.PI);
+
+        double summedAmbient = 0d;
+
+        double solarContribution = 0d;
+        double cosmicContribution = 0d;
+        double localContribution = 0d;
+        double beltContibution = 0d;
+
+        // Do the radiation simulation for the ambient components
+          if (RadioactivitySettings.simulateSolarRadiation)
+            solarContribution = SimulateSolarRadiation(ves);
+
+          if (RadioactivitySettings.simulateCosmicRadiation)
+            cosmicContribution = SimulateCosmicRadiation();
+
+          if (RadioactivitySettings.simulateLocalRadiation)
+            localContribution = SimulateLocalRadiation();
+
+          if (RadioactivitySettings.simulateBeltRadiation)
+            beltContibution = SimulateBeltRadiation();
+
+        if (KerbalTracking.Instance != null)
+        {
+          List<RadioactivityKerbal> vesselRadKerbals = KerbalTracking.Instance.GetKerbals(ves.GetVesselCrew());
+
+          for (int i = 0; vesselRadKerbals.Count; i++)
+          {
+              vesselRadKerbals[i].SetAmbientExposure(bodyFraction, skyFraction);
+
+              summedAmbient += cosmicContribution * vesselRadKerbals[i].SkyExposureFraction * vesselRadKerbals[i].LocalExposureFraction;
+              summedAmbient +=  solarContribution;
+              summedAmbient += localContribution * vesselRadKerbals[i].BodyExposureFraction * vesselRadKerbals[i].LocalExposureFraction;
+              summedAmbient += beltContibution * vesselRadKerbals[i].LocalExposureFraction;
+
+              vesselRadKerbals[i].IrradiateAmbient(summedAmbient);
+          }
+        }
+      }
     }
 
-    protected void SimulateCosmicRadiation()
+    protected void UpdateAmbientRadiation()
     {
+        for (int i = 0; i < allRadSinks.Count;i++)
+        {
+          allRadSinks[i].UpdateAmbientExposures();
+        }
+    }
+    protected double SimulateCosmicRadiation(Vessel ves)
+    {
+      double cosmic = RadioactivitySettings.cosmicRadiationFlux;
+      
+      return cosmic;
     }
 
+    protected double SimulateSolarRadiation(Vessel ves)
+    {return 0d;}
 
-    // Master method that simulates radiation
+    protected double SimulateLocalRadiation(Vessel ves)
+    {return 0d;}
+    protected double SimulateBeltRadiation(Vessel ves)
+    {return 0d;}
+
+    // EDITOR radiation simulation
+    // Main method
     protected void SimulateEditor()
     {
         // Simulate point radiation
         if (RadioactivitySettings.simulatePointRadiation)
             SimulatePointRadiationEditor();
-
-
     }
     // simulate point radiation
     protected void SimulatePointRadiationEditor()

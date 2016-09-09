@@ -46,6 +46,14 @@ namespace Radioactivity
     {
       get {return currentRadiation;}
     }
+    public double CurrentSkyVisibility
+    {
+      get {return skyFraction;}
+    }
+    public double CurrentPlanetVisibility
+    {
+      get {return bodyFraction;}
+    }
     public string GetAbsorberAliases()
     {
       string aliases = "";
@@ -68,6 +76,7 @@ namespace Radioactivity
         {
           toReturn = toReturn.Concat(associatedAbsorbers[i].GetDetails()).ToDictionary(x=>x.Key,x=>x.Value);
         }
+        
         return toReturn;
     }
     public Dictionary<string,float> GetSourceDictionary()
@@ -76,10 +85,17 @@ namespace Radioactivity
     }
 
     private double currentRadiation;
+
     private Transform sinkTransform;
     private bool registered = false;
     private Dictionary<string,float> sourceDictionary = new Dictionary<string,float>();
     private List<IRadiationAbsorber> associatedAbsorbers = new List<IRadiationAbsorber>();
+
+    // Fraction of the sky taken up by the parent body
+    private double bodyFraction = 0d;
+    // Fraction of the sky not taken up by bodies
+    private double skyFraction = 0d;
+
 
     // Add radiation to the sink
     public void AddRadiation(float amt)
@@ -98,6 +114,15 @@ namespace Radioactivity
         sourceDictionary.Remove(src);
         currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
     }
+
+    public void UpdateAmbientExposures()
+    {
+      // Compute sky exposure fraction
+      skyFraction = Utils.ComputeSkySolidAngle(part.vessel);
+      // Compute
+      bodyFraction = Utils.ComputeBodySolidAngle(part.vessel, part.vessel.mainBody)/(4d*System.Math.PI);
+    }
+
     void FixedUpdate()
     {
       if (associatedAbsorbers != null)
