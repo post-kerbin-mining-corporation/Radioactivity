@@ -12,6 +12,10 @@ namespace Radioactivity.UI
     public class RadioactivityUI:MonoBehaviour
     {
 
+        public UIResources GUIResources { get { return resources; } }
+
+        private UIResources resources;
+
         private bool uiShown = false;
         private bool initStyles = false;
 
@@ -21,32 +25,21 @@ namespace Radioactivity.UI
         private Rect mainWindowPos = new Rect(5, 15, 150, 120);
         private Rect rosterWindowPos = new Rect(210, 15, 350, 450);
 
-        private GUIStyle entryStyle;
-        private GUIStyle windowStyle;
-        private GUIStyle buttonStyle;
+
 
         private UIOverlayWindow overlayView;
         private UIRosterWindow rosterView;
 
+        bool overlayToggled = false;
+        bool rosterToggled = false;
+
         System.Random randomizer;
         int windowIdentifier;
 
-        // obsolete
-        private Rect windowPos = new Rect(0, 0, 200, 480);
-        private Rect linkWindowPos = new Rect(200, 0, 480, 200);
-        private RadiationLink currentDrawnLink = null;
         // Stock toolbar button
         private static ApplicationLauncherButton stockToolbarButton = null;
 
-        private void InitStyles()
-        {
-            entryStyle = new GUIStyle(HighLogic.Skin.textArea);
-            entryStyle.active = entryStyle.hover = entryStyle.normal;
-            windowStyle = new GUIStyle(HighLogic.Skin.window);
-            buttonStyle = new GUIStyle(HighLogic.Skin.button);
-            initStyles = true;
 
-        }
         public void Awake()
         {
             Utils.Log("UI: Awake");
@@ -58,16 +51,23 @@ namespace Radioactivity.UI
         public void Start()
         {
             Utils.Log("UI: Start");
-
             if (ApplicationLauncher.Ready)
                 OnGUIAppLauncherReady();
 
             randomizer = new System.Random(335462);
 
             windowIdentifier = randomizer.Next();
-            overlayView = new UIOverlayWindow(randomizer);
-            rosterView = new UIRosterWindow(randomizer);
+            overlayView = new UIOverlayWindow(randomizer, this);
+            rosterView = new UIRosterWindow(randomizer, this);
         }
+
+        // Set up the GUI styles
+        private void InitStyles()
+        {
+            resources = new UIResources();
+            initStyles = true;
+        }
+
         public void Update()
         {
             if (overlayShown)
@@ -98,8 +98,7 @@ namespace Radioactivity.UI
                   DrawRoster();
             }
         }
-        bool overlayToggled = false;
-        bool rosterToggled = false;
+
         public void DrawMainWindow(int WindowID)
         {
             GUILayout.BeginVertical();
@@ -148,7 +147,6 @@ namespace Radioactivity.UI
             {
                 ApplicationLauncher.Instance.RemoveModApplication(stockToolbarButton);
             }
-
         }
 
         private void OnToolbarButtonToggle()
@@ -161,14 +159,14 @@ namespace Radioactivity.UI
         {
             uiShown = true;
             stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
-            if (overlayShown)
-                Radioactivity.Instance.ShowAllOverlays();
+            //if (overlayShown)
+                //Radioactivity.Instance.ShowAllOverlays();
         }
         private void OnToolbarButtonOff()
         {
             uiShown = false;
             stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
-            Radioactivity.Instance.HideAllOverlays();
+            //Radioactivity.Instance.HideAllOverlays();
 
         }
 

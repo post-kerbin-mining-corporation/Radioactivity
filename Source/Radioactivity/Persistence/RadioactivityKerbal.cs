@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Radioactivity
+namespace Radioactivity.Persistence
 {
   public enum RadioactivityKerbalState {
     Healthy, Sick, Dead, Home
@@ -109,7 +109,7 @@ namespace Radioactivity
       // Simulates effects when the
       void SimulateOnMission(float timeStep)
       {
-        if ((CurrentExposure + CurrentAmbientExposure)) <= RadioactivitySettings.kerbalHealThreshold)
+        if ((CurrentExposure) <= RadioactivitySettings.kerbalHealThreshold)
         {
             TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate*timeStep;
             if (TotalExposure < 0d)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Radioactivity.Interfaces;
+using Radioactivity.Simulator;
 
 namespace Radioactivity
 {
@@ -26,20 +27,9 @@ namespace Radioactivity
       public bool ShowOverlay = false;
 
       [KSPField(isPersistant = false)]
-      public int IconID = 0;
+      public string IconID = "source";
 
 
-
-      // Show or hide the radioactive overlay from this source
-      [KSPEvent(guiActive = false, guiName = "Toggle Rays")]
-      public void ToggleOverlay()
-      {
-        ShowOverlay = !ShowOverlay;
-        if (ShowOverlay)
-          Radioactivity.Instance.ShowOverlay(this);
-        else
-          Radioactivity.Instance.HideOverlay(this);
-      }
       public List<ShadowShieldEffect> ShadowShields { get { return associatedShields; } }
       public string GetEmitterAliases()
       {
@@ -67,10 +57,10 @@ namespace Radioactivity
       public List<RadiationLink> GetAssociatedLinks()
       {
           List<RadiationLink> lnks = new List<RadiationLink>();
-          for (int i = 0; i < Radioactivity.Instance.AllLinks.Count; i++)
+            for (int i = 0; i < Radioactivity.Instance.RadSim.PointSim.AllLinks.Count(); i++)
           {
-              if (Radioactivity.Instance.AllLinks[i].source == this)
-                  lnks.Add(Radioactivity.Instance.AllLinks[i]);
+                if (Radioactivity.Instance.RadSim.PointSim.AllLinks[i].source == this)
+                    lnks.Add(Radioactivity.Instance.RadSim.PointSim.AllLinks[i]);
           }
           return lnks;
       }
@@ -103,7 +93,7 @@ namespace Radioactivity
           if (EmitterTransform == null)
           {
               if (RadioactivitySettings.debugSourceSinks)
-                Utils.LogWarning("Source: Couldn't find Emitter transform, using part root transform");
+                Utils.LogWarning("[RadioactiveSource]: Couldn't find Emitter transform, using part root transform");
               EmitterTransform = part.transform;
           }
 
@@ -120,7 +110,7 @@ namespace Radioactivity
 
           if (HighLogic.LoadedSceneIsFlight && !registered)
           {
-              Radioactivity.Instance.RegisterSource(this);
+                Radioactivity.Instance.RadSim.PointSim.RegisterSource(this);
               registered = true;
           }
       }
@@ -143,7 +133,7 @@ namespace Radioactivity
 
           if (HighLogic.LoadedSceneIsFlight)
           {
-              Radioactivity.Instance.UnregisterSource(this);
+                Radioactivity.Instance.RadSim.PointSim.UnregisterSource(this);
               registered = false;
           }
       }

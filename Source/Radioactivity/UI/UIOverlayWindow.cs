@@ -12,15 +12,13 @@ namespace Radioactivity.UI
       List<UISinkWindow> sinkWindows;
       List<UISourceWindow> sourceWindows;
 
-      Texture icons;
-
-      public UIOverlayWindow(System.Random randomizer)
+        RadioactivityUI host;
+        public UIOverlayWindow(System.Random randomizer, RadioactivityUI uiHost)
       {
+            host = uiHost;
           sinkWindows = new List<UISinkWindow>();
           sourceWindows = new List<UISourceWindow>();
           random = randomizer;
-
-          icons = (Texture)GameDatabase.Instance.GetTexture("Radioactivity/UI/icon_atlas", false);
 
       }
       public void Draw()
@@ -64,7 +62,7 @@ namespace Radioactivity.UI
           sinkWindows = new List<UISinkWindow>();
           for (int i = 0; i < Radioactivity.Instance.AllSinks.Count; i++ )
           {
-              sinkWindows.Add(new UISinkWindow(Radioactivity.Instance.AllSinks[i], random, icons));
+              sinkWindows.Add(new UISinkWindow(Radioactivity.Instance.AllSinks[i], random, host));
           }
 
           
@@ -76,7 +74,7 @@ namespace Radioactivity.UI
         // Check for new sinks
         for (int i = 0; i < Radioactivity.Instance.AllSources.Count; i++ )
         {
-            sourceWindows.Add(new UISourceWindow(Radioactivity.Instance.AllSources[i], random, icons ));
+            sourceWindows.Add(new UISourceWindow(Radioactivity.Instance.AllSources[i], random, host ));
         }
       }
 

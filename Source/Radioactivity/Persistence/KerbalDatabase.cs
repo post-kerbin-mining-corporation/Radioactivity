@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Radioactivity
+namespace Radioactivity.Persistence
 {
     internal class KerbalDatabase
     {

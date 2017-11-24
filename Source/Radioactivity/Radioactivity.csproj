@@ -51,26 +51,27 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\..\..\..\Games\Steam\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\Users\cadderley\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\Users\cadderley\Library\Application Support\Steam\steamapps\common\Kerbal Space Program\Managed\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttenuationZone.cs" />
     <Compile Include="Interfaces\IRadiationAbsorber.cs" />
     <Compile Include="Interfaces\IRadiationEmitter.cs" />
-    <Compile Include="KerbalDatabase.cs" />
-    <Compile Include="KerbalTracking.cs" />
     <Compile Include="Modules\RadiationDroneCore.cs" />
     <Compile Include="Modules\RadiationInstrument.cs" />
     <Compile Include="Modules\RadiationParameters.cs" />
     <Compile Include="Modules\RadioactiveReactor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadiationLink.cs" />
     <Compile Include="Modules\RadiationShieldedCrewContainer.cs" />
     <Compile Include="Modules\RadiationTracker.cs" />
     <Compile Include="Modules\RadioactiveEngine.cs" />
     <Compile Include="Modules\RadioactiveResource.cs" />
     <Compile Include="Modules\RadioactiveSink.cs" />
     <Compile Include="Modules\RadioactiveSource.cs" />
-    <Compile Include="RadiationShadowShield.cs" />
     <Compile Include="Radioactivity.cs" />
     <Compile Include="RadioactivitySettings.cs" />
     <Compile Include="RadioactivityOverlay.cs" />
@@ -80,6 +81,22 @@
     <Compile Include="UI\UISinkWindow.cs" />
     <Compile Include="UI\UISourceWindow.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Simulator\PointRadiationSimulator.cs" />
+    <Compile Include="Simulator\VesselSimulator.cs" />
+    <Compile Include="Simulator\RadiationLink.cs" />
+    <Compile Include="Simulator\AttenuationZone.cs" />
+    <Compile Include="Simulator\RadioactivitySimulator.cs" />
+    <Compile Include="Simulator\AmbientRadiationSimulator.cs" />
+    <Compile Include="Simulator\RadiationShadowShield.cs" />
+    <Compile Include="Persistence\KerbalTracking.cs" />
+    <Compile Include="Persistence\KerbalDatabase.cs" />
+    <Compile Include="UI\UIResources.cs" />
+    <Compile Include="AtmosphereUtils.cs" />
+    <Compile Include="Persistence\RadioactivityKerbal.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Simulator\" />
+    <Folder Include="Persistence\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

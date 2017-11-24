@@ -1,7 +1,11 @@
-G:\KSP Modding\repositories\Radioactivity\Source\Radioactivity\obj\Debug\Radioactivity.csprojResolveAssemblyReference.cache
-G:\KSP Modding\repositories\Radioactivity\GameData\Plugins\Radioactivity.dll
-G:\KSP Modding\repositories\Radioactivity\GameData\Plugins\Radioactivity.pdb
-G:\KSP Modding\repositories\Radioactivity\Source\Radioactivity\obj\Debug\Radioactivity.dll
-G:\KSP Modding\repositories\Radioactivity\Source\Radioactivity\obj\Debug\Radioactivity.pdb
-G:\KSP Modding\repositories\Radioactivity\GameData\Radioactivity\Plugins\Radioactivity.dll
-G:\KSP Modding\repositories\Radioactivity\GameData\Radioactivity\Plugins\Radioactivity.pdb
+G:/KSP Modding/repositories/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.csprojResolveAssemblyReference.cache
+G:/KSP Modding/repositories/Radioactivity/GameData/Plugins/Radioactivity.dll
+G:/KSP Modding/repositories/Radioactivity/GameData/Plugins/Radioactivity.pdb
+G:/KSP Modding/repositories/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.dll
+G:/KSP Modding/repositories/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.pdb
+G:/KSP Modding/repositories/Radioactivity/GameData/Radioactivity/Plugins/Radioactivity.dll
+G:/KSP Modding/repositories/Radioactivity/GameData/Radioactivity/Plugins/Radioactivity.pdb
+/github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.csprojResolveAssemblyReference.cache
+/github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.csproj.CoreCompileInputs.cache
+/github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.dll
+/github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.pdb

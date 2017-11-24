@@ -110,12 +110,12 @@ namespace Radioactivity
           } else {
 
           }
-          // if the computed decay emission is higher than the one provided by the throttle, decay it
-          // if not, set the decay emission to the throttle emission
-          if (DecayedEmission > engineLegacy.requestedThrottle * EmissionAtMax)
-            DecayedEmission = Mathf.Clamp( DecayedEmission - EmissionDecayRate*(TimeWarp.fixedDeltaTime), MinDecayedEmission, EmissionAtMax);
-          else
-            DecayedEmission = engineLegacy.requestedThrottle * EmissionAtMax
+                // if the computed decay emission is higher than the one provided by the throttle, decay it
+                // if not, set the decay emission to the throttle emission
+                if (DecayedEmission > engineLegacy.requestedThrottle * EmissionAtMax)
+                    DecayedEmission = Mathf.Clamp(DecayedEmission - EmissionDecayRate * (TimeWarp.fixedDeltaTime), MinDecayedEmission, EmissionAtMax);
+                else
+                    DecayedEmission = engineLegacy.requestedThrottle * EmissionAtMax;
           // Decay the emission
 
           currentEmission = DecayedEmission;
@@ -142,12 +142,12 @@ namespace Radioactivity
           } else {
 
           }
-          // if the computed decay emission is higher than the one provided by the throttle, decay it
-          // if not, set the decay emission to the throttle emission
-          if (DecayedEmission > engine.requestedThrottle * EmissionAtMax)
-            DecayedEmission = Mathf.Clamp( DecayedEmission - EmissionDecayRate*(TimeWarp.fixedDeltaTime), MinDecayedEmission, EmissionAtMax);
-          else
-            DecayedEmission = engine.requestedThrottle * EmissionAtMax
+                // if the computed decay emission is higher than the one provided by the throttle, decay it
+                // if not, set the decay emission to the throttle emission
+                if (DecayedEmission > engine.requestedThrottle * EmissionAtMax)
+                    DecayedEmission = Mathf.Clamp(DecayedEmission - EmissionDecayRate * (TimeWarp.fixedDeltaTime), MinDecayedEmission, EmissionAtMax);
+                else
+                    DecayedEmission = engine.requestedThrottle * EmissionAtMax;
           // Decay the emission
 
           currentEmission = DecayedEmission;

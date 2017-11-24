@@ -7,7 +7,10 @@ using UnityEngine;
 namespace Radioactivity
 {
 
-    // Represents a link between a radiation source and a radiation sink
+    /// <summary>
+    /// RadiationLink
+    /// Represents a link between a RadioactiveSource and a RadioactiveSink
+    /// </summary>
     public class RadiationLink
     {
         public RadioactiveSource source;
@@ -16,16 +19,9 @@ namespace Radioactivity
         public double fluxStart = 1.0d;
         public double fluxEndScale = 0.0d;
 
-        public bool overlayShown = false;
         public List<AttenuationZone> Path
         {
             get { return attenuationPath; }
-        }
-
-        public List<LineRenderer> OverlayPaths
-        {
-            get { return overlayPaths; }
-            set { overlayPaths = value; }
         }
 
         public GameObject GO
@@ -57,95 +53,88 @@ namespace Radioactivity
             }
         }
 
+        protected LayerMask raycastMask;
+
         protected bool needsGeometricRecalculation = true;
         protected bool needsSimpleRecalculation = true;
+
         protected Vector3 relPos;
         protected float connectionMass = 0f;
         protected List<LineRenderer> overlayPaths;
         protected GameObject go;
         protected List<AttenuationZone> attenuationPath = new List<AttenuationZone>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Radioactivity.RadiationLink"/> class.
+        /// </summary>
+        /// <param name="src">Source.</param>
+        /// <param name="snk">Snk.</param>
         public RadiationLink(RadioactiveSource src, RadioactiveSink snk)
         {
             fluxStart = RadioactivitySettings.defaultRaycastFluxStart;
             source = src;
             sink = snk;
-            if (Radioactivity.Instance.RayOverlayShown)
-                ShowOverlay();
+
+            /// Set up the mass
+            LayerMask mask;
+            LayerMask maskA = 1 << LayerMask.NameToLayer("Default");
+            LayerMask maskB = 1 << LayerMask.NameToLayer("TerrainColliders");
+            LayerMask maskC = 1 << LayerMask.NameToLayer("Local Scenery");
+            raycastMask = maskA | maskB | maskC;
 
             //ComputeConnection(src, snk);
         }
 
-        // Hide or show the overlay for this link
-        public void ToggleOverlay()
-        {
-            if (overlayShown)
-               HideOverlay();
-            else
-                ShowOverlay();
-        }
-        public void ShowOverlay()
-        {
-            RadioactivityOverlay.Instance.Show(this);
-            overlayShown = true;
 
-        }
-        public void HideOverlay()
-        {
-            RadioactivityOverlay.Instance.Hide(this);
-            overlayShown = false;
-        }
-
-        // Simulate the link, that is, compute the flux from the source and add it to the sink
+        /// <summary>
+        /// Simulate the radiation link
+        /// Tests to see if 
+        /// </summary>
+        /// <returns>The simulate.</returns>
+        /// <param name="timeScale">Time scale.</param>
         public void Simulate(float timeScale)
         {
-            TestRecompute();
             if (needsGeometricRecalculation)
             {
-
                 ComputeGeometry(this.source, this.sink);
-                if (overlayShown)
-                  RadioactivityOverlay.Instance.Update(this);
             }
             if (needsSimpleRecalculation)
             {
               fluxEndScale = AttenuateFlux(Path, 1.0f);
-                if (overlayShown)
-                  RadioactivityOverlay.Instance.Update(this);
-
             }
 
             sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * fluxEndScale));
         }
 
-        // Simulate the link in the editor
+        /// <summary>
+        /// Simulates the editor.
+        /// </summary>
+        /// <param name="timeScale">Time scale.</param>
         public void SimulateEditor(float timeScale)
         {
-            TestRecompute();
+           
             if (needsGeometricRecalculation)
             {
               ComputeGeometry(this.source, this.sink);
-                if (overlayShown)
-                  RadioactivityOverlay.Instance.Update(this);
-
-
             }
             if (needsSimpleRecalculation)
             {
                 fluxEndScale = AttenuateFlux(Path, 1.0f);
-                if (overlayShown)
-                  RadioactivityOverlay.Instance.Update(this);
-
             }
-
             sink.AddRadiation(source.SourceID, (float)((double)source.CurrentEmission * fluxEndScale));
         }
+
+        /// <summary>
+        /// Cleanups the sink.
+        /// </summary>
         public void CleanupSink()
         {
             sink.CleanupRadiation(source.SourceID);
         }
 
-        // Tests to see whether the LOS needs to be recomputed
+        /// <summary>
+        /// Tests the recompute.
+        /// </summary>
         public void TestRecompute()
         {
 
@@ -167,6 +156,11 @@ namespace Radioactivity
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the connection mass.
+        /// </summary>
+        /// <returns>The connection mass.</returns>
         protected float GetConnectionMass()
         {
             float m = 0f;
@@ -183,7 +177,12 @@ namespace Radioactivity
             }
             return m;
         }
-        // Compute the ray path between the source and sink
+
+        /// <summary>
+        /// Computes the geometry.
+        /// </summary>
+        /// <param name="src">Source.</param>
+        /// <param name="target">Target.</param>
         public void ComputeGeometry(RadioactiveSource src, RadioactiveSink target)
         {
             if (RadioactivitySettings.debugNetwork)
@@ -203,7 +202,12 @@ namespace Radioactivity
         }
 
 
-        // Attenuates the ray between the source and sink
+        /// <summary>
+        /// Attenuates the flux.
+        /// </summary>
+        /// <returns>The flux.</returns>
+        /// <param name="rayPath">Ray path.</param>
+        /// <param name="strength">Strength.</param>
         protected double AttenuateFlux(List<AttenuationZone> rayPath, double strength)
         {
             // march along the ray, attenuating as we go
@@ -219,23 +223,24 @@ namespace Radioactivity
         }
 
         // Computes LOS between a source and a sink
-        // Returns the list of parts between the two objects
+        // Returns the 
+        /// <summary>
+        /// Computes the path between a source and a sink
+        /// </summary>
+        /// <returns>The line of sight.</returns>
+        /// <param name="src">Source.</param>
+        /// <param name="target">Target.</param>
         protected List<AttenuationZone> GetLineOfSight(RadioactiveSource src, RadioactiveSink target)
         {
             RaycastHit[] hits1;
             RaycastHit[] hits2;
             float sep = Vector3.Distance(src.EmitterTransform.position, target.SinkTransform.position);
             // Only cast against Default and Terrain
-            LayerMask mask;
-            LayerMask maskA = 1 << LayerMask.NameToLayer("Default");
-            LayerMask maskB = 1 << LayerMask.NameToLayer("TerrainColliders");
-            LayerMask maskC = 1 << LayerMask.NameToLayer("Local Scenery");
 
-            mask = maskA | maskB | maskC;
 
             // raycast from the source to target and vice versa
-            hits1 = Physics.RaycastAll(src.EmitterTransform.position, target.SinkTransform.position - src.EmitterTransform.position, sep, mask);
-            hits2 = Physics.RaycastAll(target.SinkTransform.position, src.EmitterTransform.position - target.SinkTransform.position, sep, mask);
+            hits1 = Physics.RaycastAll(src.EmitterTransform.position, target.SinkTransform.position - src.EmitterTransform.position, sep, raycastMask);
+            hits2 = Physics.RaycastAll(target.SinkTransform.position, src.EmitterTransform.position - target.SinkTransform.position, sep, raycastMask);
 
             List<RaycastHit> hitsBackward = hits2.ToList();
             List<RaycastHit> hitsForward = hits1.ToList();
@@ -248,10 +253,8 @@ namespace Radioactivity
             }
             if (hitsBackward.Count > 0)
             {
-
                 hitsBackward = hitsBackward.OrderByDescending(o => o.distance).ToList();
             }
-
 
             return CreatePathway(hitsForward, hitsBackward, src, target, sep);
 
