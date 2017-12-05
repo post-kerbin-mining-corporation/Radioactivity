@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Radioactivity.UI;
 
 namespace Radioactivity.Simulator
 {
@@ -25,13 +26,13 @@ namespace Radioactivity.Simulator
         List<RadiationLink> allLinks = new List<RadiationLink>();
 
         bool simulationReady = false;
-
         // ##### Initialization #####
 
         public PointRadiationSimulator()
         {
             Utils.Log("[PointRadiationSimulator]: Initializing simulator");
 
+            /// Add events for editor modifications
             if (HighLogic.LoadedSceneIsEditor)
             {
                 GameEvents.onEditorShipModified.Add(new EventData<ShipConstruct>.OnEvent(onEditorVesselModified));
@@ -48,8 +49,6 @@ namespace Radioactivity.Simulator
                 GameEvents.onEditorLoad.Remove(new EventData<ShipConstruct, KSP.UI.Screens.CraftBrowserDialog.LoadType>.OnEvent(onEditorVesselLoad));
                 GameEvents.onPartRemove.Remove(new EventData<GameEvents.HostTargetAction<Part, Part>>.OnEvent(onEditorVesselPartRemoved));
             }
-
-            StartCoroutine(WaitForInit(0.1f));
         }
 
 
@@ -79,13 +78,6 @@ namespace Radioactivity.Simulator
             }
         }
 
-        protected IEnumerator<float> WaitForInit(float t)
-        {
-            
-            simulationReady = true;
-            Utils.Log("[PointRadiationSimulator]: Simulation started...");
-            yield return new WaitForSeconds(t);
-        }
 
 
         // ##### Game Events #####
@@ -135,8 +127,9 @@ namespace Radioactivity.Simulator
         {
             allRadSources.Add(src);
             BuildNewRadiationLink(src);
-        
-            if (RadioactivitySettings.debugNetwork)
+
+            RadioactivityUI.Instance.SourceAdded(src);
+            if (RadioactivityConstants.debugNetwork)
                 Utils.Log("[PointRadiationSimulator]: Adding radiation source " + src.SourceID + " on part " + src.part.name + " to simulator");
         }
 
@@ -147,8 +140,8 @@ namespace Radioactivity.Simulator
             {
                 RemoveRadiationLink(src);
                 allRadSources.Remove(src);
-
-                if (RadioactivitySettings.debugNetwork && src != null)
+                RadioactivityUI.Instance.SourceRemoved(src);
+                if (RadioactivityConstants.debugNetwork && src != null)
                     Utils.Log("[PointRadiationSimulator]: Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
             }
         }
@@ -158,7 +151,8 @@ namespace Radioactivity.Simulator
 
             allRadSinks.Add(snk);
             BuildNewRadiationLink(snk);
-            if (RadioactivitySettings.debugNetwork)
+            RadioactivityUI.Instance.SinkAdded(snk);
+            if (RadioactivityConstants.debugNetwork)
                 Utils.Log("[PointRadiationSimulator]: Adding radiation sink " + snk.SinkID + " on part " + snk.part.name + " to simulator");
         }
         // Remove a radiation sink from the sink list
@@ -168,8 +162,8 @@ namespace Radioactivity.Simulator
             {
                 RemoveRadiationLink(snk);
                 allRadSinks.Remove(snk);
-
-                if (RadioactivitySettings.debugNetwork && snk != null)
+                RadioactivityUI.Instance.SinkRemoved(snk);
+                if (RadioactivityConstants.debugNetwork && snk != null)
                     Utils.Log("[PointRadiationSimulator]: Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
             }
         }
@@ -230,6 +224,7 @@ namespace Radioactivity.Simulator
             for (int i = 0; i < allRadSources.Count; i++)
             {
                 RadiationLink l = new RadiationLink(allRadSources[i], snk);
+                RadioactivityUI.Instance.LinkAdded(l);
                 allLinks.Add(l);
             }
         }
@@ -242,6 +237,7 @@ namespace Radioactivity.Simulator
             for (int i = 0; i < allRadSinks.Count; i++)
             {
                 RadiationLink l = new RadiationLink(src, allRadSinks[i]);
+                RadioactivityUI.Instance.LinkAdded(l);
                 allLinks.Add(l);
 
 
@@ -266,6 +262,7 @@ namespace Radioactivity.Simulator
                 for (int i = 0; i < toRm.Count; i++)
                 {
                     toRm[i].CleanupSink();
+                    RadioactivityUI.Instance.LinkRemoved(toRm[i]);
                     allLinks.Remove(toRm[i]);
                 }
             }
@@ -289,18 +286,13 @@ namespace Radioactivity.Simulator
                 for (int i = 0; i < toRm.Count; i++)
                 {
                     toRm[i].CleanupSink();
+                    RadioactivityUI.Instance.LinkRemoved(toRm[i]);
                     allLinks.Remove(toRm[i]);
                 }
             }
         }
 
         // #### SIMULATION ######
-
-        public void FixedUpdate()
-        {
-            
-
-        }
 
         /// <summary>
         /// Simulates the radiation 
@@ -324,47 +316,35 @@ namespace Radioactivity.Simulator
                     SimulatePointRadiation(fixedDeltaTime);
                 }
             }
-          
-
-
-            SimulateKerbals();
         }
 
         /// <summary>
-        /// Simulates all point radiation
+        /// FLIGHT point radiatio simulation
         /// </summary>
         protected void SimulatePointRadiation(float fixedDeltaTime)
         {
             for (int i = 0; i < allLinks.Count; i++)
             {
-                // Simulate the radiation based on precomputed pathways
+                // Propagate the radiation based on precomputed pathways
                 allLinks[i].Simulate(fixedDeltaTime);
+                // Test to see if network geometry needs to be recomputed
                 allLinks[i].TestRecompute();
             }
         }
 
-        // EDITOR radiation simulation
-        // simulate point radiation
+        /// <summary>
+        /// EDITOR point radiation simulation
+        /// </summary>
+        /// <param name="fixedDeltaTime">Fixed delta time.</param>
         protected void SimulatePointRadiationEditor(float fixedDeltaTime)
         {
             for (int i = 0; i < allLinks.Count; i++)
             {
-                // Simulate the radiation based on precomputed pathways
+                // Propagate the radiation based on precomputed pathways
                 allLinks[i].SimulateEditor(fixedDeltaTime);
+                // Test to see if network geometry needs to be recomputed
                 allLinks[i].TestRecompute();
             }
-
         }
-
-        // simulate everything we need to do with Kerbals
-        protected void SimulateKerbals()
-        {
-            if (KerbalTracking.Instance != null)
-            {
-                KerbalTracking.Instance.SimulateKerbals(TimeWarp.fixedDeltaTime);
-            }
-
-        }
-
     }
 }

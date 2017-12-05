@@ -10,7 +10,7 @@ namespace Radioactivity
     /// <summary>
     /// Settings are items that are set by the player in the KSP settings screen
     /// </summary>
-    public class RadioactivitySimulationSettings: GameParameters.CustomParameterNode
+    public class RadioactivitySimulationSettings : GameParameters.CustomParameterNode
 
     {
         public override string DisplaySection
@@ -101,7 +101,15 @@ namespace Radioactivity
                 return settings.simulateSolarRadiation;
             }
         }
-      
+        public static bool SimulateAmbientRadiation
+        {
+            get
+            {
+                RadioactivitySimulationSettings settings = HighLogic.CurrentGame.Parameters.CustomParams<RadioactivitySimulationSettings>();
+                return settings.simulateBeltRadiation || settings.simulateLocalRadiation || settings.simulateSolarRadiation || settings.simulateCosmicRadiation;
+            }
+        }
+
 
         [GameParameters.CustomParameterUI("Simulate Point Radiation", toolTip = "If enabled, you must protect your crew from radiation sources on your ship", autoPersistance = true)]
         public bool simulatePointRadiation = true;

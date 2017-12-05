@@ -73,12 +73,7 @@
     <Compile Include="Modules\RadioactiveSink.cs" />
     <Compile Include="Modules\RadioactiveSource.cs" />
     <Compile Include="Radioactivity.cs" />
-    <Compile Include="RadioactivityOverlay.cs" />
     <Compile Include="UI\RadioactivityUI.cs" />
-    <Compile Include="UI\UIOverlayWindow.cs" />
-    <Compile Include="UI\UIRosterWindow.cs" />
-    <Compile Include="UI\UISinkWindow.cs" />
-    <Compile Include="UI\UISourceWindow.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Simulator\PointRadiationSimulator.cs" />
     <Compile Include="Simulator\VesselSimulator.cs" />
@@ -89,19 +84,29 @@
     <Compile Include="Simulator\RadiationShadowShield.cs" />
     <Compile Include="Persistence\RadioactivityPersistance.cs" />
     <Compile Include="Persistence\KerbalDatabase.cs" />
-    <Compile Include="UI\UIResources.cs" />
     <Compile Include="AtmosphereUtils.cs" />
     <Compile Include="Persistence\RadioactivityKerbal.cs" />
-    <Compile Include="UI\UIEditorWindow.cs" />
-    <Compile Include="UI\UIWindow.cs" />
     <Compile Include="Settings\RadioactivitySettings.cs" />
     <Compile Include="Settings\RadioactivityConstants.cs" />
     <Compile Include="Settings\RadioactivityPreferences.cs" />
+    <Compile Include="UI\Windows\UIEditorWindow.cs" />
+    <Compile Include="UI\Windows\UIOverlayWindow.cs" />
+    <Compile Include="UI\Windows\UIResources.cs" />
+    <Compile Include="UI\Windows\UIRosterWindow.cs" />
+    <Compile Include="UI\Windows\UISinkWindow.cs" />
+    <Compile Include="UI\Windows\UISourceWindow.cs" />
+    <Compile Include="UI\Windows\UIWindow.cs" />
+    <Compile Include="UI\Overlay\RadioactivityOverlay.cs" />
+    <Compile Include="UI\Overlay\OverlayLinkRenderer.cs" />
+    <Compile Include="UI\Overlay\ShadowShieldRenderer.cs" />
+    <Compile Include="UI\Overlay\OverlayRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Simulator\" />
     <Folder Include="Persistence\" />
     <Folder Include="Settings\" />
+    <Folder Include="UI\Windows\" />
+    <Folder Include="UI\Overlay\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

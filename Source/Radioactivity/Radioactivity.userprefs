@@ -1,16 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Settings/RadioactivityPreferences.cs">
-    <Files>
-      <File FileName="Persistence/RadioactivityPersistance.cs" Line="7" Column="2" />
-      <File FileName="Settings/RadioactivityPreferences.cs" Line="66" Column="55" />
-      <File FileName="Persistence/KerbalDatabase.cs" Line="128" Column="17" />
-      <File FileName="Settings/RadioactivityConstants.cs" Line="47" Column="51" />
-      <File FileName="UI/UIEditorWindow.cs" Line="13" Column="25" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/github/Radioactivity/Source/Radioactivity/Simulator/PointRadiationSimulator.cs" relfile="Simulator/PointRadiationSimulator.cs" line="51" column="13" />
+      <Breakpoint file="/github/Radioactivity/Source/Radioactivity/Simulator/RadiationLink.cs" relfile="Simulator/RadiationLink.cs" line="77" column="65" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />

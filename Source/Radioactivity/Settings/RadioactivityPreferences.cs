@@ -11,7 +11,7 @@ namespace Radioactivity
     /// Settings are things that are changed by the player and must be tracked
     /// </summary>
     public static class RadioactivityPreferences
-  {
+    {
         // Windows on/off
         public static bool rosterShown = false;
         public static bool overlayShown = false;
@@ -51,7 +51,7 @@ namespace Radioactivity
             }
 
             Utils.Log("[Preferences]: Done Loading");
-  
+
         }
 
         public static void Save(ConfigNode node)
@@ -75,19 +75,21 @@ namespace Radioactivity
             Utils.Log("[Preferences]: Finished Saving");
         }
 
-  }
+    }
 
     // Types of zone for attenuation
     public enum UnitDisplayMode
     {
         SI, TimeToIllness, TimeToDeath
     }
-  // Types of zone for attenuation
-  public enum AttenuationType {
-    Part, ParameterizedPart, Terrain, Empty
-  }
+    // Types of zone for attenuation
+    public enum AttenuationType
+    {
+        Part, ParameterizedPart, Terrain, Empty
+    }
 
-  public enum RadiationType {
-    Point, Cosmic, Solar, Belt, Local
-  }
+    public enum RadiationType
+    {
+        Point, Cosmic, Solar, Belt, Local
+    }
 }

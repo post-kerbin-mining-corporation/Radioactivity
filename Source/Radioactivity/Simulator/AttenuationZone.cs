@@ -71,7 +71,7 @@ namespace Radioactivity
                 attenuationCoeff = (double)parameters.AttenuationCoefficient;
             } else 
             {
-                attenuationCoeff = (double)RadioactivitySettings.defaultPartAttenuationCoefficient;
+                attenuationCoeff = (double)RadioactivityConstants.defaultPartAttenuationCoefficient;
                 attenuationType = AttenuationType.Part;
                 associatedPart = part;
             }

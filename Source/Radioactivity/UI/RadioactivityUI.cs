@@ -5,15 +5,16 @@ using System.Text;
 using UnityEngine;
 using Radioactivity;
 using KSP.UI.Screens;
+using Radioactivity.Simulator;
 
 namespace Radioactivity.UI
 {
     [KSPAddon(KSPAddon.Startup.EveryScene, false)]
-    public class RadioactivityUI:MonoBehaviour
+    public class RadioactivityUI : MonoBehaviour
     {
         public UIOverlayWindow OverlayWindow { get { return overlayWindow; } }
         public UIEditorWindow EditorWindow { get { return editorWindow; } }
-        public UIRosterWindow RosterWindow { get { return rosterWindow; }}
+        public UIRosterWindow RosterWindow { get { return rosterWindow; } }
 
         public UIResources GUIResources { get { return resources; } }
 
@@ -104,16 +105,16 @@ namespace Radioactivity.UI
         {
             if (!initStyles)
                 InitStyles();
-            
+
             // Draw the main window which is the options window
             if (uiShown)
             {
-                mainWindowPos= GUILayout.Window(windowIdentifier, 
-                                                mainWindowPos, 
-                                                DrawMainWindow, 
-                                                "Radioactivity", 
-                                                resources.GetStyle("main_window"), 
-                                                GUILayout.MinHeight(20), 
+                mainWindowPos = GUILayout.Window(windowIdentifier,
+                                                mainWindowPos,
+                                                DrawMainWindow,
+                                                "Radioactivity",
+                                                resources.GetStyle("main_window"),
+                                                GUILayout.MinHeight(20),
                                                 GUILayout.ExpandHeight(true));
             }
 
@@ -135,11 +136,11 @@ namespace Radioactivity.UI
                 overlayWindow.Drawn = GUILayout.Toggle(overlayWindow.Drawn, "Overlay", resources.GetStyle("main_button"));
             }
             rosterWindow.Drawn = GUILayout.Toggle(rosterWindow.Drawn, "Roster", resources.GetStyle("main_button"));
-            if (HighLogic.LoadedSceneIsEditor )
+            if (HighLogic.LoadedSceneIsEditor)
             {
-                editorWindow.Drawn = GUILayout.Toggle(editorWindow.Drawn, "Simulation", resources.GetStyle("main_button"));   
+                editorWindow.Drawn = GUILayout.Toggle(editorWindow.Drawn, "Simulation", resources.GetStyle("main_button"));
             }
-                
+
             GUILayout.EndVertical();
             GUI.DragWindow();
         }
@@ -149,7 +150,7 @@ namespace Radioactivity.UI
         /// </summary>
         internal void DrawOverlay()
         {
-                overlayWindow.Draw();
+            overlayWindow.Draw();
         }
         /// <summary>
         /// Draws the roster window
@@ -166,6 +167,37 @@ namespace Radioactivity.UI
             editorWindow.Draw();
         }
 
+        // These methods are called to inform the
+        // UI that the network has changed
+        // --------------------------------------
+        public void SinkAdded(RadioactiveSink snk)
+        {
+            if (overlayWindow != null)
+                overlayWindow.UpdateSinkList();
+        }
+        public void SinkRemoved(RadioactiveSink snk)
+        {
+            if (overlayWindow != null)
+                overlayWindow.UpdateSinkList();
+        }
+        public void SourceRemoved(RadioactiveSource src)
+        {
+            if (overlayWindow != null)
+                overlayWindow.UpdateSourceList();
+        }
+        public void SourceAdded(RadioactiveSource src)
+        {
+            if (overlayWindow != null)
+                overlayWindow.UpdateSourceList();
+        }
+        public void LinkAdded(RadiationLink lnk)
+        {
+
+        }
+        public void LinkRemoved(RadiationLink lnk)
+        {
+
+        }
 
         // App Launchers
         // -------------
@@ -191,7 +223,7 @@ namespace Radioactivity.UI
             uiShown = true;
             stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
             //if (overlayShown)
-                //Radioactivity.Instance.ShowAllOverlays();
+            //Radioactivity.Instance.ShowAllOverlays();
         }
         private void OnToolbarButtonOff()
         {

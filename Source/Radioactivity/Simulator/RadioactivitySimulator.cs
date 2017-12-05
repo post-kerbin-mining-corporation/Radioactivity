@@ -1,7 +1,11 @@
 ﻿using System;
-
+using UnityEngine;
+using Radioactivity;
 namespace Radioactivity.Simulator
 {
+    /// <summary>
+    /// The main simulator class. This hosts all simulators
+    /// </summary>
     public class RadioactivitySimulator
     {
         public bool Enabled
@@ -23,31 +27,50 @@ namespace Radioactivity.Simulator
         PointRadiationSimulator pointSim;
         AmbientRadiationSimulator ambientSim;
 
-        public RadioactivitySimulator() {
+        /// <summary>
+        /// Constructor - initializes simulators
+        /// </summary>
+        public RadioactivitySimulator()
+        {
             Utils.Log("[Simulator]: Initializing simulators");
-            if (RadioactivitySettings.simulatePointRadiation)
+
+            if (RadioactivitySimulationSettings.SimulatePointRadiation)
             {
                 Utils.Log("[Simulator]: Point radiation enabled");
                 pointSim = new PointRadiationSimulator();
             }
-            if (RadioactivitySettings.simulateAmbientRadiation)
-            {   
+            if (RadioactivitySimulationSettings.SimulateAmbientRadiation)
+            {
                 Utils.Log("[Simulator]: Ambient radiation enabled");
                 ambientSim = new AmbientRadiationSimulator();
             }
         }
 
+        /// <summary>
+        /// Does the actual simulation given a delta time
+        /// </summary>
+        /// <returns>The simulate.</returns>
+        /// <param name="fixedDeltaTime">Fixed delta time.</param>
         public void Simulate(float fixedDeltaTime)
         {
             if (Enabled)
             {
-                // Simulate vessel radiation
-                if (RadioactivitySettings.simulateAmbientRadiation)
+                // Simulate ambient radiation
+                if (RadioactivitySimulationSettings.SimulateAmbientRadiation)
                     ambientSim.Simulate(fixedDeltaTime);
-                
+
                 // Simulate point radiation
-                if (RadioactivitySettings.simulatePointRadiation)
+                if (RadioactivitySimulationSettings.SimulatePointRadiation)
                     pointSim.Simulate(fixedDeltaTime);
+
+                // simulate everything we need to do with Kerbals
+
+                //if (KerbalTracking.Instance != null)
+                //{
+                //    KerbalTracking.Instance.SimulateKerbals(TimeWarp.fixedDeltaTime);
+                //}
+
+
             }
         }
 

@@ -7,5 +7,7 @@ G:/KSP Modding/repositories/Radioactivity/GameData/Radioactivity/Plugins/Radioac
 G:/KSP Modding/repositories/Radioactivity/GameData/Radioactivity/Plugins/Radioactivity.pdb
 /github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.csprojResolveAssemblyReference.cache
 /github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.csproj.CoreCompileInputs.cache
+/github/Radioactivity/GameData/Radioactivity/Plugins/Radioactivity.dll
+/github/Radioactivity/GameData/Radioactivity/Plugins/Radioactivity.pdb
 /github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.dll
 /github/Radioactivity/Source/Radioactivity/obj/Debug/Radioactivity.pdb

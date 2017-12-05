@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Radioactivity.Persistence
+namespace Radioactivity.Persistance
 {
   public enum RadioactivityKerbalState {
     Healthy, Sick, Dead, Home
@@ -87,31 +87,31 @@ namespace Radioactivity.Persistence
             SimulateOnMission(timeStep);
         }
         // Do the actual effects on kerbals
-        if (RadioactivitySettings.enableKerbalEffects)
-          HandleExposure();
+           //if (RadioactivityConstants.enableKerbalEffects)
+          //HandleExposure();
       }
 
       // Simulates effects when the kerbal is dead or missing
       void SimulateDead(float timeStep)
       {
         CurrentVessel = null;
-        KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
+            RadioactivityPersistance.Instance.KerbalDB.RemoveKerbal(this);
       }
       // Simulates effects when the kerbal is at the KSC
       void SimulateKSC(float timeStep)
       {
         CurrentVessel = null;
         //HealthState = RadioactivityKerbalState.Home;
-        TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRateKSC*timeStep;
+            TotalExposure = TotalExposure - RadioactivityConstants.kerbalHealRateKSC*timeStep;
         if (TotalExposure < 0d)
           TotalExposure = 0d;
       }
       // Simulates effects when the
       void SimulateOnMission(float timeStep)
       {
-        if ((CurrentExposure) <= RadioactivitySettings.kerbalHealThreshold)
+            if ((CurrentExposure) <= RadioactivityConstants.kerbalHealThreshold)
         {
-            TotalExposure = TotalExposure - RadioactivitySettings.kerbalHealRate*timeStep;
+                TotalExposure = TotalExposure - RadioactivityConstants.kerbalHealRate*timeStep;
             if (TotalExposure < 0d)
               TotalExposure = 0d;
         }
@@ -123,7 +123,7 @@ namespace Radioactivity.Persistence
 
       void HandleExposure()
       {
-        if (TotalExposure >= RadioactivitySettings.kerbalSicknessThreshold)
+            if (TotalExposure >= RadioactivityConstants.kerbalSicknessThreshold)
         {
           if (HealthState != RadioactivityKerbalState.Sick && HealthState != RadioactivityKerbalState.Dead)
           {
@@ -132,7 +132,7 @@ namespace Radioactivity.Persistence
           }
           //Utils.LogWarning(Name + " died of radiation exposure");
         }
-        if (TotalExposure >= RadioactivitySettings.kerbalDeathThreshold)
+            if (TotalExposure >= RadioactivityConstants.kerbalDeathThreshold)
         {
           if (HealthState != RadioactivityKerbalState.Dead)
           {
@@ -141,7 +141,7 @@ namespace Radioactivity.Persistence
           }
           //Utils.LogWarning(Name + " got radiation sickness");
         }
-        if (TotalExposure < RadioactivitySettings.kerbalSicknessThreshold)
+            if (TotalExposure < RadioactivityConstants.kerbalSicknessThreshold)
         {
           if (HealthState == RadioactivityKerbalState.Sick)
           {
@@ -155,14 +155,14 @@ namespace Radioactivity.Persistence
       {
         HealthState = RadioactivityKerbalState.Sick;
         ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} now has radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
-        if (RadioactivitySettings.debugKerbalEvents)
+            if (RadioactivityConstants.debugKerbalEvents)
           Utils.LogWarning(String.Format("Kerbals: {0} got radiation sickness", Name));
       }
       void Heal()
       {
         HealthState = RadioactivityKerbalState.Healthy;
         ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} recovered from radiation sickness", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
-        if (RadioactivitySettings.debugKerbalEvents)
+            if (RadioactivityConstants.debugKerbalEvents)
           Utils.LogWarning(String.Format("Kerbals: {0} recovered from radiation sickness", Name));
       }
 
@@ -171,14 +171,14 @@ namespace Radioactivity.Persistence
       {
 
         HealthState = RadioactivityKerbalState.Dead;
-        KerbalTracking.Instance.KerbalDB.RemoveKerbal(this);
+            RadioactivityPersistance.Instance.KerbalDB.RemoveKerbal(this);
         ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} has died of radiation exposure", Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
 
         if (CurrentVessel != null && CurrentVessel.isEVA)
         {
             // If we are EVA, have to handle this more carefully
           CurrentVessel.rootPart.Die();
-          if (RadioactivitySettings.enableKerbalDeath)
+                if (HighLogic.CurrentGame.Parameters.CustomParams<RadioactivityEffectSettings>().kerbalDeath)
           {
               // Do nothing
           } else
@@ -188,7 +188,7 @@ namespace Radioactivity.Persistence
                   Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
               }
           }
-          if (RadioactivitySettings.debugKerbalEvents)
+                if (RadioactivityConstants.debugKerbalEvents)
               Utils.LogWarning(String.Format("Kerbals: {0} died on EVA of radiation exposure", Name));
         }
         else
@@ -200,7 +200,7 @@ namespace Radioactivity.Persistence
                 {
                     Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
                 }
-                if (RadioactivitySettings.debugKerbalEvents)
+                    if (RadioactivityConstants.debugKerbalEvents)
                     Utils.LogWarning(String.Format("Kerbals: {0} died at home of radiation exposure", Name));
             }
             else
@@ -215,7 +215,7 @@ namespace Radioactivity.Persistence
                     {
                         Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
                     }
-                    if (RadioactivitySettings.debugKerbalEvents)
+                        if (RadioactivityConstants.debugKerbalEvents)
                         Utils.LogWarning(String.Format("Kerbals: {0} died in his vessel of radiation exposure", Name));
                     //HighLogic.CurrentGame.CrewRoster.RemoveDead(Kerbal);
                 }
@@ -280,7 +280,7 @@ namespace Radioactivity.Persistence
 
       public ConfigNode Save(ConfigNode config)
       {
-          ConfigNode node = config.AddNode(RadioactivitySettings.kerbalConfigNodeName);
+            ConfigNode node = config.AddNode(RadioactivityConstants.kerbalConfigNodeName);
           node.AddValue("lastUpdate", LastUpdate);
           //node.AddValue("Name", Name);
           node.AddValue("Status", Status);

@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+
 namespace Radioactivity
 {
     /// <summary>
@@ -40,6 +42,8 @@ namespace Radioactivity
         public static float overlayRayWidthMin = 0.05f;
         public static float overlayRayWidthMax = 0.5f;
         public static string overlayRayMaterial = "GUI/Text Shader";
+        public static Gradient overlayRayGradient;
+
 
         // TRACKING SETTINGS
         public static string pluginConfigNodeName = "RadioactivityKerbalTracking";
@@ -57,6 +61,7 @@ namespace Radioactivity
         public static double kerbalHealRate = 0.00001157407407;
         // Rate at which radiation exposure "heals" at the KSC (Sv/s). Default is about 10 Sv/yr
         public static double kerbalHealRateKSC = 0.0001157407407;
+
 
         // DEBUG SETTINGS
         // If on, generates UI debug messages
@@ -101,7 +106,7 @@ namespace Radioactivity
                 overlayRayLayer = Utils.GetValue(settingsNode, "OverlayRayLayer", 0);
                 overlayRayMaterial = Utils.GetValue(settingsNode, "OverlayRayMaterial", "GUI/Text Shader");
 
-             
+
                 kerbalSicknessThreshold = Utils.GetValue(settingsNode, "RadiationSicknessThreshold", 1f);
                 kerbalHealThreshold = Utils.GetValue(settingsNode, "RadiationHealThreshold", 0.000000);
                 kerbalDeathThreshold = Utils.GetValue(settingsNode, "RadiationDeathThreshold", 10f);
@@ -120,7 +125,44 @@ namespace Radioactivity
             {
                 Utils.Log("[Constants]: Couldn't find constants file, using defaults");
             }
+
+            GenerateGradients();
             Utils.Log("[Constants]: Finished loading");
+        }
+
+        public static void GenerateGradients()
+        {
+            overlayRayGradient = new Gradient();
+            GradientColorKey[] gkColor = new GradientColorKey[7];
+            GradientAlphaKey[] gkAlpha = new GradientAlphaKey[4];
+
+            gkColor[0].color = Color.white;
+            gkColor[1].color = Color.red;
+            gkColor[2].color = Color.yellow;
+            gkColor[3].color = Color.green;
+            gkColor[4].color = Color.blue;
+            gkColor[5].color = Color.magenta;
+            gkColor[6].color = Color.black;
+
+            gkColor[0].time = 0f;
+            gkColor[1].time = 0.166f;
+            gkColor[2].time = 0.33f;
+            gkColor[3].time = 0.5f;
+            gkColor[4].time = 0.66f;
+            gkColor[5].time = 0.833f;
+            gkColor[6].time = 1f;
+
+            gkAlpha[0].alpha = 0.75f;
+            gkAlpha[1].alpha = 0.75f;
+            gkAlpha[2].alpha = 0.75f;
+            gkAlpha[3].alpha = 0.75f;
+
+            gkAlpha[0].time = 0f;
+            gkAlpha[1].time = 0.33f;
+            gkAlpha[2].time = 0.66f;
+            gkAlpha[3].time = 1f;
+
+            overlayRayGradient.SetKeys(gkColor, gkAlpha);
         }
     }
 }

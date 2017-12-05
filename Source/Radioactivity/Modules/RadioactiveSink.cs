@@ -75,12 +75,6 @@ namespace Radioactivity
         private Dictionary<string, float> sourceDictionary = new Dictionary<string, float>();
         private List<IRadiationAbsorber> associatedAbsorbers = new List<IRadiationAbsorber>();
 
-        // Fraction of the sky taken up by the parent body
-        private double bodyFraction = 0d;
-        // Fraction of the sky not taken up by bodies
-        private double skyFraction = 0d;
-
-
         // Add radiation to the sink
         public void AddRadiation(float amt)
         {
@@ -117,7 +111,7 @@ namespace Radioactivity
                 SinkTransform = part.FindModelTransform(SinkTransformName);
             if (SinkTransform == null)
             {
-                if (RadioactivitySettings.debugSourceSinks)
+                if (RadioactivityConstants.debugSourceSinks)
                     Utils.LogWarning("[RadioactiveSink]: Couldn't find Source transform, using part root transform");
                 SinkTransform = part.transform;
             }
@@ -138,7 +132,7 @@ namespace Radioactivity
 
         public void OnDestroy()
         {
-            
+
             if (registered)
             {
                 Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);

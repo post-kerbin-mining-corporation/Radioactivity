@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using Radioactivity.Persistence;
-                   
+using Radioactivity.Persistance;
+
 namespace Radioactivity.UI
 {
-    public class UIRosterWindow: UIWindow
+    public class UIRosterWindow : UIWindow
     {
 
         enum RosterWindowMode
@@ -24,10 +24,10 @@ namespace Radioactivity.UI
         Vector2 scrollPosition;
         Vector2 iconDims = new Vector2(16f, 16f);
 
-      
+
         List<RadioactivityKerbal> drawnKerbals = new List<RadioactivityKerbal>();
 
-        public UIRosterWindow(System.Random randomizer, RadioactivityUI uiHost): base(randomizer, uiHost)
+        public UIRosterWindow(System.Random randomizer, RadioactivityUI uiHost) : base(randomizer, uiHost)
         {
         }
 
@@ -57,7 +57,7 @@ namespace Radioactivity.UI
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
-                drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(FlightGlobals.ActiveVessel.GetVesselCrew());
+                drawnKerbals = RadioactivityPersistance.Instance.KerbalDB.VesselKerbals(FlightGlobals.ActiveVessel.GetVesselCrew());
             }
             else if (HighLogic.LoadedSceneIsEditor)
             {
@@ -67,7 +67,7 @@ namespace Radioactivity.UI
                 }
                 else
                 {
-                    drawnKerbals = KerbalTracking.Instance.KerbalDB.VesselKerbals(ShipConstruction.ShipManifest.GetAllCrew(true));
+                    drawnKerbals = RadioactivityPersistance.Instance.KerbalDB.VesselKerbals(ShipConstruction.ShipManifest.GetAllCrew(true));
                 }
             }
             else
@@ -84,21 +84,21 @@ namespace Radioactivity.UI
                 if (FlightGlobals.Vessels[i].loaded)
                     nearbyCrew.Concat(FlightGlobals.Vessels[i].GetVesselCrew());
             }
-            drawnKerbals = KerbalTracking.Instance.KerbalDB.NearbyKerbals(nearbyCrew);
+            drawnKerbals = RadioactivityPersistance.Instance.KerbalDB.NearbyKerbals(nearbyCrew);
         }
         // Get kerbals that are in flight
         internal void GetKerbalsActive()
         {
-            drawnKerbals = KerbalTracking.Instance.KerbalDB.ActiveKerbals();
+            drawnKerbals = RadioactivityPersistance.Instance.KerbalDB.ActiveKerbals();
         }
         internal void GetKerbalsKSC()
         {
-            drawnKerbals = KerbalTracking.Instance.KerbalDB.KSCKerbals();
+            drawnKerbals = RadioactivityPersistance.Instance.KerbalDB.KSCKerbals();
         }
         // Get all kerbals
         internal void GetKerbalsAll()
         {
-            drawnKerbals = KerbalTracking.Instance.KerbalDB.AllKerbals();
+            drawnKerbals = RadioactivityPersistance.Instance.KerbalDB.AllKerbals();
         }
 
 
@@ -149,17 +149,17 @@ namespace Radioactivity.UI
             Rect tempArea = GUILayoutUtility.GetRect(tempAreaWidth, 40f);
             Rect barArea = new Rect(20f, 20f, tempBarWidth, 40f);
 
-            float sickIconPos = tempBarWidth * RadioactivitySettings.kerbalSicknessThreshold / RadioactivitySettings.kerbalDeathThreshold;
-            float tempBarFGSize = (tempBarWidth - 4f) * Mathf.Clamp01((float)kerbal.TotalExposure / RadioactivitySettings.kerbalDeathThreshold);
+            float sickIconPos = tempBarWidth * RadioactivityConstants.kerbalSicknessThreshold / RadioactivityConstants.kerbalDeathThreshold;
+            float tempBarFGSize = (tempBarWidth - 4f) * Mathf.Clamp01((float)kerbal.TotalExposure / RadioactivityConstants.kerbalDeathThreshold);
 
             // Bars
             GUI.BeginGroup(tempArea);
             GUI.Box(new Rect(0f, 10f, tempBarWidth, 10f), "", host.GUIResources.GetStyle("roster_bar_bg"));
 
             // Colorize bar
-            if (kerbal.TotalExposure < RadioactivitySettings.kerbalSicknessThreshold)
+            if (kerbal.TotalExposure < RadioactivityConstants.kerbalSicknessThreshold)
                 GUI.color = Color.green;
-            else if (kerbal.TotalExposure < RadioactivitySettings.kerbalDeathThreshold)
+            else if (kerbal.TotalExposure < RadioactivityConstants.kerbalDeathThreshold)
                 GUI.color = Color.yellow;
             else
                 GUI.color = Color.red;
@@ -171,12 +171,12 @@ namespace Radioactivity.UI
             // icons
             GUI.DrawTextureWithTexCoords(new Rect(sickIconPos - iconDims.x / 2f, iconDims.y / 2f - 1f, iconDims.x, iconDims.y),
                                          host.GUIResources.GetIcon("kerbal_sick").iconAtlas, host.GUIResources.GetIcon("kerbal_sick").iconRect);
-            GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth - iconDims.x / 2f, iconDims.y / 2f - 1f, iconDims.x, iconDims.y), 
+            GUI.DrawTextureWithTexCoords(new Rect(tempBarWidth - iconDims.x / 2f, iconDims.y / 2f - 1f, iconDims.x, iconDims.y),
                                          host.GUIResources.GetIcon("kerbal_dead").iconAtlas, host.GUIResources.GetIcon("kerbal_dead").iconRect);
 
             // icon labels
-            GUI.Label(new Rect(sickIconPos - iconDims.x, iconDims.y + 4f, iconDims.x * 2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalSicknessThreshold, "F0")), host.GUIResources.GetStyle("roster_body"));
-            GUI.Label(new Rect(tempBarWidth - iconDims.x, iconDims.y + 4f, iconDims.x * 2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivitySettings.kerbalDeathThreshold, "F0")), host.GUIResources.GetStyle("roster_body"));
+            GUI.Label(new Rect(sickIconPos - iconDims.x, iconDims.y + 4f, iconDims.x * 2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivityConstants.kerbalSicknessThreshold, "F0")), host.GUIResources.GetStyle("roster_body"));
+            GUI.Label(new Rect(tempBarWidth - iconDims.x, iconDims.y + 4f, iconDims.x * 2f, 20f), String.Format("{0}Sv", Utils.ToSI(RadioactivityConstants.kerbalDeathThreshold, "F0")), host.GUIResources.GetStyle("roster_body"));
 
             // End labels
             GUI.Label(new Rect(tempBarWidth + 20f, 2f, 120f, 20f), String.Format("<b><color=#ffffff>Current:</color></b> {0}Sv/s", Utils.ToSI(kerbal.CurrentExposure, "F2")), host.GUIResources.GetStyle("roster_body"));

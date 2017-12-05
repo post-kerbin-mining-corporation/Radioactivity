@@ -7,15 +7,15 @@ using UnityEngine;
 namespace Radioactivity
 {
 
-  public class RadiationParameters:PartModule
-  {
-      // Override the part density in t/m3
-      [KSPField(isPersistant = true)]
-      public float Density = 1f;
+    public class RadiationParameters : PartModule
+    {
+        // Override the part density in t/m3
+        [KSPField(isPersistant = true)]
+        public float Density = 1f;
 
-      // Override the attenuation path length in t/m3
-      [KSPField(isPersistant = true)]
-      public float AttenuationCoefficient = 16f;
+        // Override the attenuation path length in t/m3
+        [KSPField(isPersistant = true)]
+        public float AttenuationCoefficient = 16f;
 
-  }
+    }
 }

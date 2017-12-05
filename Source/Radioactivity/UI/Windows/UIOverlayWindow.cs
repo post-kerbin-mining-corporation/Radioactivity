@@ -40,17 +40,9 @@ namespace Radioactivity.UI
         /// </summary>
       public void Update()
        {
-            if (Radioactivity.Instance.RadSim.)
+            if (Radioactivity.Instance.RadSim != null)
            {
-               if (Radioactivity.Instance.RadiationNetworkChanged)
-               {
-
-                   Utils.Log("Network Changed, rebuilding UI");
-                   UpdateSourceList();
-                   UpdateSinkList();
-                   Radioactivity.Instance.RadiationNetworkChanged = false;
-               }
-
+               
                for (int i = 0; i < sinkWindows.Count; i++ )
                {
                    sinkWindows[i].UpdatePositions();
@@ -66,21 +58,21 @@ namespace Radioactivity.UI
       {
           Utils.Log("Rebuilding Sink List");
           sinkWindows = new List<UISinkWindow>();
-          for (int i = 0; i < Radioactivity.Instance.AllSinks.Count; i++ )
+          for (int i = 0; i < Radioactivity.Instance.RadSim.PointSim.AllSinks.Count; i++ )
           {
-              sinkWindows.Add(new UISinkWindow(Radioactivity.Instance.AllSinks[i], random, host));
+                sinkWindows.Add(new UISinkWindow(Radioactivity.Instance.RadSim.PointSim.AllSinks[i], random, host));
           }
 
           
       }
 
-      void UpdateSourceList()
+      public void UpdateSourceList()
       {
           sourceWindows = new List<UISourceWindow>();
         // Check for new sinks
-        for (int i = 0; i < Radioactivity.Instance.AllSources.Count; i++ )
+            for (int i = 0; i < Radioactivity.Instance.RadSim.PointSim.AllSources.Count; i++ )
         {
-            sourceWindows.Add(new UISourceWindow(Radioactivity.Instance.AllSources[i], random, host ));
+                sourceWindows.Add(new UISourceWindow(Radioactivity.Instance.RadSim.PointSim.AllSources[i], random, host ));
         }
       }
 

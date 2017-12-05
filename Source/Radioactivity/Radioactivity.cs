@@ -78,7 +78,7 @@ namespace Radioactivity
              RadiationShieldedCrewContainer tracker = p.gameObject.AddComponent<RadiationShieldedCrewContainer>();
 
              sink.SinkID = "Kerbal";
-             sink.IconID = 3;
+             sink.IconID = "kerbal";
              tracker.AbsorberID = "Kerbal";
              tracker.RadiationAttenuationFraction = 0.0f;
              evaModified = true;
@@ -114,7 +114,16 @@ namespace Radioactivity
 
         protected void Start()
         {
+            // Wait breifly before setting up the simulation
+            StartCoroutine(WaitForInit(0.1f));
+            Utils.Log("[Radioactivity]: Simulation started...");
             radSim = new RadioactivitySimulator();
+        }
+
+        protected IEnumerator WaitForInit(float t)
+        {
+            
+            yield return new WaitForSeconds(t);
         }
 
         protected void FixedUpdate()

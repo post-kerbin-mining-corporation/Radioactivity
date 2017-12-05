@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Radioactivity.Simulator;
 
 namespace Radioactivity.UI
 {
