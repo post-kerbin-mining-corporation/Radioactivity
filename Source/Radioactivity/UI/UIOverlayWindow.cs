@@ -6,21 +6,23 @@ using UnityEngine;
 
 namespace Radioactivity.UI
 {
-  public class UIOverlayWindow
+    public class UIOverlayWindow: UIWindow
   {
       System.Random random;
       List<UISinkWindow> sinkWindows;
       List<UISourceWindow> sourceWindows;
 
-        RadioactivityUI host;
-        public UIOverlayWindow(System.Random randomizer, RadioactivityUI uiHost)
+        public UIOverlayWindow(System.Random randomizer, RadioactivityUI uiHost): base(randomizer, uiHost)
       {
-            host = uiHost;
+            random = randomizer;
           sinkWindows = new List<UISinkWindow>();
           sourceWindows = new List<UISourceWindow>();
-          random = randomizer;
-
+ 
+            Utils.Log("[UIOverlayWindow]: Initialized");
       }
+        /// <summary>
+        /// Draw the set of sink and source windows
+        /// </summary>
       public void Draw()
       {
           for (int i=0; i < sinkWindows.Count ;i++)
@@ -32,9 +34,13 @@ namespace Radioactivity.UI
               sourceWindows[i].Draw();
           }
       }
+
+        /// <summary>
+        /// Updates the sink and source window positions
+        /// </summary>
       public void Update()
        {
-           if (Radioactivity.Instance.SimulationReady)
+            if (Radioactivity.Instance.RadSim.)
            {
                if (Radioactivity.Instance.RadiationNetworkChanged)
                {

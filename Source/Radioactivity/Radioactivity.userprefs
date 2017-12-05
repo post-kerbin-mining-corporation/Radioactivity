@@ -1,36 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="UI/UIResources.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Settings/RadioactivityPreferences.cs">
     <Files>
-      <File FileName="Simulator/AttenuationZone.cs" Line="133" Column="10" />
-      <File FileName="Simulator/RadiationLink.cs" Line="137" Column="23" />
-      <File FileName="Simulator/VesselSimulator.cs" Line="21" Column="9" />
-      <File FileName="Radioactivity.cs" Line="6" Column="19" />
-      <File FileName="Simulator/RadioactivitySimulator.cs" Line="47" Column="17" />
-      <File FileName="Simulator/PointRadiationSimulator.cs" Line="75" Column="45" />
-      <File FileName="Simulator/AmbientRadiationSimulator.cs" Line="10" Column="1" />
-      <File FileName="Simulator/RadiationShadowShield.cs" Line="1" Column="1" />
-      <File FileName="Persistence/KerbalTracking.cs" Line="5" Column="1" />
-      <File FileName="RadioactivitySettings.cs" Line="30" Column="34" />
-      <File FileName="Persistence/KerbalDatabase.cs" Line="38" Column="16" />
-      <File FileName="Modules/RadioactiveSource.cs" Line="96" Column="83" />
-      <File FileName="Modules/RadioactiveSink.cs" Line="137" Column="10" />
-      <File FileName="Modules/RadioactiveResource.cs" Line="1" Column="1" />
-      <File FileName="Modules/RadiationShieldedCrewContainer.cs" Line="1" Column="1" />
-      <File FileName="UI/RadioactivityUI.cs" Line="58" Column="13" />
-      <File FileName="UI/UIOverlayWindow.cs" Line="72" Column="8" />
-      <File FileName="Interfaces/IRadiationAbsorber.cs" Line="18" Column="49" />
-      <File FileName="Interfaces/IRadiationEmitter.cs" Line="11" Column="27" />
-      <File FileName="Modules/RadiationDroneCore.cs" Line="1" Column="1" />
-      <File FileName="Modules/RadiationInstrument.cs" Line="1" Column="1" />
-      <File FileName="Modules/RadioactiveEngine.cs" Line="127" Column="28" />
-      <File FileName="Modules/RadioactiveReactor.cs" Line="1" Column="1" />
-      <File FileName="UI/UISourceWindow.cs" Line="65" Column="13" />
-      <File FileName="RadioactivityOverlay.cs" Line="1" Column="1" />
-      <File FileName="Utils.cs" Line="26" Column="85" />
-      <File FileName="AtmosphereUtils.cs" Line="6" Column="8" />
-      <File FileName="UI/UIRosterWindow.cs" Line="22" Column="61" />
-      <File FileName="UI/UIResources.cs" Line="105" Column="13" NotebookId="1" />
-      <File FileName="Persistence/RadioactivityKerbal.cs" Line="112" Column="29" NotebookId="1" />
+      <File FileName="Persistence/RadioactivityPersistance.cs" Line="7" Column="2" />
+      <File FileName="Settings/RadioactivityPreferences.cs" Line="66" Column="55" />
+      <File FileName="Persistence/KerbalDatabase.cs" Line="128" Column="17" />
+      <File FileName="Settings/RadioactivityConstants.cs" Line="47" Column="51" />
+      <File FileName="UI/UIEditorWindow.cs" Line="13" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

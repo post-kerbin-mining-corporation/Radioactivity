@@ -71,63 +71,63 @@ namespace Radioactivity.Persistence
         public void RemoveKerbal(RadioactivityKerbal k)
         {
           Kerbals.Remove(k.Name);
-          Utils.Log(String.Format("Kerbal Database: {0} removed from database", k.Name));
+          Utils.Log(String.Format("[KerbalDatabase]: {0} removed from database", k.Name));
         }
 
         internal void Load(ConfigNode node)
         {
-            Utils.Log("Kerbal Database: Loading...");
+            Utils.Log("[KerbalDatabase]: Loading...");
             Kerbals.Clear();
-            Utils.Log("Kerbal Database: Loading from persistence");
-            ConfigNode mNode = node.GetNode(RadioactivitySettings.pluginConfigNodeName);
-            ConfigNode[] kNodes = mNode.GetNodes(RadioactivitySettings.kerbalConfigNodeName);
+            Utils.Log("[KerbalDatabase]: Loading from persistence");
+            ConfigNode mNode = node.GetNode(RadioactivityConstants.pluginConfigNodeName);
+            ConfigNode[] kNodes = mNode.GetNodes(RadioactivityConstants.kerbalConfigNodeName);
             foreach (ConfigNode kNode in kNodes)
             {
 
                 if (kNode.HasValue("KerbalName"))
                 {
                     string idx = kNode.GetValue("KerbalName");
-                    Utils.Log(String.Format("Kerbal Database: Loading kerbal {0}", idx));
+                    Utils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", idx));
                     RadioactivityKerbal kerbal = new RadioactivityKerbal(idx);
                     kerbal.Load(kNode, idx);
                     Kerbals[idx] = kerbal;
                 }
             }
-            Utils.Log("Kerbal Database: Loading from roster");
+            Utils.Log("[KerbalDatabase]: Loading from roster");
             var crewList = HighLogic.CurrentGame.CrewRoster.Crew.Concat(HighLogic.CurrentGame.CrewRoster.Applicants).Concat(HighLogic.CurrentGame.CrewRoster.Tourist).Concat(HighLogic.CurrentGame.CrewRoster.Unowned).ToList();
             foreach (ProtoCrewMember crew in crewList)
             {
                 if (!Kerbals.ContainsKey(crew.name))
                 {
-                    Utils.Log(String.Format("Kerbal Database: Loading kerbal {0}", crew.name));
+                    Utils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", crew.name));
                     RadioactivityKerbal kerbal = new RadioactivityKerbal(crew.name);
                     kerbal.Load(crew);
                     Kerbals[crew.name] = kerbal;
                 }
             }
-            Utils.Log(String.Format("Kerbal Database: Loaded {0} Kerbals",Kerbals.Count ));
-            Utils.Log("Kerbal Database: Loading Complete!");
+            Utils.Log(String.Format("[KerbalDatabase]: Loaded {0} Kerbals",Kerbals.Count ));
+            Utils.Log("[KerbalDatabase]: Loading Complete!");
         }
 
         internal void Save(ConfigNode node)
         {
-            Utils.Log("Kerbal Database: Saving...");
+            Utils.Log("[KerbalDatabase]: Saving...");
 
             ConfigNode dbNode;
-            bool init = node.HasNode(RadioactivitySettings.pluginConfigNodeName);
+            bool init = node.HasNode(RadioactivityConstants.pluginConfigNodeName);
             if (init)
-                dbNode =node.GetNode(RadioactivitySettings.pluginConfigNodeName);
+                dbNode =node.GetNode(RadioactivityConstants.pluginConfigNodeName);
             else
-                dbNode = node.AddNode(RadioactivitySettings.pluginConfigNodeName);
+                dbNode = node.AddNode(RadioactivityConstants.pluginConfigNodeName);
 
 
             foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in Kerbals)
             {
-                Utils.Log(string.Format("Kerbal Database: Saving kerbal {0}", kerbal.Value));
+                Utils.Log(string.Format("[KerbalDatabase]: Saving kerbal {0}", kerbal.Value));
                 ConfigNode kNode = kerbal.Value.Save(dbNode);
                 kNode.AddValue("KerbalName",kerbal.Key);
             }
-            Utils.Log("Kerbal Database: Saving completed!");
+            Utils.Log("[KerbalDatabase]: Saving completed!");
 
         }
 

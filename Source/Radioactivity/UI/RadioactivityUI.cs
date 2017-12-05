@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using Radioactivity.UI;
+using Radioactivity;
 using KSP.UI.Screens;
 
 namespace Radioactivity.UI
@@ -11,27 +11,26 @@ namespace Radioactivity.UI
     [KSPAddon(KSPAddon.Startup.EveryScene, false)]
     public class RadioactivityUI:MonoBehaviour
     {
+        public UIOverlayWindow OverlayWindow { get { return overlayWindow; } }
+        public UIEditorWindow EditorWindow { get { return editorWindow; } }
+        public UIRosterWindow RosterWindow { get { return rosterWindow; }}
 
         public UIResources GUIResources { get { return resources; } }
+
+        public static RadioactivityUI Instance { get; private set; }
+
 
         private UIResources resources;
 
         private bool uiShown = false;
         private bool initStyles = false;
 
-        private bool overlayShown = false;
-        private bool rosterShown = false;
-
         private Rect mainWindowPos = new Rect(5, 15, 150, 120);
         private Rect rosterWindowPos = new Rect(210, 15, 350, 450);
 
-
-
-        private UIOverlayWindow overlayView;
-        private UIRosterWindow rosterView;
-
-        bool overlayToggled = false;
-        bool rosterToggled = false;
+        private UIOverlayWindow overlayWindow;
+        private UIEditorWindow editorWindow;
+        private UIRosterWindow rosterWindow;
 
         System.Random randomizer;
         int windowIdentifier;
@@ -39,15 +38,17 @@ namespace Radioactivity.UI
         // Stock toolbar button
         private static ApplicationLauncherButton stockToolbarButton = null;
 
-
         public void Awake()
         {
+            Instance = this;
             Utils.Log("UI: Awake");
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIAppLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
         }
 
-
+        /// <summary>
+        /// Sets up the UI and creates the windows
+        /// </summary>
         public void Start()
         {
             Utils.Log("UI: Start");
@@ -57,24 +58,37 @@ namespace Radioactivity.UI
             randomizer = new System.Random(335462);
 
             windowIdentifier = randomizer.Next();
-            overlayView = new UIOverlayWindow(randomizer, this);
-            rosterView = new UIRosterWindow(randomizer, this);
+            overlayWindow = new UIOverlayWindow(randomizer, this);
+            rosterWindow = new UIRosterWindow(randomizer, this);
+            editorWindow = new UIEditorWindow(randomizer, this);
+
+            overlayWindow.Drawn = RadioactivityPreferences.overlayShown;
+            editorWindow.Drawn = RadioactivityPreferences.editorShown;
+            rosterWindow.Drawn = RadioactivityPreferences.rosterShown;
         }
 
-        // Set up the GUI styles
+        /// <summary>
+        /// Loads the GUI styles
+        /// </summary>
         private void InitStyles()
         {
             resources = new UIResources();
             initStyles = true;
         }
 
+        /// <summary>
+        /// Propagates Mono Updates to the windows
+        /// </summary>
         public void Update()
         {
-            if (overlayShown)
-                overlayView.Update();
-            if (rosterShown)
-              rosterView.Update();
+            overlayWindow.Update();
+            editorWindow.Update();
+            rosterWindow.Update();
         }
+
+        /// <summary>
+        /// Propagates Mono OnGUI updates to the windows
+        /// </summary>
         public void OnGUI()
         {
             if (Event.current.type == EventType.Repaint || Event.current.isMouse)
@@ -83,61 +97,78 @@ namespace Radioactivity.UI
             OnUIDraw();
         }
 
+        /// <summary>
+        /// Draws all the UI components
+        /// </summary>
         public void OnUIDraw()
         {
             if (!initStyles)
                 InitStyles();
+            
+            // Draw the main window which is the options window
             if (uiShown)
             {
-                mainWindowPos= GUILayout.Window(windowIdentifier, mainWindowPos, DrawMainWindow, "Radioactivity", windowStyle, GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
-
-                if (overlayShown)
-                    DrawOverlay();
-
-                if (rosterShown)
-                  DrawRoster();
+                mainWindowPos= GUILayout.Window(windowIdentifier, 
+                                                mainWindowPos, 
+                                                DrawMainWindow, 
+                                                "Radioactivity", 
+                                                resources.GetStyle("main_window"), 
+                                                GUILayout.MinHeight(20), 
+                                                GUILayout.ExpandHeight(true));
             }
+
+            /// We can draw these anytime without the options window
+            DrawOverlay();
+            DrawEditor();
+            DrawRoster();
         }
 
+        /// <summary>
+        /// Draws the settings window
+        /// </summary>
+        /// <param name="WindowID">Window identifier.</param>
         public void DrawMainWindow(int WindowID)
         {
             GUILayout.BeginVertical();
             if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
             {
-                overlayShown = GUILayout.Toggle(overlayShown, "Overlay", buttonStyle);
-                if (overlayShown != overlayToggled)
-                {
-                    overlayToggled = overlayShown;
-                    if (overlayShown)
-                        Radioactivity.Instance.ShowAllOverlays();
-                    else
-                        Radioactivity.Instance.HideAllOverlays();
-                }
+                overlayWindow.Drawn = GUILayout.Toggle(overlayWindow.Drawn, "Overlay", resources.GetStyle("main_button"));
             }
-            rosterShown = GUILayout.Toggle(rosterShown, "Roster", buttonStyle);
-            if (rosterShown != rosterToggled)
+            rosterWindow.Drawn = GUILayout.Toggle(rosterWindow.Drawn, "Roster", resources.GetStyle("main_button"));
+            if (HighLogic.LoadedSceneIsEditor )
             {
-                rosterToggled = rosterShown;
+                editorWindow.Drawn = GUILayout.Toggle(editorWindow.Drawn, "Simulation", resources.GetStyle("main_button"));   
             }
+                
             GUILayout.EndVertical();
             GUI.DragWindow();
         }
 
+        /// <summary>
+        /// Draws the overlay window(s)
+        /// </summary>
         internal void DrawOverlay()
         {
-
-            if (!HighLogic.LoadedSceneIsFlight)
-                overlayView.Draw();
-            else
-                if (!MapView.MapIsEnabled)
-                    overlayView.Draw();
+                overlayWindow.Draw();
         }
+        /// <summary>
+        /// Draws the roster window
+        /// </summary>
         internal void DrawRoster()
         {
-            rosterView.Draw();
+            rosterWindow.Draw();
+        }
+        /// <summary>
+        /// Draws the editor settings window
+        /// </summary>
+        internal void DrawEditor()
+        {
+            editorWindow.Draw();
         }
 
 
+        // App Launchers
+        // -------------
         public void OnDestroy()
         {
 
@@ -169,7 +200,6 @@ namespace Radioactivity.UI
             //Radioactivity.Instance.HideAllOverlays();
 
         }
-
 
         void OnGUIAppLauncherReady()
         {

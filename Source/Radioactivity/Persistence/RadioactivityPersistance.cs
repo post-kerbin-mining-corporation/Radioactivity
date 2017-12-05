@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Radioactivity.Persistence
+namespace Radioactivity
 {
     [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER, GameScenes.FLIGHT, GameScenes.TRACKSTATION)]
-    public class KerbalTracking: ScenarioModule
+    public class RadioactivityPersistance: ScenarioModule
     {
 
-          public static KerbalTracking Instance { get; private set; }
-
+        public static RadioactivityPersistance Instance { get; private set; }
+           
           internal KerbalDatabase KerbalDB;
           internal bool databaseReady = false;
+
           public override void OnAwake()
           {
-              Utils.Log("Kerbal Tracking: Init");
+              Utils.Log("[Persistance]: Init");
               Instance = this;
               base.OnAwake();
 
@@ -24,21 +25,22 @@ namespace Radioactivity.Persistence
 
           public override void OnLoad(ConfigNode node)
           {
-              Utils.Log("Kerbal Tracking: Started Loading");
+              Utils.Log("[Persistance]: Started Loading");
               base.OnLoad(node);
               KerbalDB.Load(node);
-              RadioactivitySettings.Load();
-              Utils.Log("Kerbal Tracking: Done Loading");
+               RadioactivityPreferences.Load(node);
+              RadioactivityConstants.Load();
+              Utils.Log("[Persistance]: Done Loading");
               databaseReady = true;
 
           }
 
           public override void OnSave(ConfigNode node)
           {
-              Utils.Log("Kerbal Tracking: Started Saving");
+              Utils.Log("[Persistance]: Started Saving");
               base.OnSave(node);
               KerbalDB.Save(node);
-              Utils.Log("Kerbal Tracking: Finished Saving");
+              Utils.Log("[Persistance]: Finished Saving");
           }
 
           internal void FixedUpdate()
@@ -65,7 +67,7 @@ namespace Radioactivity.Persistence
             {
               foreach (ProtoCrewMember crewMember in crew)
               {
-                if (crew == kerbal.Value.Kerbal)
+                if (crewMember == kerbal.Value.Kerbal)
                   toReturn.Add(kerbal.Value);
               }
             }

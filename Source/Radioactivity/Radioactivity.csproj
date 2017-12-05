@@ -73,7 +73,6 @@
     <Compile Include="Modules\RadioactiveSink.cs" />
     <Compile Include="Modules\RadioactiveSource.cs" />
     <Compile Include="Radioactivity.cs" />
-    <Compile Include="RadioactivitySettings.cs" />
     <Compile Include="RadioactivityOverlay.cs" />
     <Compile Include="UI\RadioactivityUI.cs" />
     <Compile Include="UI\UIOverlayWindow.cs" />
@@ -88,15 +87,21 @@
     <Compile Include="Simulator\RadioactivitySimulator.cs" />
     <Compile Include="Simulator\AmbientRadiationSimulator.cs" />
     <Compile Include="Simulator\RadiationShadowShield.cs" />
-    <Compile Include="Persistence\KerbalTracking.cs" />
+    <Compile Include="Persistence\RadioactivityPersistance.cs" />
     <Compile Include="Persistence\KerbalDatabase.cs" />
     <Compile Include="UI\UIResources.cs" />
     <Compile Include="AtmosphereUtils.cs" />
     <Compile Include="Persistence\RadioactivityKerbal.cs" />
+    <Compile Include="UI\UIEditorWindow.cs" />
+    <Compile Include="UI\UIWindow.cs" />
+    <Compile Include="Settings\RadioactivitySettings.cs" />
+    <Compile Include="Settings\RadioactivityConstants.cs" />
+    <Compile Include="Settings\RadioactivityPreferences.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Simulator\" />
     <Folder Include="Persistence\" />
+    <Folder Include="Settings\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

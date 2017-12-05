@@ -66,6 +66,14 @@ namespace Radioactivity.UI
             styleList = new Dictionary<string, GUIStyle>();
 
             GUIStyle draftStyle;
+            // Main window
+            draftStyle = new GUIStyle(HighLogic.Skin.window);
+            draftStyle.padding = new RectOffset(0, 0, 0, 0);
+            draftStyle.fontSize = 10;
+            styleList.Add("main_window", new GUIStyle(draftStyle));
+
+            draftStyle = new GUIStyle(HighLogic.Skin.button);
+            styleList.Add("main_button", new GUIStyle(draftStyle));
 
             // Mini window
             // Window

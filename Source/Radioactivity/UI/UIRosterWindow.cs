@@ -7,7 +7,7 @@ using Radioactivity.Persistence;
                    
 namespace Radioactivity.UI
 {
-    public class UIRosterWindow
+    public class UIRosterWindow: UIWindow
     {
 
         enum RosterWindowMode
@@ -15,9 +15,7 @@ namespace Radioactivity.UI
             Vessel, Nearby, Active, All
         }
 
-        System.Random random;
-        int windowIdentifier;
-        RadioactivityUI host;
+
         Rect windowPosition = new Rect(210, 15, 425, 250);
 
         int modeFlag = 0;
@@ -29,11 +27,8 @@ namespace Radioactivity.UI
       
         List<RadioactivityKerbal> drawnKerbals = new List<RadioactivityKerbal>();
 
-        public UIRosterWindow(System.Random randomizer, RadioactivityUI uiHost)
+        public UIRosterWindow(System.Random randomizer, RadioactivityUI uiHost): base(randomizer, uiHost)
         {
-            host = uiHost;
-            random = randomizer;
-            windowIdentifier = randomizer.Next();
         }
 
         public void Update()
@@ -109,7 +104,7 @@ namespace Radioactivity.UI
 
         public void Draw()
         {
-            windowPosition = GUILayout.Window(windowIdentifier, windowPosition, DrawWindow, "Kerbal Roster", host.GUIResources.GetStyle("roster_window"), GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, "Kerbal Roster", host.GUIResources.GetStyle("roster_window"), GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
         }
 
         void DrawWindow(int WindowID)

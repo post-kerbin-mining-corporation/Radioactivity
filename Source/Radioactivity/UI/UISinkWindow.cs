@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Radioactivity.UI
 {
-    public class UISinkWindow
+    public class UISinkWindow: UIWindow
     {
 
         public RadioactiveSink Sink
@@ -19,8 +19,6 @@ namespace Radioactivity.UI
 
         bool showWindow = false;
 
-        int windowID;
-
         Vector2 iconDims = new Vector2(32f, 32f);
         Vector2 infoBarDims = new Vector2(16f, 16f);
         Vector2 windowDims = new Vector2(150f, 20f);
@@ -30,14 +28,11 @@ namespace Radioactivity.UI
         Vector3 screenPosition;
         Rect windowPosition;
         RadioactiveSink sink;
-        RadioactivityUI host;
+      
 
-        public UISinkWindow(RadioactiveSink snk, System.Random random, RadioactivityUI uiHost)
+        public UISinkWindow(RadioactiveSink snk, System.Random randomizer, RadioactivityUI uiHost): base(randomizer, uiHost)
         {
-            host = uiHost;
             sink = snk;
-
-            windowID = random.Next();
             // Set up screen position
             screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
             windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);

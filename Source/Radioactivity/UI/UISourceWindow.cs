@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Radioactivity.UI
 {
-    public class UISourceWindow
+    public class UISourceWindow: UIWindow
     {
         public RadioactiveSource Source
         {
@@ -18,8 +18,6 @@ namespace Radioactivity.UI
         bool showWindow = false;
         bool showRays = false;
 
-        int windowID;
-
         Vector2 iconDims = new Vector2(32f, 32f);
         Vector2 infoBarDims = new Vector2(16, 16);
         Vector2 windowDims = new Vector2(150f, 20f);
@@ -29,15 +27,9 @@ namespace Radioactivity.UI
         Rect windowPosition;
         RadioactiveSource source;
 
-        RadioactivityUI host;
-
-        public UISourceWindow(RadioactiveSource src, System.Random random, RadioactivityUI uiHost)
+        public UISourceWindow(RadioactiveSource src, System.Random randomizer, RadioactivityUI uiHost): base (randomizer, uiHost)
         {
             source = src;
-
-            host = uiHost;
-
-            windowID = random.Next();
             // Set up screen position
             screenPosition = Camera.main.WorldToScreenPoint(source.part.transform.position);
             windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
