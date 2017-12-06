@@ -113,8 +113,8 @@ namespace Radioactivity.UI
             draftStyle.stretchWidth = true;
             styleList.Add("mini_text_body", new GUIStyle(draftStyle));
 
-            draftStyle = new GUIStyle(HighLogic.Skin.label);
-            draftStyle.fontSize = 10;
+            draftStyle = new GUIStyle(HighLogic.Skin.button);
+            draftStyle.fontSize = 9;
             draftStyle.padding = new RectOffset(0, 0, 0, 0);
             styleList.Add("mini_button", new GUIStyle(draftStyle));
 

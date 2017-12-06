@@ -7,7 +7,7 @@ using Radioactivity.Simulator;
 
 namespace Radioactivity.UI
 {
-    public class UISourceWindow: UIWindow
+    public class UISourceWindow : UIWindow
     {
         public RadioactiveSource Source
         {
@@ -27,7 +27,7 @@ namespace Radioactivity.UI
         Rect windowPosition;
         RadioactiveSource source;
 
-        public UISourceWindow(RadioactiveSource src, System.Random randomizer, RadioactivityUI uiHost): base (randomizer, uiHost)
+        public UISourceWindow(RadioactiveSource src, System.Random randomizer, RadioactivityUI uiHost) : base(randomizer, uiHost)
         {
             source = src;
             // Set up screen position
@@ -37,7 +37,7 @@ namespace Radioactivity.UI
 
         public void UpdatePositions()
         {
-            if (source.EmitterTransform != null)
+            if (source != null && source.EmitterTransform != null)
             {
                 screenPosition = Camera.main.WorldToScreenPoint(source.EmitterTransform.position);
                 windowPosition = new Rect(screenPosition.x + iconDims.x / 2 + 5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
@@ -55,7 +55,7 @@ namespace Radioactivity.UI
         internal void DrawButton()
         {
             Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
-            Rect groupRect = new Rect(buttonRect.xMax + 5f, buttonRect.yMin + buttonRect.height / 2 - infoBarDims.y / 2f, 90f, infoBarDims.y);
+            Rect groupRect = new Rect(buttonRect.xMax + 5f, buttonRect.yMin + buttonRect.height / 2 - infoBarDims.y / 2f, 120f, infoBarDims.y);
 
             GUI.DrawTextureWithTexCoords(buttonRect, host.GUIResources.GetIcon(source.IconID).iconAtlas, host.GUIResources.GetIcon(source.IconID).iconRect);
             GUI.BeginGroup(groupRect, host.GUIResources.GetStyle("mini_group"));
@@ -67,7 +67,6 @@ namespace Radioactivity.UI
 
             if (GUI.Button(sourceButtonRect, "...", host.GUIResources.GetStyle("mini_button")))
             {
-                Utils.Log("CLICKKER");
                 showSourceInfo = !showSourceInfo;
                 if (showSourceInfo && !showWindow)
                     showWindow = true;
@@ -79,13 +78,9 @@ namespace Radioactivity.UI
         }
         internal void DrawWindow(int WindowID)
         {
-            if (drawn)
-            {
-                //if (DrawSinkDetails)
-                //  DrawSinkDetails();
-                if (showSourceInfo)
-                    DrawSourceDetails();
-            }
+            if (showSourceInfo)
+                DrawSourceDetails();
+
         }
 
         internal void DrawSourceDetails()

@@ -96,12 +96,15 @@ namespace Radioactivity.UI
 
         public void RemoveLink(RadiationLink link)
         {
-            OverlayLinkRenderer toRemove = linkRenderers.First(lnk => lnk.Link == link);
-            toRemove.DestroyAll();
+            OverlayLinkRenderer toRemove = linkRenderers.FirstOrDefault(lnk => lnk.Link == link);
 
-            linkRenderers.Remove(toRemove);
-            if (RadioactivityConstants.debugOverlay)
-                Utils.Log("[RadioactiveOverlay]: Removing visual link");
+            if (toRemove != null)
+            {
+                toRemove.DestroyAll();
+                linkRenderers.Remove(toRemove);
+                if (RadioactivityConstants.debugOverlay)
+                    Utils.Log("[RadioactiveOverlay]: Removing visual link");
+            }
         }
 
         public void UpdateLink(RadiationLink link, bool complex)

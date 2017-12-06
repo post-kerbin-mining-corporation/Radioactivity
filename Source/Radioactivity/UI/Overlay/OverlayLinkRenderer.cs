@@ -79,11 +79,11 @@ namespace Radioactivity.UI
         public void SetEnabled(bool on)
         {
             if (RadioactivityConstants.debugOverlay)
-                Utils.Log("[OverlayLinkRenderer]: On/Off Toggle");
+                Utils.Log(String.Format("[OverlayLinkRenderer]: Enabled is {0}", on));
             drawn = on;
             for (int i = 0; i < renderers.Count; i++)
             {
-                renderers[i].SetEnabled(on);
+                renderers[i].SetEnabled(drawn);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Radioactivity.UI
             public void SetEnabled(bool on)
             {
                 drawn = on;
-                renderer.enabled = on;
+                renderer.enabled = drawn;
             }
             public void SetAttenuation()
             {
@@ -155,7 +155,6 @@ namespace Radioactivity.UI
                 go.layer = 0;
                 renderer.SetVertexCount(2);
                 renderer.SetWidth(RadioactivityConstants.overlayRayWidthMin, RadioactivityConstants.overlayRayWidthMin);
-
             }
         }
     }

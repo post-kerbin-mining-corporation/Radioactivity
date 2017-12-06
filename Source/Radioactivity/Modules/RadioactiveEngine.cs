@@ -96,7 +96,7 @@ namespace Radioactivity
         protected void HandleEmissionLegacy()
         {
             if (HighLogic.LoadedSceneIsEditor)
-                currentEmission = EmissionAtMax;
+                currentEmission = EmissionAtMax * engineLegacy.thrustPercentage / 100f;
             if (engineLegacy == null)
                 return;
             if (HighLogic.LoadedSceneIsFlight)
@@ -105,7 +105,7 @@ namespace Radioactivity
                 if ((engineLegacy.requestedThrottle) < SavedThrottle)
                 {
                     // set the emission to the delta from the last one or the last saved decay, whichever is higher
-                    DecayedEmission = Mathf.Max((SavedThrottle * EmissionAtMax), DecayedEmission);
+                    DecayedEmission = Mathf.Max((SavedThrottle * EmissionAtMax * engine.thrustPercentage / 100f), DecayedEmission);
                     SavedThrottle = engineLegacy.requestedThrottle;
                 }
                 else
@@ -129,7 +129,7 @@ namespace Radioactivity
             if (engine == null)
                 return;
             if (HighLogic.LoadedSceneIsEditor)
-                currentEmission = EmissionAtMax;
+                currentEmission = EmissionAtMax * engine.thrustPercentage / 100f;
 
 
             if (HighLogic.LoadedSceneIsFlight)
@@ -139,7 +139,7 @@ namespace Radioactivity
                 if ((engine.requestedThrottle) < SavedThrottle)
                 {
                     // set the emission to the delta from the last one or the last saved decay, whichever is higher
-                    DecayedEmission = Mathf.Max((SavedThrottle * EmissionAtMax), DecayedEmission);
+                    DecayedEmission = Mathf.Max((SavedThrottle * EmissionAtMax * engine.thrustPercentage / 100f), DecayedEmission);
                     SavedThrottle = engine.requestedThrottle;
                 }
                 else

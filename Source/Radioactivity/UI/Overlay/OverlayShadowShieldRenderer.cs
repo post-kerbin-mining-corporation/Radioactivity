@@ -36,7 +36,7 @@ namespace Radioactivity.UI
             renderer = go.GetComponent<MeshRenderer>();
             renderer.material = new Material(Shader.Find(RadioactivityConstants.overlayRayMaterial));
             renderer.material.color = Color.blue;
-            renderer.material.renderQueue = 4000;
+            renderer.material.renderQueue = 2998;
 
         }
         public void Update()

@@ -1,3 +1,20 @@
+v0.2.0
+------
+- KSP 1.3.1
+- Complete rewrite
+- Persistence improvements
+-- Settings are available in the main menu to enable/disable parameters on a per-save basis
+-- UI on/off settings are persisted between scenes in saves
+- UI improvements
+-- Added better main window to control smaller windows
+-- Better looking UI components for ray overlay
+-- Better looking ray overlay in VAB and flight
+-- Ray color is now scaled to absolute flux to help design
+-- Ray overlay can be set to display sinks in flux units (Sv) or time units (time to rad sickness or death)
+-- Improved overlay display of shadow shields
+- Module improvements
+-- RadioactiveEngine now takes the tweakable thrust limiter into account when handling emission
+
 v0.1.1
 ------
 - Fixed rendering of overlay rays in non-static situations

@@ -1,12 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="UI/RadioactivityUI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="UI/Windows/UIResources.cs">
     <Files>
-      <File FileName="UI/Overlay/OverlayShadowShieldRenderer.cs" Line="20" Column="27" />
-      <File FileName="UI/Overlay/RadioactivityOverlay.cs" Line="68" Column="60" />
-      <File FileName="UI/Overlay/OverlayLinkRenderer.cs" Line="159" Column="14" />
-      <File FileName="UI/Windows/UISourceWindow.cs" Line="35" Column="15" />
-      <File FileName="UI/Windows/UISinkWindow.cs" Line="81" Column="56" />
-      <File FileName="UI/RadioactivityUI.cs" Line="152" Column="70" />
+      <File FileName="UI/Overlay/OverlayShadowShieldRenderer.cs" Line="39" Column="49" />
+      <File FileName="UI/Overlay/RadioactivityOverlay.cs" Line="99" Column="72" />
+      <File FileName="UI/Overlay/OverlayLinkRenderer.cs" Line="157" Column="121" />
+      <File FileName="UI/Windows/UISourceWindow.cs" Line="66" Column="53" />
+      <File FileName="UI/Windows/UISinkWindow.cs" Line="44" Column="33" />
+      <File FileName="UI/RadioactivityUI.cs" Line="89" Column="35" />
+      <File FileName="Simulator/RadiationLink.cs" Line="113" Column="13" />
+      <File FileName="Modules/RadioactiveEngine.cs" Line="103" Column="14" />
+      <File FileName="UI/Windows/UIOverlayWindow.cs" Line="58" Column="51" />
+      <File FileName="UI/Windows/UIResources.cs" Line="117" Column="37" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

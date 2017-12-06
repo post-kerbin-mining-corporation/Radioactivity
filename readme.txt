@@ -1,5 +1,5 @@
 ====================
-RADIOACTIVITY v0.1.1
+RADIOACTIVITY v0.2.0
 ====================
 
 A mod about radiation!
@@ -9,7 +9,7 @@ DEPENDENCIES
 ============
 
 Required:
-- ModuleManager (2.6.25)
+- ModuleManager ()
 
 ============
 INSTALLATION
@@ -23,6 +23,6 @@ To install, place the GameData folder inside your Kerbal Space Program folder. I
 LICENSING
 =========
 
-The contents of this pack are distributed under an All Rights Reserved License. You may not distribute this or modified copies without my permission. 
+The contents of this pack are distributed under an All Rights Reserved License. You may not distribute this or modified copies without my permission.
 
 ModuleManager by ialdabaoth and sarbian is distributed under a Creative Commons Sharealike license. More details, including source code, can be found here: http://forum.kerbalspaceprogram.com/threads/31342-0-20-ModuleManager-1-3-for-all-your-stock-modding-needs?p=528607&viewfull=1#post528607

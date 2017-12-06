@@ -23,8 +23,6 @@ namespace Radioactivity.UI
         Vector2 infoBarDims = new Vector2(16f, 16f);
         Vector2 windowDims = new Vector2(150f, 20f);
 
-
-        Vector3 worldPosition;
         Vector3 screenPosition;
         Rect windowPosition;
         RadioactiveSink sink;
@@ -43,7 +41,7 @@ namespace Radioactivity.UI
         public void UpdatePositions()
         {
             // Set up screen position
-            if (sink.SinkTransform != null)
+            if (sink != null && sink.SinkTransform != null)
             {
                 screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
                 windowPosition = new Rect(screenPosition.x + iconDims.x / 2 + 5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
@@ -105,13 +103,12 @@ namespace Radioactivity.UI
 
         internal void DrawWindow(int WindowID)
         {
-            if (drawn)
-            {
-                if (showSinkInfo)
+ 
+               if (showSinkInfo)
                     DrawSinkDetails();
                 if (showSourceInfo)
                     DrawSourceDetails();
-            }
+
         }
 
         internal void DrawSinkDetails()
