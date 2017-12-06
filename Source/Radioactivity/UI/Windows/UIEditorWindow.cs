@@ -18,7 +18,9 @@ namespace Radioactivity.UI
         /// </summary>
         public void Draw()
         {
-            
+            if (drawn)
+            {
+            }
         }
 
         /// <summary>

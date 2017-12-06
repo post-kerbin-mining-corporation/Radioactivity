@@ -18,7 +18,7 @@ namespace Radioactivity
         public static bool editorShown = false;
 
         // Unit mode setting
-        public static UnitDisplayMode unitMode = UnitDisplayMode.SI;
+        public static int unitMode = 0;
 
         // Editor Simulation settings
 
@@ -43,7 +43,7 @@ namespace Radioactivity
                 rosterShown = Utils.GetValue(mNode, "RosterShown", false);
                 overlayShown = Utils.GetValue(mNode, "OverlayShown", false);
                 editorShown = Utils.GetValue(mNode, "EditorShown", false);
-
+                unitMode = Utils.GetValue(mNode, "UnitMode", 0);
                 editorAtmosphereDensity = Utils.GetValue(mNode, "EditorAtmosphereDensity", 0.0d);
                 editorAtmosphereHeight = Utils.GetValue(mNode, "EditorAtmosphereHeight", 0.0d);
                 editorSunDistance = Utils.GetValue(mNode, "EditorSunDistance", 0.0d);
@@ -66,6 +66,7 @@ namespace Radioactivity
             prefsNode.AddValue("RosterShown", RadioactivityUI.Instance.RosterWindow.Drawn);
             prefsNode.AddValue("OverlayShown", RadioactivityUI.Instance.OverlayWindow.Drawn);
             prefsNode.AddValue("EditorShown", RadioactivityUI.Instance.EditorWindow.Drawn);
+            prefsNode.AddValue("UnitMode", RadioactivityUI.Instance.UnitMode);
 
             prefsNode.AddValue("EditorAtmosphereDensity", editorAtmosphereDensity);
             prefsNode.AddValue("EditorAtmosphereHeight", editorAtmosphereHeight);

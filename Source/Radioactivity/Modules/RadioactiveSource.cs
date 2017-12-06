@@ -30,7 +30,7 @@ namespace Radioactivity
         public string IconID = "source";
 
 
-        public List<ShadowShieldEffect> ShadowShields { get { return associatedShields; } }
+        public List<ShadowShield> ShadowShields { get { return associatedShields; } }
         public string GetEmitterAliases()
         {
             string aliases = "";
@@ -83,7 +83,7 @@ namespace Radioactivity
         private bool registered = false;
         private Transform emitterTransform;
         private List<IRadiationEmitter> associatedEmitters = new List<IRadiationEmitter>();
-        private List<ShadowShieldEffect> associatedShields = new List<ShadowShieldEffect>();
+        private List<ShadowShield> associatedShields = new List<ShadowShield>();
 
         public override void OnStart(PartModule.StartState state)
         {

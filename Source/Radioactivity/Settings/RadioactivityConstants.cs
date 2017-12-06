@@ -39,7 +39,7 @@ namespace Radioactivity
         // OVERLAY SETTINGS
         public static int overlayRayLayer = 0;
         public static float overlayRayWidthMult = 0.005f;
-        public static float overlayRayWidthMin = 0.05f;
+        public static float overlayRayWidthMin = 0.02f;
         public static float overlayRayWidthMax = 0.5f;
         public static string overlayRayMaterial = "GUI/Text Shader";
         public static Gradient overlayRayGradient;
@@ -134,33 +134,39 @@ namespace Radioactivity
         {
             overlayRayGradient = new Gradient();
             GradientColorKey[] gkColor = new GradientColorKey[7];
-            GradientAlphaKey[] gkAlpha = new GradientAlphaKey[4];
+            GradientAlphaKey[] gkAlpha = new GradientAlphaKey[7];
 
-            gkColor[0].color = Color.white;
-            gkColor[1].color = Color.red;
-            gkColor[2].color = Color.yellow;
-            gkColor[3].color = Color.green;
-            gkColor[4].color = Color.blue;
-            gkColor[5].color = Color.magenta;
-            gkColor[6].color = Color.black;
+            gkColor[0].color = new Color(0f, 0f, 0.5f);
+            gkColor[1].color = new Color(0f, 0f, 1f);
+            gkColor[2].color = new Color(0f, 1f, 1f);
+            gkColor[3].color = new Color(0f, 1f, 0f);
+            gkColor[4].color = new Color(1f, 1f, 0f);
+            gkColor[5].color = new Color(1f, 0f, 0f);
+            gkColor[6].color = new Color(0.5f, 0f, 0f);
 
             gkColor[0].time = 0f;
-            gkColor[1].time = 0.166f;
-            gkColor[2].time = 0.33f;
-            gkColor[3].time = 0.5f;
-            gkColor[4].time = 0.66f;
-            gkColor[5].time = 0.833f;
+            gkColor[1].time = 0.00001f;
+            gkColor[2].time = 0.0001f;
+            gkColor[3].time = 0.001f;
+            gkColor[4].time = 0.01f;
+            gkColor[5].time = 0.1f;
             gkColor[6].time = 1f;
 
             gkAlpha[0].alpha = 0.75f;
             gkAlpha[1].alpha = 0.75f;
             gkAlpha[2].alpha = 0.75f;
             gkAlpha[3].alpha = 0.75f;
+            gkAlpha[4].alpha = 0.75f;
+            gkAlpha[5].alpha = 0.75f;
+            gkAlpha[6].alpha = 0.75f;
 
             gkAlpha[0].time = 0f;
-            gkAlpha[1].time = 0.33f;
-            gkAlpha[2].time = 0.66f;
-            gkAlpha[3].time = 1f;
+            gkAlpha[1].time = 0.00001f;
+            gkAlpha[2].time = 0.0001f;
+            gkAlpha[3].time = 0.001f;
+            gkAlpha[4].time = 0.01f;
+            gkAlpha[5].time = 0.1f;
+            gkAlpha[6].time = 1f;
 
             overlayRayGradient.SetKeys(gkColor, gkAlpha);
         }

@@ -33,23 +33,26 @@ namespace Radioactivity.UI
 
         public void Update()
         {
-            switch (modeFlag)
+            if (HighLogic.LoadedSceneIsGame)
             {
-                case 0:
-                    GetKerbalsVessel();
-                    break;
-                case 1:
-                    GetKerbalsLocal();
-                    break;
-                case 2:
-                    GetKerbalsKSC();
-                    break;
-                case 3:
-                    GetKerbalsActive();
-                    break;
-                case 4:
-                    GetKerbalsAll();
-                    break;
+                switch (modeFlag)
+                {
+                    case 0:
+                        GetKerbalsVessel();
+                        break;
+                    case 1:
+                        GetKerbalsLocal();
+                        break;
+                    case 2:
+                        GetKerbalsKSC();
+                        break;
+                    case 3:
+                        GetKerbalsActive();
+                        break;
+                    case 4:
+                        GetKerbalsAll();
+                        break;
+                }
             }
         }
         // Get kerbals in the vessel
@@ -104,7 +107,11 @@ namespace Radioactivity.UI
 
         public void Draw()
         {
-            windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, "Kerbal Roster", host.GUIResources.GetStyle("roster_window"), GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            if (drawn)
+            {
+                if (HighLogic.LoadedSceneIsGame)
+                    windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, "Kerbal Roster", host.GUIResources.GetStyle("roster_window"), GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
+            }
         }
 
         void DrawWindow(int WindowID)

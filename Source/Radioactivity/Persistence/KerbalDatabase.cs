@@ -79,18 +79,22 @@ namespace Radioactivity.Persistance
             Utils.Log("[KerbalDatabase]: Loading...");
             Kerbals.Clear();
             Utils.Log("[KerbalDatabase]: Loading from persistence");
-            ConfigNode mNode = node.GetNode(RadioactivityConstants.pluginConfigNodeName);
-            ConfigNode[] kNodes = mNode.GetNodes(RadioactivityConstants.kerbalConfigNodeName);
-            foreach (ConfigNode kNode in kNodes)
-            {
 
-                if (kNode.HasValue("KerbalName"))
+            ConfigNode mNode = node.GetNode(RadioactivityConstants.pluginConfigNodeName);
+            if (mNode != null)
+            {
+                ConfigNode[] kNodes = mNode.GetNodes(RadioactivityConstants.kerbalConfigNodeName);
+                foreach (ConfigNode kNode in kNodes)
                 {
-                    string idx = kNode.GetValue("KerbalName");
-                    Utils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", idx));
-                    RadioactivityKerbal kerbal = new RadioactivityKerbal(idx);
-                    kerbal.Load(kNode, idx);
-                    Kerbals[idx] = kerbal;
+
+                    if (kNode.HasValue("KerbalName"))
+                    {
+                        string idx = kNode.GetValue("KerbalName");
+                        Utils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", idx));
+                        RadioactivityKerbal kerbal = new RadioactivityKerbal(idx);
+                        kerbal.Load(kNode, idx);
+                        Kerbals[idx] = kerbal;
+                    }
                 }
             }
             Utils.Log("[KerbalDatabase]: Loading from roster");

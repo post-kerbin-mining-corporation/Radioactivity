@@ -11,6 +11,8 @@ namespace Radioactivity.Simulator
     /// 
     public class PointRadiationSimulator
     {
+
+        public bool SimReady {get {return simulationReady;} set { simulationReady = value; }}
         // ##### Accessors #####
         public List<RadioactiveSource> AllSources
         { get { return allRadSources; } }
@@ -210,7 +212,9 @@ namespace Radioactivity.Simulator
             {
                 for (int j = 0; i < allRadSinks.Count; i++)
                 {
-                    allLinks.Add(new RadiationLink(allRadSources[i], allRadSinks[j]));
+                    RadiationLink l = new RadiationLink(allRadSources[i], allRadSinks[j]);
+                    RadioactivityUI.Instance.LinkAdded(l);
+                    allLinks.Add(l);
                 }
             }
         }

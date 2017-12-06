@@ -16,8 +16,6 @@ namespace Radioactivity.UI
         private Dictionary<string, Color> colorList;
 
         private Texture generalIcons;
-        private Texture reactorIcons;
-        private Texture capacitorIcons;
 
         // Get any color, given its name
         public Color GetColor(string name)
@@ -53,10 +51,13 @@ namespace Radioactivity.UI
             iconList = new Dictionary<string, AtlasIcon>();
 
             // Add the general icons
-            iconList.Add("source", new AtlasIcon(generalIcons, 0.00f, 0.75f, 0.25f, 0.25f));
-            iconList.Add("science", new AtlasIcon(generalIcons, 0.25f, 0.75f, 0.25f, 0.25f));
-            iconList.Add("probe", new AtlasIcon(generalIcons, 0.50f, 0.75f, 0.25f, 0.25f));
-            iconList.Add("kerbal", new AtlasIcon(generalIcons, 0.75f, 0.75f, 0.25f, 0.25f));
+            iconList.Add("source", new AtlasIcon(generalIcons, 0.00f, 0.5f, 0.5f, 0.5f));
+            iconList.Add("science", new AtlasIcon(generalIcons, 0.5f, 0.5f, 0.5f, 0.5f));
+            iconList.Add("probe", new AtlasIcon(generalIcons, 0.0f, 0.0f, 0.5f, 0.5f));
+            iconList.Add("kerbal", new AtlasIcon(generalIcons, 0.5f, 0.0f, 0.5f, 0.5f));
+
+            iconList.Add("kerbal_sick", new AtlasIcon(generalIcons, 0.5f, 0.0f, 0.5f, 0.5f));
+            iconList.Add("kerbal_dead", new AtlasIcon(generalIcons, 0.5f, 0.0f, 0.5f, 0.5f));
 
         }
 
@@ -89,6 +90,14 @@ namespace Radioactivity.UI
             styleList.Add("mini_group", new GUIStyle(draftStyle));
 
             draftStyle = new GUIStyle(HighLogic.Skin.label);
+            draftStyle.fontSize = 11;
+            draftStyle.padding = new RectOffset(5, 0, 0, 0);
+            draftStyle.alignment = TextAnchor.MiddleLeft;
+            draftStyle.normal.textColor = Color.white;
+            draftStyle.stretchWidth = true;
+            styleList.Add("mini_text_rad", new GUIStyle(draftStyle));
+
+            draftStyle = new GUIStyle(HighLogic.Skin.label);
             draftStyle.fontSize = 10;
             draftStyle.padding = new RectOffset(0, 0, 0, 0);
             draftStyle.alignment = TextAnchor.UpperLeft;
@@ -105,7 +114,7 @@ namespace Radioactivity.UI
             styleList.Add("mini_text_body", new GUIStyle(draftStyle));
 
             draftStyle = new GUIStyle(HighLogic.Skin.label);
-            draftStyle.fontSize = 8;
+            draftStyle.fontSize = 10;
             draftStyle.padding = new RectOffset(0, 0, 0, 0);
             styleList.Add("mini_button", new GUIStyle(draftStyle));
 

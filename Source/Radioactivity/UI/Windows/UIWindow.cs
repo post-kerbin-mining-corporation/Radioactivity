@@ -12,7 +12,7 @@ namespace Radioactivity.UI
         protected RadioactivityUI host;
         protected bool drawn = false;
 
-        public UIWindow(Random randomizer, RadioactivityUI uiHost)
+        public UIWindow(System.Random randomizer, RadioactivityUI uiHost)
         {
             host = uiHost;
             windowID = randomizer.Next();

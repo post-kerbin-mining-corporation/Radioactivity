@@ -83,7 +83,6 @@ namespace Radioactivity
 
         public void AddRadiation(string src, float amt)
         {
-
             sourceDictionary[src] = amt;
             currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
         }

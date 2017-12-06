@@ -22,7 +22,8 @@ namespace Radioactivity.UI
         {
             root = new GameObject("RadioactiveLinkRendererRoot");
             link = toRender;
-
+            if (RadioactivityConstants.debugOverlay)
+                Utils.Log("[OverlayLinkRenderer]: Initialized");
             if (HighLogic.LoadedSceneIsFlight)
             {
                 root.transform.SetParent(link.source.part.partTransform, true);
@@ -42,24 +43,43 @@ namespace Radioactivity.UI
 
         public void Rebuild()
         {
+            
             DestroyAll();
             for (int i = 0; i < link.Path.Count; i++)
             {
                 renderers.Add(new OverlayLinkZone(link.Path[i], link, root.transform));
             }
+            if (RadioactivityConstants.debugOverlay)
+                Utils.Log("[OverlayLinkRenderer]: Rebuilt");
+        }
+
+        public void Update(bool complex)
+        {
+            if (complex)
+                Rebuild();
+            else 
+                for (int i = 0; i < renderers.Count; i++)
+                {
+                    renderers[i].SetAttenuation();
+                }
         }
 
         public void DestroyAll()
         {
+            
             for (int i = 0; i < renderers.Count; i++)
             {
                 renderers[i].Destroy();
             }
             renderers.Clear();
+            if (RadioactivityConstants.debugOverlay)
+                Utils.Log("[OverlayLinkRenderer]: Destroyed");
         }
 
         public void SetEnabled(bool on)
         {
+            if (RadioactivityConstants.debugOverlay)
+                Utils.Log("[OverlayLinkRenderer]: On/Off Toggle");
             drawn = on;
             for (int i = 0; i < renderers.Count; i++)
             {
@@ -88,6 +108,8 @@ namespace Radioactivity.UI
                 CreateBasicRenderer(parent);
                 SetAttenuation();
                 SetPosition();
+                if (RadioactivityConstants.debugOverlay)
+                    Utils.Log("[OverlayLinkZone]: Initialized");
             }
 
             public void SetEnabled(bool on)
@@ -95,13 +117,14 @@ namespace Radioactivity.UI
                 drawn = on;
                 renderer.enabled = on;
             }
-
-
             public void SetAttenuation()
             {
-                
-                renderer.SetColors(RadioactivityConstants.overlayRayGradient.Evaluate((float)(link.inputFlux * zone.attenuationIn)),
-                                   RadioactivityConstants.overlayRayGradient.Evaluate((float)(link.inputFlux * zone.attenuationOut)));
+                //Utils.Log(String.Format("{0} -> {1}", link.inputFlux*zone.attenuationIn, link.inputFlux * zone.attenuationOut));
+                //Utils.Log(String.Format("{0} -> {1}",
+                                        //RadioactivityConstants.overlayRayGradient.Evaluate((float)(link.inputFlux * zone.attenuationIn)),
+                                        //RadioactivityConstants.overlayRayGradient.Evaluate((float)(link.inputFlux * zone.attenuationOut))));
+                renderer.SetColors(RadioactivityConstants.overlayRayGradient.Evaluate((float)(link.inputFlux * zone.attenuationIn)/10000f ),
+                                   RadioactivityConstants.overlayRayGradient.Evaluate((float)(link.inputFlux * zone.attenuationOut)/10000f ) );
             }
             public void SetPosition()
             {
@@ -131,6 +154,7 @@ namespace Radioactivity.UI
                 renderer.material.renderQueue = 3000;
                 go.layer = 0;
                 renderer.SetVertexCount(2);
+                renderer.SetWidth(RadioactivityConstants.overlayRayWidthMin, RadioactivityConstants.overlayRayWidthMin);
 
             }
         }

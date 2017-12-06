@@ -114,10 +114,14 @@ namespace Radioactivity
 
         protected void Start()
         {
-            // Wait breifly before setting up the simulation
-            StartCoroutine(WaitForInit(0.1f));
-            Utils.Log("[Radioactivity]: Simulation started...");
-            radSim = new RadioactivitySimulator();
+            if (HighLogic.LoadedSceneIsGame)
+            {
+                radSim = new RadioactivitySimulator();
+                // Wait breifly before setting up the simulation
+                StartCoroutine(WaitForInit(0.1f));
+                Utils.Log("[Radioactivity]: Simulation started...");
+                radSim.StartSimulation();
+            }
         }
 
         protected IEnumerator WaitForInit(float t)

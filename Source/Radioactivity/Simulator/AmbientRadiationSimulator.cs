@@ -8,7 +8,6 @@ namespace Radioactivity.Simulator
         public AmbientRadiationSimulator()
         {
             Utils.Log("[AmbientRadiationSimulator]: Initializing simulator");
-
         }
 
         public void Simulate(float fixedDeltaTime)

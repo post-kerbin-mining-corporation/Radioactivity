@@ -17,13 +17,12 @@ namespace Radioactivity.UI
         bool showSourceInfo = false;
         bool showSinkInfo = false;
         bool showWindow = false;
-        bool showRays = false;
+
 
         Vector2 iconDims = new Vector2(32f, 32f);
         Vector2 infoBarDims = new Vector2(16, 16);
         Vector2 windowDims = new Vector2(150f, 20f);
 
-        Vector3 worldPosition;
         Vector3 screenPosition;
         Rect windowPosition;
         RadioactiveSource source;
@@ -32,14 +31,17 @@ namespace Radioactivity.UI
         {
             source = src;
             // Set up screen position
-            screenPosition = Camera.main.WorldToScreenPoint(source.part.transform.position);
-            windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
+            //screenPosition = Camera.main.WorldToScreenPoint(source.EmitterTransform.position);
+            //windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
         }
 
         public void UpdatePositions()
         {
-            screenPosition = Camera.main.WorldToScreenPoint(source.EmitterTransform.position);
-            windowPosition = new Rect(screenPosition.x + iconDims.x / 2 + 5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
+            if (source.EmitterTransform != null)
+            {
+                screenPosition = Camera.main.WorldToScreenPoint(source.EmitterTransform.position);
+                windowPosition = new Rect(screenPosition.x + iconDims.x / 2 + 5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
+            }
         }
 
         public void Draw()
@@ -53,15 +55,19 @@ namespace Radioactivity.UI
         internal void DrawButton()
         {
             Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, Screen.height - screenPosition.y - iconDims.y / 2f, iconDims.x, iconDims.y);
-            Rect labelRect = new Rect(buttonRect.xMax + 5f, buttonRect.yMin + buttonRect.height / 2 - infoBarDims.y / 2f, 90f, infoBarDims.y);
+            Rect groupRect = new Rect(buttonRect.xMax + 5f, buttonRect.yMin + buttonRect.height / 2 - infoBarDims.y / 2f, 90f, infoBarDims.y);
 
             GUI.DrawTextureWithTexCoords(buttonRect, host.GUIResources.GetIcon(source.IconID).iconAtlas, host.GUIResources.GetIcon(source.IconID).iconRect);
-            GUILayout.BeginArea(labelRect, host.GUIResources.GetStyle("mini_group"));
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(source.CurrentEmission, "F2")), host.GUIResources.GetStyle("mini_text_body"), GUILayout.MinWidth(60f));
+            GUI.BeginGroup(groupRect, host.GUIResources.GetStyle("mini_group"));
 
-            if (GUILayout.Button("...", host.GUIResources.GetStyle("mini_button"), GUILayout.Width(12), GUILayout.Height(12)))
+            Rect labelRect = new Rect(0f, 0f, 90f, 16f);
+            Rect sourceButtonRect = new Rect(90f, 0f, 16f, 16f);
+
+            GUI.Label(labelRect, String.Format("{0} Sv/s", Utils.ToSI(source.CurrentEmission, "F2")), host.GUIResources.GetStyle("mini_text_rad"));
+
+            if (GUI.Button(sourceButtonRect, "...", host.GUIResources.GetStyle("mini_button")))
             {
+                Utils.Log("CLICKKER");
                 showSourceInfo = !showSourceInfo;
                 if (showSourceInfo && !showWindow)
                     showWindow = true;
@@ -69,15 +75,17 @@ namespace Radioactivity.UI
                     showWindow = false;
             }
 
-            GUILayout.EndHorizontal();
-            GUILayout.EndArea();
+            GUI.EndGroup();
         }
         internal void DrawWindow(int WindowID)
         {
-            //if (DrawSinkDetails)
-            //  DrawSinkDetails();
-            if (showSourceInfo)
-                DrawSourceDetails();
+            if (drawn)
+            {
+                //if (DrawSinkDetails)
+                //  DrawSinkDetails();
+                if (showSourceInfo)
+                    DrawSourceDetails();
+            }
         }
 
         internal void DrawSourceDetails()

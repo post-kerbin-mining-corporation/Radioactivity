@@ -46,6 +46,19 @@ namespace Radioactivity.Simulator
             }
         }
 
+
+        public void StartSimulation()
+        {
+            Enabled = true;
+            if (RadioactivitySimulationSettings.SimulatePointRadiation)
+            {
+                PointSim.SimReady = true;
+            }
+            if (RadioactivitySimulationSettings.SimulateAmbientRadiation)
+            {
+            }
+        }
+
         /// <summary>
         /// Does the actual simulation given a delta time
         /// </summary>

@@ -81,7 +81,6 @@
     <Compile Include="Simulator\AttenuationZone.cs" />
     <Compile Include="Simulator\RadioactivitySimulator.cs" />
     <Compile Include="Simulator\AmbientRadiationSimulator.cs" />
-    <Compile Include="Simulator\RadiationShadowShield.cs" />
     <Compile Include="Persistence\RadioactivityPersistance.cs" />
     <Compile Include="Persistence\KerbalDatabase.cs" />
     <Compile Include="AtmosphereUtils.cs" />
@@ -98,8 +97,10 @@
     <Compile Include="UI\Windows\UIWindow.cs" />
     <Compile Include="UI\Overlay\RadioactivityOverlay.cs" />
     <Compile Include="UI\Overlay\OverlayLinkRenderer.cs" />
-    <Compile Include="UI\Overlay\ShadowShieldRenderer.cs" />
+    <Compile Include="UI\Overlay\OverlayShadowShieldRenderer.cs" />
     <Compile Include="UI\Overlay\OverlayRenderer.cs" />
+    <Compile Include="Simulator\ShadowShield.cs" />
+    <Compile Include="Modules\RadiationShadowShield.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Simulator\" />

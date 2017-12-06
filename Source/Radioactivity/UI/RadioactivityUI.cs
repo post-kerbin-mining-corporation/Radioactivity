@@ -15,11 +15,13 @@ namespace Radioactivity.UI
         public UIOverlayWindow OverlayWindow { get { return overlayWindow; } }
         public UIEditorWindow EditorWindow { get { return editorWindow; } }
         public UIRosterWindow RosterWindow { get { return rosterWindow; } }
-
+        public int UnitMode { get { return unitMode; }}
         public UIResources GUIResources { get { return resources; } }
 
         public static RadioactivityUI Instance { get; private set; }
 
+        private int unitMode = 0;
+        private string[] unitModeStrings = new string[] { "Flux", "Time to Sickness", "Time to Death"};
 
         private UIResources resources;
 
@@ -27,7 +29,6 @@ namespace Radioactivity.UI
         private bool initStyles = false;
 
         private Rect mainWindowPos = new Rect(5, 15, 150, 120);
-        private Rect rosterWindowPos = new Rect(210, 15, 350, 450);
 
         private UIOverlayWindow overlayWindow;
         private UIEditorWindow editorWindow;
@@ -66,6 +67,7 @@ namespace Radioactivity.UI
             overlayWindow.Drawn = RadioactivityPreferences.overlayShown;
             editorWindow.Drawn = RadioactivityPreferences.editorShown;
             rosterWindow.Drawn = RadioactivityPreferences.rosterShown;
+            unitMode = RadioactivityPreferences.unitMode;
         }
 
         /// <summary>
@@ -85,6 +87,19 @@ namespace Radioactivity.UI
             overlayWindow.Update();
             editorWindow.Update();
             rosterWindow.Update();
+
+            if (uiShown)
+            {
+                Vector3 pos = stockToolbarButton.GetAnchor();
+                if (ApplicationLauncher.Instance.IsPositionedAtTop)
+                {
+                    mainWindowPos = new Rect(Screen.width - 160f, 0f, 120f, 100f);
+                }
+                else
+                {
+                    mainWindowPos = new Rect(Screen.width - 240f, Screen.height - 150f, 120f, 100f);
+                }
+            }
         }
 
         /// <summary>
@@ -112,10 +127,8 @@ namespace Radioactivity.UI
                 mainWindowPos = GUILayout.Window(windowIdentifier,
                                                 mainWindowPos,
                                                 DrawMainWindow,
-                                                "Radioactivity",
-                                                resources.GetStyle("main_window"),
-                                                GUILayout.MinHeight(20),
-                                                GUILayout.ExpandHeight(true));
+                                                "",
+                                                resources.GetStyle("main_window"));
             }
 
             /// We can draw these anytime without the options window
@@ -130,10 +143,13 @@ namespace Radioactivity.UI
         /// <param name="WindowID">Window identifier.</param>
         public void DrawMainWindow(int WindowID)
         {
+            GUILayout.BeginHorizontal();
+
             GUILayout.BeginVertical();
             if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
             {
                 overlayWindow.Drawn = GUILayout.Toggle(overlayWindow.Drawn, "Overlay", resources.GetStyle("main_button"));
+                RadioactivityOverlay.Instance.SetEnabled(overlayWindow.Drawn);
             }
             rosterWindow.Drawn = GUILayout.Toggle(rosterWindow.Drawn, "Roster", resources.GetStyle("main_button"));
             if (HighLogic.LoadedSceneIsEditor)
@@ -142,7 +158,16 @@ namespace Radioactivity.UI
             }
 
             GUILayout.EndVertical();
-            GUI.DragWindow();
+            GUILayout.BeginVertical();
+            GUILayout.Label("Overlay Unit\n Display Mode", resources.GetStyle("mini_text_header"));
+            if (GUILayout.Button(unitModeStrings[unitMode], resources.GetStyle("main_button")))
+            {
+                unitMode++;
+                if (unitMode >= unitModeStrings.Length)
+                    unitMode = 0;
+            }
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
         }
 
         /// <summary>
@@ -174,6 +199,7 @@ namespace Radioactivity.UI
         {
             if (overlayWindow != null)
                 overlayWindow.UpdateSinkList();
+            
         }
         public void SinkRemoved(RadioactiveSink snk)
         {
@@ -184,19 +210,33 @@ namespace Radioactivity.UI
         {
             if (overlayWindow != null)
                 overlayWindow.UpdateSourceList();
+            if (src.ShadowShields.Count > 0)
+            {
+                for (int i = 0; i< src.ShadowShields.Count;i++)
+                {
+                    RadioactivityOverlay.Instance.RemoveShadowShield(src.ShadowShields[i]);
+                }
+            }
         }
         public void SourceAdded(RadioactiveSource src)
         {
             if (overlayWindow != null)
                 overlayWindow.UpdateSourceList();
+            if (src.ShadowShields.Count > 0)
+            {
+                for (int i = 0; i < src.ShadowShields.Count; i++)
+                {
+                    RadioactivityOverlay.Instance.AddShadowShield(src.ShadowShields[i], src);
+                }
+            }
         }
         public void LinkAdded(RadiationLink lnk)
         {
-
+            RadioactivityOverlay.Instance.AddLink(lnk);
         }
         public void LinkRemoved(RadiationLink lnk)
         {
-
+            RadioactivityOverlay.Instance.RemoveLink(lnk);
         }
 
         // App Launchers
@@ -222,15 +262,11 @@ namespace Radioactivity.UI
         {
             uiShown = true;
             stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
-            //if (overlayShown)
-            //Radioactivity.Instance.ShowAllOverlays();
         }
         private void OnToolbarButtonOff()
         {
             uiShown = false;
             stockToolbarButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(uiShown ? "Radioactivity/UI/toolbar_on" : "Radioactivity/UI/toolbar_off", false));
-            //Radioactivity.Instance.HideAllOverlays();
-
         }
 
         void OnGUIAppLauncherReady()

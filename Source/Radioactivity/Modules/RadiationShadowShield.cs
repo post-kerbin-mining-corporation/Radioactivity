@@ -5,66 +5,53 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Radioactivity.Interfaces;
+using Radioactivity.Simulator;
 
 namespace Radioactivity
 {
 
-  public class RadiationShadowShield: PartModule
-  {
-
-      [KSPField(isPersistant = false)]
-      public string ShieldName = "Shadow Shield";
-
-    [KSPField(isPersistant = false)]
-    public string ShieldGeometry = "DISC";
-
-    public float ShieldRadius = 1f;
-
-    // Local shield position in part space, Vector frmf
-    [KSPField(isPersistant = false)]
-    public string ShieldPosition;
-
-    [KSPField(isPersistant = false)]
-    public float Density;
-    [KSPField(isPersistant = false)]
-    public float Thickness;
-    [KSPField(isPersistant = false)]
-    public float MassAttenuationCoeffecient;
-
-    protected Vector3 shieldPosition;
-
-    public ShadowShieldEffect BuildShadowShield(Transform emitter)
+    public class RadiationShadowShield : PartModule
     {
-      return new ShadowShieldEffect(Density, Thickness, MassAttenuationCoeffecient, emitter.position, shieldPosition-emitter.postion, shieldPosition,ShieldRadius);
-    }
 
+        [KSPField(isPersistant = false)]
+        public string ShieldName = "Shadow Shield";
 
-  }
+        [KSPField(isPersistant = false)]
+        public string ShieldGeometry = "DISC";
 
-  public class ShadowShieldEffect
-  {
-    Vector3 orientation;
-    float angle;
-    double outAttenuation;
+        [KSPField(isPersistant = false)]
+        public float ShieldRadius = 1f;
 
-    public ShadowShieldEffect(float density, float thickness, float coeff, Vector3 emitterPos, Vector3 shieldOrient, Vector3 shieldPos, float shieldRad)
-    {
-      outAttenuation = Math.Exp(-1d * (double)(density * thickness * coeff));
-      angle = Mathf.Atan((shieldRad*2f)/(2f*Vector3.Distance(emitterPos, shieldPos)));
-      orientation = shieldOrient;
-    }
+        // Local shield position in part space, Vector frmf
+        [KSPField(isPersistant = false)]
+        public string ShieldPosition;
 
-    public double AttenuateShield(Vector3 rayDir)
-    {
-      if (Vector3.Angle(rayDir, orientation) <= angle)
-      {
-        return outAttenuation;
+        [KSPField(isPersistant = false)]
+        public float Density;
+        [KSPField(isPersistant = false)]
+        public float Thickness;
+        [KSPField(isPersistant = false)]
+        public float MassAttenuationCoeffecient;
 
-      } else
-      {
-        return 1d;
-      }
+        protected Vector3 shieldPosition;
+
+        public override void OnStart(PartModule.StartState state)
+        {
+
+            base.OnStart(state);
+
+        }
+        public ShadowShield BuildShadowShield(Transform emitter)
+        {
+            shieldPosition = Utils.Vector3FromString(ShieldPosition);
+            return new ShadowShield(this.part, 
+                                    Density, 
+                                    Thickness, 
+                                    MassAttenuationCoeffecient, emitter, 
+                                    shieldPosition - emitter.localPosition, 
+                                    shieldPosition, 
+                                    ShieldRadius);
+        }
 
     }
-  }
 }

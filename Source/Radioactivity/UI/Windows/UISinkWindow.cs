@@ -32,17 +32,22 @@ namespace Radioactivity.UI
 
         public UISinkWindow(RadioactiveSink snk, System.Random randomizer, RadioactivityUI uiHost): base(randomizer, uiHost)
         {
+            
             sink = snk;
             // Set up screen position
-            screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
-            windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
+            //screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
+            //windowPosition = new Rect(screenPosition.x + 50f, Screen.height - screenPosition.y + windowDims.y / 2f, windowDims.x, windowDims.y);
+
         }
 
         public void UpdatePositions()
         {
             // Set up screen position
-            screenPosition = Camera.main.WorldToScreenPoint(sink.part.transform.position);
-            windowPosition = new Rect(screenPosition.x + iconDims.x / 2 + 5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
+            if (sink.SinkTransform != null)
+            {
+                screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
+                windowPosition = new Rect(screenPosition.x + iconDims.x / 2 + 5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
+            }    
         }
 
         public void Draw()
@@ -60,19 +65,23 @@ namespace Radioactivity.UI
             Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, 
                                        Screen.height - screenPosition.y - iconDims.y / 2f, 
                                        iconDims.x, iconDims.y);
-            Rect labelRect = new Rect(buttonRect.xMax + 5f, 
+            Rect groupRect = new Rect(buttonRect.xMax + 5f, 
                                       buttonRect.yMin + buttonRect.height / 2 - infoBarDims.y / 2f, 
-                                      110f, infoBarDims.y);
+                                      120f, infoBarDims.y);
 
             GUI.DrawTextureWithTexCoords(buttonRect, 
-                                         host.GUIResources.GetIcon(sink.IconID).iconAtlas, host.GUIResources.GetIcon(sink.IconID).iconRect);
-            GUILayout.BeginArea(labelRect, host.GUIResources.GetStyle("mini_group"));
+                                         host.GUIResources.GetIcon(sink.IconID).iconAtlas, 
+                                         host.GUIResources.GetIcon(sink.IconID).iconRect);
+            GUI.BeginGroup(groupRect, host.GUIResources.GetStyle("mini_group"));
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(String.Format("{0} Sv/s", Utils.ToSI(sink.CurrentRadiation, "F2")), 
-                            host.GUIResources.GetStyle("mini_text_body"), GUILayout.MinWidth(60f));
+            Rect labelRect = new Rect(0f, 0f, 90f, 16f);
+            Rect sinkButtonRect = new Rect(90f, 0f, 16f, 16f);
+            Rect sourceButtonRect = new Rect(106f, 0f, 16f, 16f);
 
-            if (GUILayout.Button("...", host.GUIResources.GetStyle("mini_button"), GUILayout.Width(12), GUILayout.Height(12)))
+            GUI.Label(labelRect, Utils.FormatFluxString(RadioactivityUI.Instance.UnitMode, sink.CurrentRadiation), 
+                      host.GUIResources.GetStyle("mini_text_rad"));
+
+            if (GUI.Button(sinkButtonRect, "...", host.GUIResources.GetStyle("mini_button")))
             {
                 showSinkInfo = !showSinkInfo;
                 if (showSinkInfo && !showWindow)
@@ -80,7 +89,7 @@ namespace Radioactivity.UI
                 if (!showSinkInfo && !showSourceInfo)
                     showWindow = false;
             }
-            if (GUILayout.Button("->", host.GUIResources.GetStyle("mini_button"), GUILayout.Width(12), GUILayout.Height(12)))
+            if (GUI.Button(sourceButtonRect, "->", host.GUIResources.GetStyle("mini_button")))
             {
                 showSourceInfo = !showSourceInfo;
                 if (showSourceInfo && !showWindow)
@@ -89,17 +98,20 @@ namespace Radioactivity.UI
                     showWindow = false;
             }
 
-            GUILayout.EndHorizontal();
-            GUILayout.EndArea();
+
+            GUI.EndGroup();
         }
 
 
         internal void DrawWindow(int WindowID)
         {
-            if (showSinkInfo)
-                DrawSinkDetails();
-            if (showSourceInfo)
-                DrawSourceDetails();
+            if (drawn)
+            {
+                if (showSinkInfo)
+                    DrawSinkDetails();
+                if (showSourceInfo)
+                    DrawSourceDetails();
+            }
         }
 
         internal void DrawSinkDetails()
@@ -125,10 +137,12 @@ namespace Radioactivity.UI
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("<b>" + kvp.Key + "</b>", host.GUIResources.GetStyle("mini_text_header"));
-                GUILayout.Label(String.Format("{0}Sv/s", Utils.ToSI(kvp.Value, "F2")), host.GUIResources.GetStyle("mini_text_body"));
+                GUILayout.Label(String.Format("{0} Sv/s", Utils.ToSI(kvp.Value, "F2")), host.GUIResources.GetStyle("mini_text_body"));
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndVertical();
         }
+
+
     }
 }
