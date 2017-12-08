@@ -22,8 +22,6 @@ namespace Radioactivity.Simulator
             if (HighLogic.LoadedSceneIsFlight)
             {
                 
-                
-                        
             }
         }
     }

@@ -119,7 +119,11 @@ namespace Radioactivity.UI
         public void OnUIDraw()
         {
             if (!initStyles)
+            {
                 InitStyles();
+             
+            }
+            GUI.skin = HighLogic.Skin;
 
             // Draw the main window which is the options window
             if (uiShown)
@@ -132,6 +136,7 @@ namespace Radioactivity.UI
             }
 
             /// We can draw these anytime without the options window
+
             DrawOverlay();
             DrawEditor();
             DrawRoster();
@@ -146,13 +151,13 @@ namespace Radioactivity.UI
             GUILayout.BeginHorizontal();
 
             GUILayout.BeginVertical();
-            if (HighLogic.LoadedSceneIsFlight || HighLogic.LoadedSceneIsEditor)
+            if ((HighLogic.LoadedSceneIsFlight && !MapView.MapIsEnabled) || HighLogic.LoadedSceneIsEditor)
             {
                 overlayWindow.Drawn = GUILayout.Toggle(overlayWindow.Drawn, "Overlay", resources.GetStyle("main_button"));
                 RadioactivityOverlay.Instance.SetEnabled(overlayWindow.Drawn);
             }
             rosterWindow.Drawn = GUILayout.Toggle(rosterWindow.Drawn, "Roster", resources.GetStyle("main_button"));
-            if (HighLogic.LoadedSceneIsEditor)
+            if (HighLogic.LoadedSceneIsEditor && RadioactivitySimulationSettings.SimulateAmbientRadiation)
             {
                 editorWindow.Drawn = GUILayout.Toggle(editorWindow.Drawn, "Simulation", resources.GetStyle("main_button"));
             }

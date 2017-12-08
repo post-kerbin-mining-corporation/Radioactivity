@@ -166,7 +166,7 @@ namespace Radioactivity
         {
             if (!registered)
             {
-                Radioactivity.Instance.RadSim.PointSim.RegisterSink(this);
+                Radioactivity.Instance.RadSim.RegisterSink(this);
                 registered = true;
             }
         }
@@ -174,7 +174,7 @@ namespace Radioactivity
         {
             if (registered)
             {
-                Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
+                Radioactivity.Instance.RadSim.UnregisterSink(this);
                 registered = false;
             }
         }
@@ -186,7 +186,7 @@ namespace Radioactivity
             {
                 if (Radioactivity.Instance.RadSim != null)
                 {
-                    Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
+                    Radioactivity.Instance.RadSim.UnregisterSink(this);
                     registered = false;
                 }
             }
@@ -194,7 +194,7 @@ namespace Radioactivity
             {
                 if (Radioactivity.Instance.RadSim != null)
                 {
-                    Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
+                    Radioactivity.Instance.RadSim.UnregisterSink(this);
                     registered = false;
                 }
             }

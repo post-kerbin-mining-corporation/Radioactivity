@@ -131,7 +131,6 @@ namespace Radioactivity.UI
             draftStyle.fontSize = 11;
             styleList.Add("roster_body", new GUIStyle(draftStyle));
 
-
             draftStyle = new GUIStyle(HighLogic.Skin.label);
             styleList.Add("roster_value", new GUIStyle(draftStyle));
             draftStyle = new GUIStyle(HighLogic.Skin.button);
@@ -152,6 +151,22 @@ namespace Radioactivity.UI
             styleList.Add("roster_slider", new GUIStyle(draftStyle));
             draftStyle = new GUIStyle(HighLogic.Skin.horizontalSliderThumb);
             styleList.Add("roster_slider_thumb", new GUIStyle(draftStyle));
+
+            draftStyle = new GUIStyle(HighLogic.Skin.label);
+            draftStyle.fontSize = 13;
+            draftStyle.padding = new RectOffset(5, 0, 0, 0);
+            draftStyle.alignment = TextAnchor.MiddleLeft;
+            draftStyle.normal.textColor = Color.white;
+            draftStyle.stretchWidth = true;
+            styleList.Add("editor_text", new GUIStyle(draftStyle));
+
+            draftStyle = new GUIStyle(HighLogic.Skin.label);
+            draftStyle.fontSize = 13;
+            draftStyle.padding = new RectOffset(0, 0, 0, 0);
+            draftStyle.alignment = TextAnchor.UpperLeft;
+            draftStyle.normal.textColor = Color.white;
+            draftStyle.stretchWidth = true;
+            styleList.Add("editor_header", new GUIStyle(draftStyle));
 
         }
         void CreateColorList()

@@ -110,7 +110,7 @@ namespace Radioactivity
 
             if (HighLogic.LoadedSceneIsFlight && !registered)
             {
-                Radioactivity.Instance.RadSim.PointSim.RegisterSource(this);
+                Radioactivity.Instance.RadSim.RegisterSource(this);
                 registered = true;
             }
         }
@@ -133,7 +133,7 @@ namespace Radioactivity
 
             if (HighLogic.LoadedSceneIsFlight)
             {
-                Radioactivity.Instance.RadSim.PointSim.UnregisterSource(this);
+                Radioactivity.Instance.RadSim.UnregisterSource(this);
                 registered = false;
             }
         }

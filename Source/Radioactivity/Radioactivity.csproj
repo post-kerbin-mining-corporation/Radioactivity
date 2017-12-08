@@ -103,6 +103,7 @@
     <Compile Include="Simulator\KerbalSimulator.cs" />
     <Compile Include="Simulator\RadioactivityEnvironmentData.cs" />
     <Compile Include="Simulator\RadioactivityEnvironment.cs" />
+    <Compile Include="Simulator\RadiationVessel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Simulator\" />

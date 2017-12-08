@@ -1,19 +1,20 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Simulator/VesselSimulator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="UI/RadioactivityUI.cs">
     <Files>
-      <File FileName="Simulator/KerbalSimulator.cs" Line="93" Column="99" />
-      <File FileName="Modules/RadiationShieldedCrewContainer.cs" Line="101" Column="2" />
-      <File FileName="Persistence/RadioactivityPersistance.cs" Line="45" Column="9" />
-      <File FileName="Modules/RadioactiveSink.cs" Line="76" Column="33" />
-      <File FileName="Persistence/RadioactivityKerbal.cs" Line="52" Column="52" />
-      <File FileName="Simulator/RadioactivityEnvironmentData.cs" Line="13" Column="9" />
-      <File FileName="Simulator/RadioactivityEnvironment.cs" Line="35" Column="45" />
-      <File FileName="Simulator/VesselSimulator.cs" Line="9" Column="9" />
+      <File FileName="UI/Windows/UIEditorWindow.cs" Line="116" Column="59" />
+      <File FileName="Settings/RadioactivityPreferences.cs" Line="29" Column="52" />
+      <File FileName="UI/Windows/UIRosterWindow.cs" Line="19" Column="59" />
+      <File FileName="UI/Windows/UIResources.cs" Line="169" Column="65" />
+      <File FileName="Settings/RadioactivitySettings.cs" Line="13" Column="49" />
+      <File FileName="UI/Windows/UIWindow.cs" Line="16" Column="10" />
+      <File FileName="UI/RadioactivityUI.cs" Line="126" Column="39" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/github/Radioactivity/Source/Radioactivity/Simulator/AmbientRadiationSimulator.cs" relfile="Simulator/AmbientRadiationSimulator.cs" line="97" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
