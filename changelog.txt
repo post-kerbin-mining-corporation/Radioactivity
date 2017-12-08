@@ -12,7 +12,11 @@ v0.2.0
 -- Ray color is now scaled to absolute flux to help design
 -- Ray overlay can be set to display sinks in flux units (Sv) or time units (time to rad sickness or death)
 -- Improved overlay display of shadow shields
-- Module improvements
+- Simulation improvements
+-- Improved performance in all areas
+-- Improved parameterization and logging for all components
+-- Point simulation is disabled in flight for empty crew containers (saves cycles)
+-- Point simulation is disabled in flight for empty probe cores (saves cycles)
 -- RadioactiveEngine now takes the tweakable thrust limiter into account when handling emission
 
 v0.1.1

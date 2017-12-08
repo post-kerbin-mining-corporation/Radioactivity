@@ -47,7 +47,10 @@ namespace Radioactivity.UI
             DestroyAll();
             for (int i = 0; i < link.Path.Count; i++)
             {
-                renderers.Add(new OverlayLinkZone(link.Path[i], link, root.transform));
+                OverlayLinkZone zn = new OverlayLinkZone(link.Path[i], link, root.transform);
+                zn.SetEnabled(drawn);
+                renderers.Add(zn);
+
             }
             if (RadioactivityConstants.debugOverlay)
                 Utils.Log("[OverlayLinkRenderer]: Rebuilt");

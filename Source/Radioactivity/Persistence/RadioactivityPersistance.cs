@@ -9,11 +9,10 @@ namespace Radioactivity
     [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER, GameScenes.FLIGHT, GameScenes.TRACKSTATION)]
     public class RadioactivityPersistance : ScenarioModule
     {
-
+        public KerbalDatabase KerbalDB { get { return kerbalDB; }}
         public static RadioactivityPersistance Instance { get; private set; }
 
-        internal KerbalDatabase KerbalDB;
-        internal bool databaseReady = false;
+        internal KerbalDatabase kerbalDB;
 
         public override void OnAwake()
         {
@@ -21,7 +20,7 @@ namespace Radioactivity
             Instance = this;
             base.OnAwake();
 
-            KerbalDB = new KerbalDatabase();
+            kerbalDB = new KerbalDatabase();
         }
 
         public override void OnLoad(ConfigNode node)
@@ -32,7 +31,7 @@ namespace Radioactivity
             RadioactivityPreferences.Load(node);
             RadioactivityConstants.Load();
             Utils.Log("[Persistance]: Done Loading");
-            databaseReady = true;
+            KerbalDB.Ready = true;
 
         }
 
@@ -42,22 +41,6 @@ namespace Radioactivity
             base.OnSave(node);
             KerbalDB.Save(node);
             Utils.Log("[Persistance]: Finished Saving");
-        }
-
-        internal void FixedUpdate()
-        {
-
-        }
-
-        public void SimulateKerbals(float time)
-        {
-            if (databaseReady)
-            {
-                foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
-                {
-                    kerbal.Value.Simulate(time);
-                }
-            }
         }
 
         public List<RadioactivityKerbal> GetKerbals(List<ProtoCrewMember> crew)
@@ -74,28 +57,5 @@ namespace Radioactivity
             }
             return toReturn;
         }
-
-        // Irradiates a kerbal
-        public void IrradiateKerbal(ProtoCrewMember crew, Vessel crewVessel, double pointAmount)
-        {
-            foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
-            {
-                if (crew == kerbal.Value.Kerbal)
-                    kerbal.Value.IrradiatePoint(crewVessel, pointAmount);
-            }
-        }
-        public void IrradiateKerbal(ProtoCrewMember crew, Vessel crewVessel, double pointAmount, double bodyFraction, double skyFraction, double partFraction)
-        {
-            foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
-            {
-                if (crew == kerbal.Value.Kerbal)
-                {
-                    kerbal.Value.IrradiatePoint(crewVessel, pointAmount);
-                    //kerbal.Value.SetAmbientExposure(bodyFraction, skyFraction, partFraction);
-                }
-            }
-        }
-
-
     }
 }

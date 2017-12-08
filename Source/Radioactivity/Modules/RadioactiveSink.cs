@@ -27,6 +27,13 @@ namespace Radioactivity
         [KSPField(isPersistant = false)]
         public string IconID = "kerbal";
 
+        // Ambient radiation field parameters
+        [KSPField(isPersistant = true)]
+        public double GroundFractionVisible = 0d;
+
+        [KSPField(isPersistant = true)]
+        public double SkyFractionVisible = 0d;
+
         // Access the sink transform
         public Transform SinkTransform
         {
@@ -37,6 +44,11 @@ namespace Radioactivity
         {
             get { return currentRadiation; }
         }
+        public bool SinkEnabled
+        {
+            get { return sinkEnabled; }
+        }
+
 
         public string GetAbsorberAliases()
         {
@@ -72,6 +84,7 @@ namespace Radioactivity
 
         private Transform sinkTransform;
         private bool registered = false;
+        private bool sinkEnabled = false;
         private Dictionary<string, float> sourceDictionary = new Dictionary<string, float>();
         private List<IRadiationAbsorber> associatedAbsorbers = new List<IRadiationAbsorber>();
 
@@ -94,12 +107,33 @@ namespace Radioactivity
 
         void FixedUpdate()
         {
+            if (HighLogic.LoadedSceneIsFlight)
+            {
+                if (SinkEnabled)
+                    DoRegistration();
+                else
+                    DoDeregistration();
+            }
+            if (HighLogic.LoadedSceneIsEditor)
+            {
+                DoRegistration();
+            }
+
             if (associatedAbsorbers != null)
             {
+                bool allDisabled = false;
                 foreach (IRadiationAbsorber abs in associatedAbsorbers)
                 {
-                    abs.AddRadiation((float)currentRadiation);
+                    allDisabled = !abs.IsAbsorbing();
+                    if (!allDisabled)
+                    {
+                        abs.AddRadiation((float)currentRadiation);
+                    }
                 }
+                if (allDisabled)
+                    sinkEnabled = false;
+                else
+                    sinkEnabled = true;
             }
         }
 
@@ -122,10 +156,26 @@ namespace Radioactivity
                     associatedAbsorbers.Add(abs);
             }
 
-            if (HighLogic.LoadedSceneIsFlight && !registered)
+
+            if (SinkEnabled)
+                DoRegistration();
+
+        }
+
+        protected void DoRegistration()
+        {
+            if (!registered)
             {
                 Radioactivity.Instance.RadSim.PointSim.RegisterSink(this);
                 registered = true;
+            }
+        }
+        protected void DoDeregistration()
+        {
+            if (registered)
+            {
+                Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
+                registered = false;
             }
         }
 
@@ -134,13 +184,19 @@ namespace Radioactivity
 
             if (registered)
             {
-                Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
-                registered = false;
+                if (Radioactivity.Instance.RadSim != null)
+                {
+                    Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
+                    registered = false;
+                }
             }
             if (HighLogic.LoadedSceneIsFlight)
             {
-                Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
-                registered = false;
+                if (Radioactivity.Instance.RadSim != null)
+                {
+                    Radioactivity.Instance.RadSim.PointSim.UnregisterSink(this);
+                    registered = false;
+                }
             }
         }
     }

@@ -20,6 +20,7 @@ namespace Radioactivity.Interfaces
         // Add radiation to a part. Should propagate radiation to kerbals, track it, etc.
         void AddRadiation(float amt);
 
-
+        // Determines if the absorber is active
+        bool IsAbsorbing();
     }
 }

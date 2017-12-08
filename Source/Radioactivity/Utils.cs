@@ -42,7 +42,7 @@ namespace Radioactivity
 
             int degree = Mathf.Clamp((int)Math.Floor(Math.Log10(Math.Abs(d)) / 3), -8, 8);
             if (degree == 0)
-                return d.ToString(format);
+                return d.ToString(format) + " ";
 
             double scaled = d * Math.Pow(1000, -degree);
 

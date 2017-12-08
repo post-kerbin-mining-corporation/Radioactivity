@@ -33,7 +33,7 @@ namespace Radioactivity.UI
 
         public void Update()
         {
-            if (HighLogic.LoadedSceneIsGame)
+            if (drawn && HighLogic.LoadedSceneIsGame)
             {
                 switch (modeFlag)
                 {

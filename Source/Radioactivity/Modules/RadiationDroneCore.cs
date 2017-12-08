@@ -35,9 +35,10 @@ namespace Radioactivity
         public string UIName = "Drone Core";
 
         protected int baseSAS = 0;
-
+        protected bool ready = false;
         protected double prevRadiation = 0d;
         protected ModuleSAS drone;
+        protected ModuleCommand command;
 
         public string GetAlias()
         {
@@ -78,15 +79,26 @@ namespace Radioactivity
         {
             LifetimeRadiation = LifetimeRadiation + amt;
         }
+
+        public bool IsAbsorbing()
+        {
+            if (command != null)
+            {
+                return !command.hibernation;
+            }
+            return true;
+        }
+
         public override void OnStart(PartModule.StartState state)
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
                 drone = this.GetComponent<ModuleSAS>();
+                command = this.GetComponent<ModuleCommand>();
                 if (drone != null)
                 {
                     baseSAS = drone.SASServiceLevel;
-
+                    ready = true;
                 }
             }
 
@@ -100,29 +112,28 @@ namespace Radioactivity
             CurrentRadiationString = String.Format("{0:F2} /s", LifetimeRadiation - prevRadiation);
             LifetimeRadiationString = String.Format("{0:F2}", LifetimeRadiation);
 
-            //if (HighLogic.LoadedSceneIsFlight && RadioactivityConstants.enableProbeEffects)
-            //  ApplySASPenalty();
+            if (HighLogic.LoadedSceneIsFlight && RadioactivityEffectSettings.EnableControlDegradation)
+              ApplySASPenalty();
         }
 
         void ApplySASPenalty()
         {
-            if (drone != null)
+            if (drone != null && ready)
             {
                 int frameSAS = Mathf.Clamp(baseSAS - GetSASPenalty(), 0, 3);
                 if (drone.SASServiceLevel != frameSAS)
                 {
                     drone.SASServiceLevel = frameSAS;
+                    if (RadioactivityConstants.debugModules)
+                        Utils.Log(String.Format("[RadiationDroneCore]: Set SAS level to {0}", frameSAS));
+
+                    drone.OnAwake();
+                    drone.OnActive();
+                    drone.OnStart(StartState.Flying);
                     if (this.vessel != null)
                     {
-                        if (RadioactivityConstants.debugModules)
-                            Utils.Log(String.Format("RadiationDroneCore: Set SAS level to {0:F0}", frameSAS));
                         this.vessel.Autopilot.SAS.ModuleSetup();
                         this.vessel.Autopilot.SAS.Update();
-                        drone.OnStart(StartState.Flying);
-                        this.vessel.Autopilot.SetupModules();
-                        this.vessel.Autopilot.Update();
-                        this.vessel.Autopilot.Disable();
-                        this.vessel.Autopilot.Enable();
                     }
                 }
 

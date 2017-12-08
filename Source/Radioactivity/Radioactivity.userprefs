@@ -1,16 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="UI/Windows/UIResources.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Simulator/VesselSimulator.cs">
     <Files>
-      <File FileName="UI/Overlay/OverlayShadowShieldRenderer.cs" Line="39" Column="49" />
-      <File FileName="UI/Overlay/RadioactivityOverlay.cs" Line="99" Column="72" />
-      <File FileName="UI/Overlay/OverlayLinkRenderer.cs" Line="157" Column="121" />
-      <File FileName="UI/Windows/UISourceWindow.cs" Line="66" Column="53" />
-      <File FileName="UI/Windows/UISinkWindow.cs" Line="44" Column="33" />
-      <File FileName="UI/RadioactivityUI.cs" Line="89" Column="35" />
-      <File FileName="Simulator/RadiationLink.cs" Line="113" Column="13" />
-      <File FileName="Modules/RadioactiveEngine.cs" Line="103" Column="14" />
-      <File FileName="UI/Windows/UIOverlayWindow.cs" Line="58" Column="51" />
-      <File FileName="UI/Windows/UIResources.cs" Line="117" Column="37" />
+      <File FileName="Simulator/KerbalSimulator.cs" Line="93" Column="99" />
+      <File FileName="Modules/RadiationShieldedCrewContainer.cs" Line="101" Column="2" />
+      <File FileName="Persistence/RadioactivityPersistance.cs" Line="45" Column="9" />
+      <File FileName="Modules/RadioactiveSink.cs" Line="76" Column="33" />
+      <File FileName="Persistence/RadioactivityKerbal.cs" Line="52" Column="52" />
+      <File FileName="Simulator/RadioactivityEnvironmentData.cs" Line="13" Column="9" />
+      <File FileName="Simulator/RadioactivityEnvironment.cs" Line="35" Column="45" />
+      <File FileName="Simulator/VesselSimulator.cs" Line="9" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

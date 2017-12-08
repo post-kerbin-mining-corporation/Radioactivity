@@ -58,6 +58,10 @@ namespace Radioactivity
         {
             return AbsorberID;
         }
+        public bool IsAbsorbing()
+        {
+            return true;
+        }
 
         public void AddRadiation(float amt)
         {

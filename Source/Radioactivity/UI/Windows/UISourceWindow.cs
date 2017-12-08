@@ -89,7 +89,7 @@ namespace Radioactivity.UI
 
             foreach (var kvp in source.GetEmitterDetails())
             {
-                GUILayout.Space(2f);
+                GUILayout.Space(1f);
                 GUILayout.BeginHorizontal();
                 GUILayout.Label(kvp.Key, host.GUIResources.GetStyle("mini_text_header"));
                 GUILayout.Label(kvp.Value, host.GUIResources.GetStyle("mini_text_body"));

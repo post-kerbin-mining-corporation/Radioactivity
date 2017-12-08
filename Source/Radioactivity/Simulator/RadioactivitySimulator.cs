@@ -21,9 +21,14 @@ namespace Radioactivity.Simulator
         {
             get { return ambientSim; }
         }
+        public KerbalSimulator KerbalSim
+        {
+            get { return kerbalSim; }
+        }
 
         bool simulatorEnabled = false;
 
+        KerbalSimulator kerbalSim;
         PointRadiationSimulator pointSim;
         AmbientRadiationSimulator ambientSim;
 
@@ -44,6 +49,7 @@ namespace Radioactivity.Simulator
                 Utils.Log("[Simulator]: Ambient radiation enabled");
                 ambientSim = new AmbientRadiationSimulator();
             }
+            kerbalSim = new KerbalSimulator();
         }
 
 
@@ -78,6 +84,7 @@ namespace Radioactivity.Simulator
 
                 // simulate everything we need to do with Kerbals
 
+                kerbalSim.Simulate(fixedDeltaTime);
                 //if (KerbalTracking.Instance != null)
                 //{
                 //    KerbalTracking.Instance.SimulateKerbals(TimeWarp.fixedDeltaTime);

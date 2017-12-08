@@ -113,7 +113,7 @@ namespace Radioactivity.UI
 
         internal void DrawSinkDetails()
         {
-            GUILayout.Space(2f);
+            GUILayout.Space(1f);
             GUILayout.BeginVertical(host.GUIResources.GetStyle("mini_group"));
             foreach (var kvp in sink.GetAbsorberDetails())
             {
@@ -128,7 +128,7 @@ namespace Radioactivity.UI
         internal void DrawSourceDetails()
         {
 
-            GUILayout.Space(2f);
+            GUILayout.Space(1f);
             GUILayout.BeginVertical(host.GUIResources.GetStyle("mini_group"));
             foreach (var kvp in sink.GetSourceDictionary())
             {

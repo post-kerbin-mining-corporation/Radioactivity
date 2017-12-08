@@ -6,11 +6,12 @@ using System.Text;
 
 namespace Radioactivity.Persistance
 {
-    internal class KerbalDatabase
+    public class KerbalDatabase
     {
-        internal Dictionary<string, RadioactivityKerbal> Kerbals;
+        public bool Ready = false;
+        public Dictionary<string, RadioactivityKerbal> Kerbals;
 
-        internal KerbalDatabase()
+        public KerbalDatabase()
         {
             Kerbals = new Dictionary<string, RadioactivityKerbal>();
         }

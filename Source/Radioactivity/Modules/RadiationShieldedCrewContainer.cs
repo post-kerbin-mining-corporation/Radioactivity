@@ -58,7 +58,16 @@ namespace Radioactivity
         {
             return AbsorberID;
         }
-
+        public bool IsAbsorbing()
+        {
+            if (this.part.protoModuleCrew.Count > 0)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
         // Adds radiation
         public void AddRadiation(float amt)
         {
@@ -84,8 +93,7 @@ namespace Radioactivity
             {
                 for (int i = 0; i < this.part.protoModuleCrew.Count; i++)
                 {
-                    //KerbalTracking.Instance.IrradiateKerbal(this.part.protoModuleCrew[i], part.vessel, (double)amt);
-
+                    Radioactivity.Instance.RadSim.KerbalSim.SetIrradiation(this.part.protoModuleCrew[i], part.vessel, (double)amt);
                 }
             }
         }
