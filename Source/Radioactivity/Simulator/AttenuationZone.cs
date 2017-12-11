@@ -61,7 +61,7 @@ namespace Radioactivity
             if (HighLogic.LoadedSceneIsEditor)
                 part.DragCubes.SetDragWeights();
             
-            volume = Utils.GetDisplacement(part);
+            volume = PartUtils.GetDisplacement(part);
             density = (part.mass + part.GetResourceMass()) / volume;
 
             parameters = part.GetComponent<RadiationParameters>();

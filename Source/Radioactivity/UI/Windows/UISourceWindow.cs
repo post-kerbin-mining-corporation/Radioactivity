@@ -63,7 +63,7 @@ namespace Radioactivity.UI
             Rect labelRect = new Rect(0f, 0f, 90f, 16f);
             Rect sourceButtonRect = new Rect(90f, 0f, 16f, 16f);
 
-            GUI.Label(labelRect, String.Format("{0} Sv/s", Utils.ToSI(source.CurrentEmission, "F2")), host.GUIResources.GetStyle("mini_text_rad"));
+            GUI.Label(labelRect, String.Format("{0} Sv/s", FormatUtils.ToSI(source.CurrentEmission, "F2")), host.GUIResources.GetStyle("mini_text_rad"));
 
             if (GUI.Button(sourceButtonRect, "...", host.GUIResources.GetStyle("mini_button")))
             {

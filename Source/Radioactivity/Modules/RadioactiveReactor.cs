@@ -45,15 +45,15 @@ namespace Radioactivity
         }
         public override string GetInfo()
         {
-            string toRet = String.Format("Emits radiation when running \n\n <b>Maximum emission:</b> {0}Sv/s\n", Utils.ToSI(EmissionAtMax, "F2"));
-            toRet += String.Format("<b>Meltdown emission:</b> {0}Sv/s", Utils.ToSI(MeltdownEmission, "F2"));
+            string toRet = String.Format("Emits radiation when running \n\n <b>Maximum emission:</b> {0}Sv/s\n", FormatUtils.ToSI(EmissionAtMax, "F2"));
+            toRet += String.Format("<b>Meltdown emission:</b> {0}Sv/s", FormatUtils.ToSI(MeltdownEmission, "F2"));
 
             return toRet;
         }
         public Dictionary<string, string> GetDetails()
         {
             Dictionary<string, string> toReturn = new Dictionary<string, string>();
-            toReturn.Add("<color=#ffffff><b>Reactor Emission</b>:</color>", String.Format("{0}Sv/s", Utils.ToSI(currentEmission, "F2")));
+            toReturn.Add("<color=#ffffff><b>Reactor Emission</b>:</color>", String.Format("{0}Sv/s", FormatUtils.ToSI(currentEmission, "F2")));
 
             return toReturn;
         }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -69,7 +69,7 @@ namespace Radioactivity.UI
             newShield.SetEnabled(drawn);
             shieldRenderers.Add(newShield);
             if (RadioactivityConstants.debugOverlay)
-                Utils.Log("[RadioactiveOverlay]: Adding visual shadow shield");
+                LogUtils.Log("[RadioactiveOverlay]: Adding visual shadow shield");
         }
 
         public void RemoveShadowShield(ShadowShield shield)
@@ -80,7 +80,7 @@ namespace Radioactivity.UI
                 toRemove.Destroy();
                 shieldRenderers.Remove(toRemove);
                 if (RadioactivityConstants.debugOverlay)
-                    Utils.Log("[RadioactiveOverlay]: Removing visual shadow shield");
+                    LogUtils.Log("[RadioactiveOverlay]: Removing visual shadow shield");
             }
         }
 
@@ -91,7 +91,7 @@ namespace Radioactivity.UI
             linkRenderers.Add(newLink);
 
             if (RadioactivityConstants.debugOverlay)
-                Utils.Log("[RadioactiveOverlay]: Adding visual link");
+                LogUtils.Log("[RadioactiveOverlay]: Adding visual link");
         }
 
         public void RemoveLink(RadiationLink link)
@@ -103,7 +103,7 @@ namespace Radioactivity.UI
                 toRemove.DestroyAll();
                 linkRenderers.Remove(toRemove);
                 if (RadioactivityConstants.debugOverlay)
-                    Utils.Log("[RadioactiveOverlay]: Removing visual link");
+                    LogUtils.Log("[RadioactiveOverlay]: Removing visual link");
             }
         }
 
@@ -113,7 +113,7 @@ namespace Radioactivity.UI
 
             toUpdate.Update(complex);
             if (RadioactivityConstants.debugOverlay)
-                Utils.Log("[RadioactiveOverlay]: Updating visual link");
+                LogUtils.Log("[RadioactiveOverlay]: Updating visual link");
         }
 
 

@@ -27,7 +27,7 @@ namespace Radioactivity.Simulator
 
         public PointRadiationSimulator(RadioactivitySimulator hostSim)
         {
-            Utils.Log("[PointRadiationSimulator]: Initializing simulator");
+            LogUtils.Log("[PointRadiationSimulator]: Initializing simulator");
             mainSimulator = hostSim;
         }
 

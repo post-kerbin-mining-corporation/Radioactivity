@@ -40,16 +40,16 @@ namespace Radioactivity.Simulator
         /// </summary>
         public RadioactivitySimulator()
         {
-            Utils.Log("[RadioactivitySimulator]: Initializing simulators");
+            LogUtils.Log("[RadioactivitySimulator]: Initializing simulators");
 
             if (RadioactivitySimulationSettings.SimulatePointRadiation)
             {
-                Utils.Log("[RadioactivitySimulator]: Point radiation enabled");
+                LogUtils.Log("[RadioactivitySimulator]: Point radiation enabled");
                 pointSim = new PointRadiationSimulator(this);
             }
             if (RadioactivitySimulationSettings.SimulateAmbientRadiation)
             {
-                Utils.Log("[RadioactivitySimulator]: Ambient radiation enabled");
+                LogUtils.Log("[RadioactivitySimulator]: Ambient radiation enabled");
                 ambientSim = new AmbientRadiationSimulator(this);
             }
             kerbalSim = new KerbalSimulator();
@@ -103,7 +103,7 @@ namespace Radioactivity.Simulator
 
             RadioactivityUI.Instance.SourceAdded(src);
             if (RadioactivityConstants.debugNetwork)
-                Utils.Log("[RadioactivitySimulator]: Adding radiation source " + src.SourceID + " on part " + src.part.name + " to simulator");
+                LogUtils.Log("[RadioactivitySimulator]: Adding radiation source " + src.SourceID + " on part " + src.part.name + " to simulator");
         }
 
         // Remove a radiation source from the source list
@@ -117,7 +117,7 @@ namespace Radioactivity.Simulator
                     allRadSources.Remove(src);
                 RadioactivityUI.Instance.SourceRemoved(src);
                 if (RadioactivityConstants.debugNetwork && src != null)
-                    Utils.Log("[RadioactivitySimulator]: Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
+                    LogUtils.Log("[RadioactivitySimulator]: Removing radiation source " + src.SourceID + " on part " + src.part.name + " from simulator");
             }
         }
         // Add a radiation sink to the sink list
@@ -132,7 +132,7 @@ namespace Radioactivity.Simulator
                         
             RadioactivityUI.Instance.SinkAdded(snk);
             if (RadioactivityConstants.debugNetwork)
-                Utils.Log("[RadioactivitySimulator]: Adding radiation sink " + snk.SinkID + " on part " + snk.part.name + " to simulator");
+                LogUtils.Log("[RadioactivitySimulator]: Adding radiation sink " + snk.SinkID + " on part " + snk.part.name + " to simulator");
         }
         // Remove a radiation sink from the sink list
         public void UnregisterSink(RadioactiveSink snk)
@@ -147,7 +147,7 @@ namespace Radioactivity.Simulator
                 allRadSinks.Remove(snk);
                 RadioactivityUI.Instance.SinkRemoved(snk);
                 if (RadioactivityConstants.debugNetwork && snk != null)
-                    Utils.Log("[RadioactivitySimulator]: Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
+                    LogUtils.Log("[RadioactivitySimulator]: Removing radiation sink " + snk.SinkID + " on part " + snk.part.name + " from simulator");
             }
         }
 
@@ -238,31 +238,31 @@ namespace Radioactivity.Simulator
         #region Game Events
         public void onEditorVesselReset()
         {
-            Utils.Log("[RadioactivitySimulator][Editor]: Vessel RESET, recalculate all parts");
+            LogUtils.Log("[RadioactivitySimulator][Editor]: Vessel RESET, recalculate all parts");
             if (!HighLogic.LoadedSceneIsEditor) { return; }
             InitializeEditorConstruct(EditorLogic.fetch.ship);
         }
         public void onEditorVesselStart()
         {
-            Utils.Log("[RadioactivitySimulator][Editor]: Vessel START, recalculate all parts");
+            LogUtils.Log("[RadioactivitySimulator][Editor]: Vessel START, recalculate all parts");
             if (!HighLogic.LoadedSceneIsEditor) { return; }
             InitializeEditorConstruct(EditorLogic.fetch.ship);
         }
         public void onEditorVesselLoad(ShipConstruct ship, KSP.UI.Screens.CraftBrowserDialog.LoadType type)
         {
-            Utils.Log("[RadioactivitySimulator][Editor]: Vessel LOAD, recalculate all parts");
+            LogUtils.Log("[RadioactivitySimulator][Editor]: Vessel LOAD, recalculate all parts");
             if (!HighLogic.LoadedSceneIsEditor) { return; }
             InitializeEditorConstruct(ship);
         }
         public void onEditorVesselPartRemoved(GameEvents.HostTargetAction<Part, Part> p)
         {
-            Utils.Log("[RadioactivitySimulator][Editor]: Vessel PART REMOVE, recalculate network");
+            LogUtils.Log("[RadioactivitySimulator][Editor]: Vessel PART REMOVE, recalculate network");
             if (!HighLogic.LoadedSceneIsEditor) { return; }
             InitializeEditorConstruct(EditorLogic.fetch.ship);
         }
         public void onEditorVesselModified(ShipConstruct ship)
         {
-            Utils.Log("[RadioactivitySimulator][Editor]: Vessel MODIFIED, recalculate network");
+            LogUtils.Log("[RadioactivitySimulator][Editor]: Vessel MODIFIED, recalculate network");
             if (!HighLogic.LoadedSceneIsEditor) { return; }
             InitializeEditorConstruct(ship);
         }

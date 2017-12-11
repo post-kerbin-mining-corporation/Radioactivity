@@ -50,14 +50,14 @@ namespace Radioactivity.Persistance
             var crewList = HighLogic.CurrentGame.CrewRoster.Crew.Concat(HighLogic.CurrentGame.CrewRoster.Applicants).Concat(HighLogic.CurrentGame.CrewRoster.Tourist).Concat(HighLogic.CurrentGame.CrewRoster.Unowned).ToList();
             Kerbal = crewList.FirstOrDefault(a => a.name == name);
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
-            LastUpdate = Utils.GetValue(config, "LastUpdate", 0d);
+            LastUpdate = ConfigNodeUtils.GetValue(config, "LastUpdate", 0d);
 
-            TotalExposure = Utils.GetValue(config, "TotalExposure", 0d);
-            CurrentExposure = Utils.GetValue(config, "CurrentExposure", 0d);
+            TotalExposure = ConfigNodeUtils.GetValue(config, "TotalExposure", 0d);
+            CurrentExposure = ConfigNodeUtils.GetValue(config, "CurrentExposure", 0d);
 
-            HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), Utils.GetValue(config, "HealthState", "Healthy"));
+            HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), ConfigNodeUtils.GetValue(config, "HealthState", "Healthy"));
 
-            VesselID = Utils.GetValue(config, "VesselID", Guid.Empty);
+            VesselID = ConfigNodeUtils.GetValue(config, "VesselID", Guid.Empty);
             if (Guid.Empty.Equals(VesselID))
             {
                 CurrentVessel = null;

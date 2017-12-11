@@ -17,7 +17,7 @@ namespace Radioactivity.Simulator
         public AmbientRadiationSimulator(RadioactivitySimulator hostSim)
         {
             
-            Utils.Log("[AmbientRadiationSimulator]: Initializing simulator");
+            LogUtils.Log("[AmbientRadiationSimulator]: Initializing simulator");
             allVessels = new List<RadiationVessel>();
             mainSimulator = hostSim;
 
@@ -44,25 +44,25 @@ namespace Radioactivity.Simulator
         }
         protected void OnNewVesselCreated(Vessel v)
         {
-            Utils.Log("[AmbientRadiationSimulator][Event]: NEW vessel created");
+            LogUtils.Log("[AmbientRadiationSimulator][Event]: NEW vessel created");
             TryAddRadiationVessel(v);
         }
         protected void OnVesselDestroyed(Vessel v)
         {
-            Utils.Log("[AmbientRadiationSimulator][Event]: Vessel destroyed");
+            LogUtils.Log("[AmbientRadiationSimulator][Event]: Vessel destroyed");
         }
         protected void OnVesselCreated(Vessel v)
         {
-            Utils.Log("[AmbientRadiationSimulator][Event]: Vessel created");
+            LogUtils.Log("[AmbientRadiationSimulator][Event]: Vessel created");
             TryAddRadiationVessel(v);
         }
         protected void OnVesselTerminated(ProtoVessel v)
         {
-            Utils.Log("[AmbientRadiationSimulator][Event]: Vessel terminated");
+            LogUtils.Log("[AmbientRadiationSimulator][Event]: Vessel terminated");
         }
         protected void OnVesselRecovered(ProtoVessel v, bool b)
         {
-            Utils.Log("[AmbientRadiationSimulator][Event]: Vessel recovered");
+            LogUtils.Log("[AmbientRadiationSimulator][Event]: Vessel recovered");
         }
         protected void TryAddRadiationVessel(Vessel v)
         {
@@ -82,7 +82,7 @@ namespace Radioactivity.Simulator
         {
             RadiationVessel radVessel = new RadiationVessel(v);
             allVessels.Add(radVessel);
-            Utils.Log("[AmbientRadiationSimulator]: Adding vessel " + radVessel.vessel.GetName() + " to simulator");
+            LogUtils.Log("[AmbientRadiationSimulator]: Adding vessel " + radVessel.vessel.GetName() + " to simulator");
             return radVessel;
         }
         protected void UnregisterVessel(Vessel v)
@@ -97,7 +97,7 @@ namespace Radioactivity.Simulator
             if (toRemove != null)
             {
                 allVessels.Remove(toRemove);
-                Utils.Log("[AmbientRadiationSimulator]: Removing vessel " + v.GetName() + " from simulator");
+                LogUtils.Log("[AmbientRadiationSimulator]: Removing vessel " + v.GetName() + " from simulator");
             }
         }
 
@@ -140,7 +140,6 @@ namespace Radioactivity.Simulator
         }
         protected void RemoveSinkFlight(RadioactiveSink snk)
         {
-            bool exists = false;
             for (int i = 0; i < allVessels.Count; i++)
             {
                 if (allVessels[i].vessel == snk.vessel)

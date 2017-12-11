@@ -33,7 +33,7 @@ namespace Radioactivity.Simulator
             dimensions = new Vector3(shieldRad, thickness, shieldRad);
 
             if (RadioactivityConstants.debugModules)
-                Utils.Log(String.Format("[ShadowShield]: created new with position {0}, radius {1:F1}, angular size {2:F1}", localPosition.ToString(), shieldRad, angle));
+                LogUtils.Log(String.Format("[ShadowShield]: created new with position {0}, radius {1:F1}, angular size {2:F1}", localPosition.ToString(), shieldRad, angle));
         }
 
         public double AttenuateShield(Vector3 rayDir)
@@ -42,7 +42,7 @@ namespace Radioactivity.Simulator
             if (Vector3.Angle(rayDir, orientation) <= angle)
             {
                 if (RadioactivityConstants.debugModules)
-                    Utils.Log("[ShadowShield]: attenuated ray to " + outAttenuation.ToString());
+                    LogUtils.Log("[ShadowShield]: attenuated ray to " + outAttenuation.ToString());
                 return outAttenuation;
 
             }

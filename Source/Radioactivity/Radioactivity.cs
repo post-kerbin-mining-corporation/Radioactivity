@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace Radioactivity
         }
         if (evaParts.Count < 2)
         {
-            Utils.Log("[RadioactivityStartup]: Finding EVA parts");
+            LogUtils.Log("[RadioactivityStartup]: Finding EVA parts");
             FindEVAParts();
         }
         else if (evaParts.Count == 2 && !evaModified)
@@ -69,11 +69,11 @@ namespace Radioactivity
      {
          if (p.GetComponent<RadioactiveSink>() != null)
          {
-                Utils.Log("[RadioactivityStartup]: Module already exists");
+                LogUtils.Log("[RadioactivityStartup]: Module already exists");
          }
          else
          {
-                Utils.Log("[RadioactivityStartup]: Adding modules");
+                LogUtils.Log("[RadioactivityStartup]: Adding modules");
              RadioactiveSink sink = p.gameObject.AddComponent<RadioactiveSink>();
              RadiationShieldedCrewContainer tracker = p.gameObject.AddComponent<RadiationShieldedCrewContainer>();
 
@@ -119,7 +119,7 @@ namespace Radioactivity
                 radSim = new RadioactivitySimulator();
                 // Wait breifly before setting up the simulation
                 StartCoroutine(WaitForInit(0.1f));
-                Utils.Log("[Radioactivity]: Simulation started...");
+                LogUtils.Log("[Radioactivity]: Simulation started...");
                 radSim.StartSimulation();
             }
         }

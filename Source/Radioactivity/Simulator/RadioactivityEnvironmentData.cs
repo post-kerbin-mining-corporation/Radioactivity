@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,17 +15,17 @@ namespace Radioactivity
         {
             ConfigNode settingsNode;
 
-            Utils.Log("[RadioactivityEnvironmentData]: Started loading");
+            LogUtils.Log("[RadioactivityEnvironmentData]: Started loading");
             if (GameDatabase.Instance.ExistsConfigNode("Radioactivity/ENVRIONMENTDATA"))
             {
-                Utils.Log("[RadioactivityEnvironmentData]: Located body data file");
+                LogUtils.Log("[RadioactivityEnvironmentData]: Located body data file");
                 settingsNode = GameDatabase.Instance.GetConfigNode("Radioactivity/ENVIRONMENTDATA");
             }
             else
             {
-                Utils.Log("[RadioactivityEnvironmentData]: Couldn't find data file, using defaults");
+                LogUtils.Log("[RadioactivityEnvironmentData]: Couldn't find data file, using defaults");
             }
-            Utils.Log("[RadioactivityEnvironmentData]: Finished loading");
+            LogUtils.Log("[RadioactivityEnvironmentData]: Finished loading");
         }
     }
 

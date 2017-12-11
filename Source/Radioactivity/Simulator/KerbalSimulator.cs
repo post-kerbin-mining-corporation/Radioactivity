@@ -103,7 +103,7 @@ namespace Radioactivity.Simulator
                     Sicken(kerbal);
                     return;
                 }
-                Utils.LogWarning("[KerbalSimulator]:" + kerbal.Name + " died of radiation exposure");
+                LogUtils.LogWarning("[KerbalSimulator]:" + kerbal.Name + " died of radiation exposure");
             }
             if (kerbal.TotalExposure >= RadioactivityConstants.kerbalDeathThreshold)
             {
@@ -112,7 +112,7 @@ namespace Radioactivity.Simulator
                     Die(kerbal);
                     return;
                 }
-                //Utils.LogWarning(Name + " got radiation sickness");
+                //LogUtils.LogWarning(Name + " got radiation sickness");
             }
             if (kerbal.TotalExposure < RadioactivityConstants.kerbalSicknessThreshold)
             {
@@ -120,7 +120,7 @@ namespace Radioactivity.Simulator
                 {
                     Heal(kerbal);
                 }
-                //Utils.LogWarning(Name + " got radiation sickness");
+                //LogUtils.LogWarning(Name + " got radiation sickness");
             }
         }
         void Sicken(RadioactivityKerbal kerbal)
@@ -128,14 +128,14 @@ namespace Radioactivity.Simulator
             kerbal.HealthState = RadioactivityKerbalState.Sick;
             ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} now has radiation sickness", kerbal.Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
             if (RadioactivityConstants.debugKerbalEvents)
-                Utils.LogWarning(String.Format("[KerbalSimulator]: {0} got radiation sickness", kerbal.Name));
+                LogUtils.LogWarning(String.Format("[KerbalSimulator]: {0} got radiation sickness", kerbal.Name));
         }
         void Heal(RadioactivityKerbal kerbal)
         {
             kerbal.HealthState = RadioactivityKerbalState.Healthy;
             ScreenMessages.PostScreenMessage(new ScreenMessage(String.Format("{0} recovered from radiation sickness", kerbal.Name), 4.0f, ScreenMessageStyle.UPPER_CENTER));
             if (RadioactivityConstants.debugKerbalEvents)
-                Utils.LogWarning(String.Format("[KerbalSimulator]: {0} recovered from radiation sickness", kerbal.Name));
+                LogUtils.LogWarning(String.Format("[KerbalSimulator]: {0} recovered from radiation sickness", kerbal.Name));
         }
 
         void Die(RadioactivityKerbal kerbal)
@@ -161,7 +161,7 @@ namespace Radioactivity.Simulator
                     }
                 }
                 if (RadioactivityConstants.debugKerbalEvents)
-                    Utils.LogWarning(String.Format("[KerbalSimulator]: {0} died on EVA of radiation exposure", kerbal.Name));
+                    LogUtils.LogWarning(String.Format("[KerbalSimulator]: {0} died on EVA of radiation exposure", kerbal.Name));
             }
             else
             {
@@ -173,7 +173,7 @@ namespace Radioactivity.Simulator
                         kerbal.Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
                     }
                     if (RadioactivityConstants.debugKerbalEvents)
-                        Utils.LogWarning(String.Format("[KerbalSimulator]: {0} died at home of radiation exposure", kerbal.Name));
+                        LogUtils.LogWarning(String.Format("[KerbalSimulator]: {0} died at home of radiation exposure", kerbal.Name));
                 }
                 else
                 {
@@ -188,7 +188,7 @@ namespace Radioactivity.Simulator
                             kerbal.Kerbal.StartRespawnPeriod(2160000.0); // 100 Kerbin days
                         }
                         if (RadioactivityConstants.debugKerbalEvents)
-                            Utils.LogWarning(String.Format("[KerbalSimulator]: {0} died in his vessel of radiation exposure", kerbal.Name));
+                            LogUtils.LogWarning(String.Format("[KerbalSimulator]: {0} died in his vessel of radiation exposure", kerbal.Name));
                         //HighLogic.CurrentGame.CrewRoster.RemoveDead(Kerbal);
                     }
                 }

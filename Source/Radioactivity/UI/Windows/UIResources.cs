@@ -155,7 +155,7 @@ namespace Radioactivity.UI
             draftStyle = new GUIStyle(HighLogic.Skin.label);
             draftStyle.fontSize = 13;
             draftStyle.padding = new RectOffset(5, 0, 0, 0);
-            draftStyle.alignment = TextAnchor.MiddleLeft;
+            draftStyle.alignment = TextAnchor.UpperLeft;
             draftStyle.normal.textColor = Color.white;
             draftStyle.stretchWidth = true;
             styleList.Add("editor_text", new GUIStyle(draftStyle));

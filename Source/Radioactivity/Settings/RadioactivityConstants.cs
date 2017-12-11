@@ -85,49 +85,49 @@ namespace Radioactivity
         {
             ConfigNode settingsNode;
 
-            Utils.Log("[Constants]: Started loading");
+            LogUtils.Log("[Constants]: Started loading");
             if (GameDatabase.Instance.ExistsConfigNode("Radioactivity/RADIOACTIVITYCONSTANTS"))
             {
-                Utils.Log("[Constants]: Located constants file");
+                LogUtils.Log("[Constants]: Located constants file");
                 settingsNode = GameDatabase.Instance.GetConfigNode("Radioactivity/RADIOACTIVITYCONSTANTS");
 
-                raycastDistance = Utils.GetValue(settingsNode, "RaycastDistance", 2000f);
-                fluxCutoff = Utils.GetValue(settingsNode, "FluxCutoff", 0f);
-                defaultRaycastFluxStart = Utils.GetValue(settingsNode, "RaycastFluxStart", 1.0f);
-                maximumPositionDelta = Utils.GetValue(settingsNode, "RaycastPositionDelta", 0.5f);
-                maximumMassDelta = Utils.GetValue(settingsNode, "RaycastMassDelta", 0.05f);
-                defaultPartAttenuationCoefficient = Utils.GetValue(settingsNode, "DefaultMassAttenuationCoefficient", 6f);
-                defaultDensity = Utils.GetValue(settingsNode, "DefaultDensity", 0.5f);
-                cosmicRadiationFlux = Utils.GetValue(settingsNode, "CosmicRadiationFlux", 0.00005073566);
+                raycastDistance = ConfigNodeUtils.GetValue(settingsNode, "RaycastDistance", 2000f);
+                fluxCutoff = ConfigNodeUtils.GetValue(settingsNode, "FluxCutoff", 0f);
+                defaultRaycastFluxStart = ConfigNodeUtils.GetValue(settingsNode, "RaycastFluxStart", 1.0f);
+                maximumPositionDelta = ConfigNodeUtils.GetValue(settingsNode, "RaycastPositionDelta", 0.5f);
+                maximumMassDelta = ConfigNodeUtils.GetValue(settingsNode, "RaycastMassDelta", 0.05f);
+                defaultPartAttenuationCoefficient = ConfigNodeUtils.GetValue(settingsNode, "DefaultMassAttenuationCoefficient", 6f);
+                defaultDensity = ConfigNodeUtils.GetValue(settingsNode, "DefaultDensity", 0.5f);
+                cosmicRadiationFlux = ConfigNodeUtils.GetValue(settingsNode, "CosmicRadiationFlux", 0.00005073566);
 
-                overlayRayWidthMult = Utils.GetValue(settingsNode, "OverlayRayWidthMultiplier", 0.005f);
-                overlayRayWidthMin = Utils.GetValue(settingsNode, "OverlayRayMinimumWidth", 0.05f);
-                overlayRayWidthMax = Utils.GetValue(settingsNode, "OverlayRayMaximumWidth", 0.5f);
-                overlayRayLayer = Utils.GetValue(settingsNode, "OverlayRayLayer", 0);
-                overlayRayMaterial = Utils.GetValue(settingsNode, "OverlayRayMaterial", "GUI/Text Shader");
+                overlayRayWidthMult = ConfigNodeUtils.GetValue(settingsNode, "OverlayRayWidthMultiplier", 0.005f);
+                overlayRayWidthMin = ConfigNodeUtils.GetValue(settingsNode, "OverlayRayMinimumWidth", 0.05f);
+                overlayRayWidthMax = ConfigNodeUtils.GetValue(settingsNode, "OverlayRayMaximumWidth", 0.5f);
+                overlayRayLayer = ConfigNodeUtils.GetValue(settingsNode, "OverlayRayLayer", 0);
+                overlayRayMaterial = ConfigNodeUtils.GetValue(settingsNode, "OverlayRayMaterial", "GUI/Text Shader");
 
 
-                kerbalSicknessThreshold = Utils.GetValue(settingsNode, "RadiationSicknessThreshold", 1f);
-                kerbalHealThreshold = Utils.GetValue(settingsNode, "RadiationHealThreshold", 0.000000);
-                kerbalDeathThreshold = Utils.GetValue(settingsNode, "RadiationDeathThreshold", 10f);
-                kerbalHealRate = Utils.GetValue(settingsNode, "RadiationHealRate", 0.00001157407407);
-                kerbalHealRateKSC = Utils.GetValue(settingsNode, "RadiationHealRateKSC", 0.0001157407407);
+                kerbalSicknessThreshold = ConfigNodeUtils.GetValue(settingsNode, "RadiationSicknessThreshold", 1f);
+                kerbalHealThreshold = ConfigNodeUtils.GetValue(settingsNode, "RadiationHealThreshold", 0.000000);
+                kerbalDeathThreshold = ConfigNodeUtils.GetValue(settingsNode, "RadiationDeathThreshold", 10f);
+                kerbalHealRate = ConfigNodeUtils.GetValue(settingsNode, "RadiationHealRate", 0.00001157407407);
+                kerbalHealRateKSC = ConfigNodeUtils.GetValue(settingsNode, "RadiationHealRateKSC", 0.0001157407407);
 
-                debugUI = Utils.GetValue(settingsNode, "DebugUI", true);
-                debugOverlay = Utils.GetValue(settingsNode, "DebugOverlay", true);
-                debugNetwork = Utils.GetValue(settingsNode, "DebugNetwork", true);
-                debugRaycasting = Utils.GetValue(settingsNode, "DebugRaycasting", true);
-                debugSourceSinks = Utils.GetValue(settingsNode, "DebugSourcesAndSinks", true);
-                debugModules = Utils.GetValue(settingsNode, "DebugModules", true);
+                debugUI = ConfigNodeUtils.GetValue(settingsNode, "DebugUI", true);
+                debugOverlay = ConfigNodeUtils.GetValue(settingsNode, "DebugOverlay", true);
+                debugNetwork = ConfigNodeUtils.GetValue(settingsNode, "DebugNetwork", true);
+                debugRaycasting = ConfigNodeUtils.GetValue(settingsNode, "DebugRaycasting", true);
+                debugSourceSinks = ConfigNodeUtils.GetValue(settingsNode, "DebugSourcesAndSinks", true);
+                debugModules = ConfigNodeUtils.GetValue(settingsNode, "DebugModules", true);
 
             }
             else
             {
-                Utils.Log("[Constants]: Couldn't find constants file, using defaults");
+                LogUtils.Log("[Constants]: Couldn't find constants file, using defaults");
             }
 
             GenerateGradients();
-            Utils.Log("[Constants]: Finished loading");
+            LogUtils.Log("[Constants]: Finished loading");
         }
 
         public static void GenerateGradients()

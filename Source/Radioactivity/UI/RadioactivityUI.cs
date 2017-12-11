@@ -43,7 +43,7 @@ namespace Radioactivity.UI
         public void Awake()
         {
             Instance = this;
-            Utils.Log("UI: Awake");
+            LogUtils.Log("UI: Awake");
             GameEvents.onGUIApplicationLauncherReady.Add(OnGUIAppLauncherReady);
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
         }
@@ -53,7 +53,7 @@ namespace Radioactivity.UI
         /// </summary>
         public void Start()
         {
-            Utils.Log("UI: Start");
+            LogUtils.Log("UI: Start");
             if (ApplicationLauncher.Ready)
                 OnGUIAppLauncherReady();
 

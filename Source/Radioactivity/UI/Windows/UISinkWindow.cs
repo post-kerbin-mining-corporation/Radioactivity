@@ -76,7 +76,7 @@ namespace Radioactivity.UI
             Rect sinkButtonRect = new Rect(90f, 0f, 16f, 16f);
             Rect sourceButtonRect = new Rect(106f, 0f, 16f, 16f);
 
-            GUI.Label(labelRect, Utils.FormatFluxString(RadioactivityUI.Instance.UnitMode, sink.CurrentRadiation), 
+            GUI.Label(labelRect, FormatUtils.FormatFluxString(RadioactivityUI.Instance.UnitMode, sink.CurrentRadiation), 
                       host.GUIResources.GetStyle("mini_text_rad"));
 
             if (GUI.Button(sinkButtonRect, "...", host.GUIResources.GetStyle("mini_button")))
@@ -134,7 +134,7 @@ namespace Radioactivity.UI
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("<b>" + kvp.Key + "</b>", host.GUIResources.GetStyle("mini_text_header"));
-                GUILayout.Label(String.Format("{0} Sv/s", Utils.ToSI(kvp.Value, "F2")), host.GUIResources.GetStyle("mini_text_body"));
+                GUILayout.Label(String.Format("{0} Sv/s", FormatUtils.ToSI(kvp.Value, "F2")), host.GUIResources.GetStyle("mini_text_body"));
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndVertical();

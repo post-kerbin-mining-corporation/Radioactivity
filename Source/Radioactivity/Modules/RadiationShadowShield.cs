@@ -43,7 +43,7 @@ namespace Radioactivity
         }
         public ShadowShield BuildShadowShield(Transform emitter)
         {
-            shieldPosition = Utils.Vector3FromString(ShieldPosition);
+            shieldPosition = ConfigNodeUtils.Vector3FromString(ShieldPosition);
             return new ShadowShield(this.part, 
                                     Density, 
                                     Thickness, 

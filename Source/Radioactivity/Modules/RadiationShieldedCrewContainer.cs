@@ -51,7 +51,7 @@ namespace Radioactivity
         {
             Dictionary<string, string> toReturn = new Dictionary<string, string>();
             toReturn.Add("<color=#ffffff><b>Crew Shielding</b>:</color>", String.Format("{0}%", RadiationAttenuationFraction * 100f));
-            toReturn.Add("<color=#ffffff><b>Crew Dose</b>:</color>", String.Format("{0}Sv/s", Utils.ToSI(CurrentRadiation, "F2")));
+            toReturn.Add("<color=#ffffff><b>Crew Dose</b>:</color>", String.Format("{0}Sv/s", FormatUtils.ToSI(CurrentRadiation, "F2")));
             return toReturn;
         }
         public string GetSinkName()
@@ -79,8 +79,8 @@ namespace Radioactivity
 
         public void FixedUpdate()
         {
-            CurrentRadiationString = Utils.ToSI(CurrentRadiation, "F2") + "Sv/s";
-            LifetimeRadiationString = Utils.ToSI(LifetimeRadiation, "F2") + "Sv";
+            CurrentRadiationString = FormatUtils.ToSI(CurrentRadiation, "F2") + "Sv/s";
+            LifetimeRadiationString = FormatUtils.ToSI(LifetimeRadiation, "F2") + "Sv";
 
             CurrentRadiation = LifetimeRadiation - prevRadiation;
             prevRadiation = LifetimeRadiation;

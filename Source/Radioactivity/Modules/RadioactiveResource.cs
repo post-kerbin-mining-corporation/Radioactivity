@@ -47,12 +47,12 @@ namespace Radioactivity
         public Dictionary<string, string> GetDetails()
         {
             Dictionary<string, string> toReturn = new Dictionary<string, string>();
-            toReturn.Add("Nuclear Materials", String.Format("{0}Sv/s", Utils.ToSI(currentEmission, "F2")));
+            toReturn.Add("Nuclear Materials", String.Format("{0}Sv/s", FormatUtils.ToSI(currentEmission, "F2")));
             return toReturn;
         }
         public override string GetInfo()
         {
-            string toRet = String.Format("{0} emits {1}Sv/s per unit of radiation", ResourceName, Utils.ToSI(EmissionPerUnit, "F2"));
+            string toRet = String.Format("{0} emits {1}Sv/s per unit of radiation", ResourceName, FormatUtils.ToSI(EmissionPerUnit, "F2"));
 
             return toRet;
         }

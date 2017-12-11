@@ -16,7 +16,7 @@ namespace Radioactivity
 
         public override void OnAwake()
         {
-            Utils.Log("[Persistance]: Init");
+            LogUtils.Log("[Persistance]: Init");
             Instance = this;
             base.OnAwake();
 
@@ -25,22 +25,22 @@ namespace Radioactivity
 
         public override void OnLoad(ConfigNode node)
         {
-            Utils.Log("[Persistance]: Started Loading");
+            LogUtils.Log("[Persistance]: Started Loading");
             base.OnLoad(node);
             KerbalDB.Load(node);
             RadioactivityPreferences.Load(node);
             RadioactivityConstants.Load();
-            Utils.Log("[Persistance]: Done Loading");
+            LogUtils.Log("[Persistance]: Done Loading");
             KerbalDB.Ready = true;
 
         }
 
         public override void OnSave(ConfigNode node)
         {
-            Utils.Log("[Persistance]: Started Saving");
+            LogUtils.Log("[Persistance]: Started Saving");
             base.OnSave(node);
             KerbalDB.Save(node);
-            Utils.Log("[Persistance]: Finished Saving");
+            LogUtils.Log("[Persistance]: Finished Saving");
         }
 
         public List<RadioactivityKerbal> GetKerbals(List<ProtoCrewMember> crew)

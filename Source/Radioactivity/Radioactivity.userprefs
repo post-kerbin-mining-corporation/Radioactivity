@@ -1,13 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="UI/RadioactivityUI.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Modules/RadiationParameters.cs">
     <Files>
-      <File FileName="UI/Windows/UIEditorWindow.cs" Line="116" Column="59" />
-      <File FileName="Settings/RadioactivityPreferences.cs" Line="29" Column="52" />
-      <File FileName="UI/Windows/UIRosterWindow.cs" Line="19" Column="59" />
-      <File FileName="UI/Windows/UIResources.cs" Line="169" Column="65" />
-      <File FileName="Settings/RadioactivitySettings.cs" Line="13" Column="49" />
-      <File FileName="UI/Windows/UIWindow.cs" Line="16" Column="10" />
-      <File FileName="UI/RadioactivityUI.cs" Line="126" Column="39" />
+      <File FileName="Settings/RadioactivitySettings.cs" Line="80" Column="51" />
+      <File FileName="Simulator/RadiationVessel.cs" Line="62" Column="24" />
+      <File FileName="Modules/RadiationParameters.cs" Line="12" Column="45" />
+      <File FileName="Simulator/AttenuationZone.cs" Line="64" Column="31" />
+      <File FileName="UI/Windows/UISourceWindow.cs" Line="66" Column="71" />
+      <File FileName="Settings/RadioactivityConstants.cs" Line="120" Column="51" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

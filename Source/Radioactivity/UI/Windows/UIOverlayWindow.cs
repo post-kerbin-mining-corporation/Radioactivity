@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +18,7 @@ namespace Radioactivity.UI
             sinkWindows = new List<UISinkWindow>();
             sourceWindows = new List<UISourceWindow>();
 
-            Utils.Log("[UIOverlayWindow]: Initialized");
+            LogUtils.Log("[UIOverlayWindow]: Initialized");
         }
         /// <summary>
         /// Draw the set of sink and source windows
@@ -67,7 +67,7 @@ namespace Radioactivity.UI
 
         public void UpdateSinkList()
         {
-            Utils.Log("[UIOverlayWindow]: Rebuilding Sink List");
+            LogUtils.Log("[UIOverlayWindow]: Rebuilding Sink List");
             sinkWindows = new List<UISinkWindow>();
             for (int i = 0; i < Radioactivity.Instance.RadSim.AllSinks.Count; i++)
             {
@@ -79,7 +79,7 @@ namespace Radioactivity.UI
 
         public void UpdateSourceList()
         {
-            Utils.Log("[UIOverlayWindow]: Rebuilding Source List");
+            LogUtils.Log("[UIOverlayWindow]: Rebuilding Source List");
             sourceWindows = new List<UISourceWindow>();
             // Check for new sinks
             for (int i = 0; i < Radioactivity.Instance.RadSim.AllSources.Count; i++)

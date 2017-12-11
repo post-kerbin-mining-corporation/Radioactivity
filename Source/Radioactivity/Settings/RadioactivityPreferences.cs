@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +27,7 @@ namespace Radioactivity
         // Settings for what "planet" we are on
         public static double editorAtmosphereDensity = 0.0d;
         public static double editorAtmosphereHeight = 0.0d;
+        public static double editorPlanetRadius = 0.0d;
         /// How far to the sun
         public static double editorSunDistance = 0.0d;
         // How high in the atmo are we
@@ -37,26 +38,27 @@ namespace Radioactivity
         {
             ConfigNode mNode = node.GetNode(RadioactivityConstants.pluginPreferencesName);
 
-            Utils.Log("[Preferences]: Started Loading");
+            LogUtils.Log("[Preferences]: Started Loading");
             if (mNode != null)
             {
-                rosterShown = Utils.GetValue(mNode, "RosterShown", false);
-                overlayShown = Utils.GetValue(mNode, "OverlayShown", false);
-                editorShown = Utils.GetValue(mNode, "EditorShown", false);
-                unitMode = Utils.GetValue(mNode, "UnitMode", 0);
-                editorAtmosphereDensity = Utils.GetValue(mNode, "EditorAtmosphereDensity", 0.0d);
-                editorAtmosphereHeight = Utils.GetValue(mNode, "EditorAtmosphereHeight", 0.0d);
-                editorSunDistance = Utils.GetValue(mNode, "EditorSunDistance", 0.0d);
-                editorFlightHeight = Utils.GetValue(mNode, "EditorFlightHeight", 0.0d);
+                rosterShown = ConfigNodeUtils.GetValue(mNode, "RosterShown", false);
+                overlayShown = ConfigNodeUtils.GetValue(mNode, "OverlayShown", false);
+                editorShown = ConfigNodeUtils.GetValue(mNode, "EditorShown", false);
+                unitMode = ConfigNodeUtils.GetValue(mNode, "UnitMode", 0);
+                editorAtmosphereDensity = ConfigNodeUtils.GetValue(mNode, "EditorAtmosphereDensity", 0.0d);
+                editorAtmosphereHeight = ConfigNodeUtils.GetValue(mNode, "EditorAtmosphereHeight", 0.0d);
+                editorPlanetRadius = ConfigNodeUtils.GetValue(mNode, "EditorPlanetRadius", 0.0d);
+                editorSunDistance = ConfigNodeUtils.GetValue(mNode, "EditorSunDistance", 0.0d);
+                editorFlightHeight = ConfigNodeUtils.GetValue(mNode, "EditorFlightHeight", 0.0d);
             }
 
-            Utils.Log("[Preferences]: Done Loading");
+            LogUtils.Log("[Preferences]: Done Loading");
 
         }
 
         public static void Save(ConfigNode node)
         {
-            Utils.Log("[Preferences]: Started Saving");
+            LogUtils.Log("[Preferences]: Started Saving");
             ConfigNode prefsNode;
             if (node.HasNode(RadioactivityConstants.pluginPreferencesName))
                 prefsNode = node.GetNode(RadioactivityConstants.pluginPreferencesName);
@@ -70,10 +72,11 @@ namespace Radioactivity
 
             prefsNode.AddValue("EditorAtmosphereDensity", editorAtmosphereDensity);
             prefsNode.AddValue("EditorAtmosphereHeight", editorAtmosphereHeight);
+            prefsNode.AddValue("EditorPlanetRadius", editorPlanetRadius);
             prefsNode.AddValue("EditorSunDistance", editorSunDistance);
             prefsNode.AddValue("EditorFlightHeight", editorFlightHeight);
 
-            Utils.Log("[Preferences]: Finished Saving");
+            LogUtils.Log("[Preferences]: Finished Saving");
         }
 
     }

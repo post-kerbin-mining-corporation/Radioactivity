@@ -69,14 +69,14 @@ namespace Radioactivity
         }
         public override string GetInfo()
         {
-            string toRet = String.Format("Emits radiation when running \n\n <b>Maximum emission:</b> {0}Sv/s", Utils.ToSI(EmissionAtMax, "F2"));
+            string toRet = String.Format("Emits radiation when running \n\n <b>Maximum emission:</b> {0}Sv/s", FormatUtils.ToSI(EmissionAtMax, "F2"));
 
             return toRet;
         }
         public Dictionary<string, string> GetDetails()
         {
             Dictionary<string, string> toReturn = new Dictionary<string, string>();
-            toReturn.Add("<color=#ffffff><b>Engine Emission</b>:</color>", String.Format("{0}Sv/s", Utils.ToSI(currentEmission, "F2")));
+            toReturn.Add("<color=#ffffff><b>Engine Emission</b>:</color>", String.Format("{0}Sv/s", FormatUtils.ToSI(currentEmission, "F2")));
             return toReturn;
         }
 
@@ -167,7 +167,7 @@ namespace Radioactivity
             if (enginesLegacy.Length > 0)
             {
                 if (RadioactivityConstants.debugModules)
-                    Utils.Log("RadioactiveEngine: Using legacy engine module");
+                    LogUtils.Log("RadioactiveEngine: Using legacy engine module");
                 useLegacyEngines = true;
                 engineLegacy = enginesLegacy[0];
             }
@@ -175,7 +175,7 @@ namespace Radioactivity
             {
                 if (EngineID == "" || EngineID == String.Empty)
                 {
-                    Utils.LogWarning("RadioactiveEngine: EngineID field not specified, trying to use default engine");
+                    LogUtils.LogWarning("RadioactiveEngine: EngineID field not specified, trying to use default engine");
                     if (engines.Length > 0)
                         engine = engines[0];
                 }
@@ -190,12 +190,12 @@ namespace Radioactivity
             if (useLegacyEngines)
             {
                 if (engineLegacy == null)
-                    Utils.LogError("RadioactiveEngine: Couldn't find a legacy engine module");
+                    LogUtils.LogError("RadioactiveEngine: Couldn't find a legacy engine module");
             }
             else
             {
                 if (engine == null)
-                    Utils.LogError("RadioactiveEngine: Couldn't find a ModuleEnginesFX engine module");
+                    LogUtils.LogError("RadioactiveEngine: Couldn't find a ModuleEnginesFX engine module");
             }
         }
     }

@@ -1,4 +1,4 @@
-// All parts that receive radiation require a RadioactiveSink
+﻿// All parts that receive radiation require a RadioactiveSink
 // Handles hooking the part into the radiation simulation system
 using System;
 using System.Collections.Generic;
@@ -145,7 +145,7 @@ namespace Radioactivity
             if (SinkTransform == null)
             {
                 if (RadioactivityConstants.debugSourceSinks)
-                    Utils.LogWarning("[RadioactiveSink]: Couldn't find Source transform, using part root transform");
+                    LogUtils.LogWarning("[RadioactiveSink]: Couldn't find Source transform, using part root transform");
                 SinkTransform = part.transform;
             }
 

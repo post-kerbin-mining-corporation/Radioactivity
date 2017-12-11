@@ -48,7 +48,7 @@ namespace Radioactivity
         public Dictionary<string, string> GetDetails()
         {
             Dictionary<string, string> toReturn = new Dictionary<string, string>();
-            toReturn.Add("<color=#ffffff><b>Lifetime Dose</b>:</color>", String.Format("{0}Sv", Utils.ToSI(LifetimeRadiation, "F2")));
+            toReturn.Add("<color=#ffffff><b>Lifetime Dose</b>:</color>", String.Format("{0}Sv", FormatUtils.ToSI(LifetimeRadiation, "F2")));
             return toReturn;
         }
 
@@ -72,8 +72,8 @@ namespace Radioactivity
 
         public void FixedUpdate()
         {
-            CurrentRadiationString = String.Format("{0}Sv/s", Utils.ToSI(CurrentRadiation, "F2"));
-            LifetimeRadiationString = String.Format("{0} Sv", Utils.ToSI(LifetimeRadiation, "F2"));
+            CurrentRadiationString = String.Format("{0}Sv/s", FormatUtils.ToSI(CurrentRadiation, "F2"));
+            LifetimeRadiationString = String.Format("{0} Sv", FormatUtils.ToSI(LifetimeRadiation, "F2"));
         }
     }
 }

@@ -74,7 +74,6 @@
     <Compile Include="Modules\RadioactiveSource.cs" />
     <Compile Include="Radioactivity.cs" />
     <Compile Include="UI\RadioactivityUI.cs" />
-    <Compile Include="Utils.cs" />
     <Compile Include="Simulator\PointRadiationSimulator.cs" />
     <Compile Include="Simulator\RadiationLink.cs" />
     <Compile Include="Simulator\AttenuationZone.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="Simulator\AmbientRadiationSimulator.cs" />
     <Compile Include="Persistence\RadioactivityPersistance.cs" />
     <Compile Include="Persistence\KerbalDatabase.cs" />
-    <Compile Include="AtmosphereUtils.cs" />
     <Compile Include="Persistence\RadioactivityKerbal.cs" />
     <Compile Include="Settings\RadioactivitySettings.cs" />
     <Compile Include="Settings\RadioactivityConstants.cs" />
@@ -104,6 +102,11 @@
     <Compile Include="Simulator\RadioactivityEnvironmentData.cs" />
     <Compile Include="Simulator\RadioactivityEnvironment.cs" />
     <Compile Include="Simulator\RadiationVessel.cs" />
+    <Compile Include="Utils\LogUtils.cs" />
+    <Compile Include="Utils\FormatUtils.cs" />
+    <Compile Include="Utils\ConfigNodeUtils.cs" />
+    <Compile Include="Utils\PartUtils.cs" />
+    <Compile Include="Utils\VesselUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Simulator\" />
@@ -111,6 +114,7 @@
     <Folder Include="Settings\" />
     <Folder Include="UI\Windows\" />
     <Folder Include="UI\Overlay\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

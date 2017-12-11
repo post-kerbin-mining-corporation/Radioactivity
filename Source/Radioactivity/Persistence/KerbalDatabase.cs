@@ -72,14 +72,14 @@ namespace Radioactivity.Persistance
         public void RemoveKerbal(RadioactivityKerbal k)
         {
           Kerbals.Remove(k.Name);
-          Utils.Log(String.Format("[KerbalDatabase]: {0} removed from database", k.Name));
+          LogUtils.Log(String.Format("[KerbalDatabase]: {0} removed from database", k.Name));
         }
 
         internal void Load(ConfigNode node)
         {
-            Utils.Log("[KerbalDatabase]: Loading...");
+            LogUtils.Log("[KerbalDatabase]: Loading...");
             Kerbals.Clear();
-            Utils.Log("[KerbalDatabase]: Loading from persistence");
+            LogUtils.Log("[KerbalDatabase]: Loading from persistence");
 
             ConfigNode mNode = node.GetNode(RadioactivityConstants.pluginConfigNodeName);
             if (mNode != null)
@@ -91,32 +91,32 @@ namespace Radioactivity.Persistance
                     if (kNode.HasValue("KerbalName"))
                     {
                         string idx = kNode.GetValue("KerbalName");
-                        Utils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", idx));
+                        LogUtils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", idx));
                         RadioactivityKerbal kerbal = new RadioactivityKerbal(idx);
                         kerbal.Load(kNode, idx);
                         Kerbals[idx] = kerbal;
                     }
                 }
             }
-            Utils.Log("[KerbalDatabase]: Loading from roster");
+            LogUtils.Log("[KerbalDatabase]: Loading from roster");
             var crewList = HighLogic.CurrentGame.CrewRoster.Crew.Concat(HighLogic.CurrentGame.CrewRoster.Applicants).Concat(HighLogic.CurrentGame.CrewRoster.Tourist).Concat(HighLogic.CurrentGame.CrewRoster.Unowned).ToList();
             foreach (ProtoCrewMember crew in crewList)
             {
                 if (!Kerbals.ContainsKey(crew.name))
                 {
-                    Utils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", crew.name));
+                    LogUtils.Log(String.Format("[KerbalDatabase]: Loading kerbal {0}", crew.name));
                     RadioactivityKerbal kerbal = new RadioactivityKerbal(crew.name);
                     kerbal.Load(crew);
                     Kerbals[crew.name] = kerbal;
                 }
             }
-            Utils.Log(String.Format("[KerbalDatabase]: Loaded {0} Kerbals",Kerbals.Count ));
-            Utils.Log("[KerbalDatabase]: Loading Complete!");
+            LogUtils.Log(String.Format("[KerbalDatabase]: Loaded {0} Kerbals",Kerbals.Count ));
+            LogUtils.Log("[KerbalDatabase]: Loading Complete!");
         }
 
         internal void Save(ConfigNode node)
         {
-            Utils.Log("[KerbalDatabase]: Saving...");
+            LogUtils.Log("[KerbalDatabase]: Saving...");
 
             ConfigNode dbNode;
             bool init = node.HasNode(RadioactivityConstants.pluginConfigNodeName);
@@ -128,11 +128,11 @@ namespace Radioactivity.Persistance
 
             foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in Kerbals)
             {
-                Utils.Log(string.Format("[KerbalDatabase]: Saving kerbal {0}", kerbal.Value));
+                LogUtils.Log(string.Format("[KerbalDatabase]: Saving kerbal {0}", kerbal.Value));
                 ConfigNode kNode = kerbal.Value.Save(dbNode);
                 kNode.AddValue("KerbalName",kerbal.Key);
             }
-            Utils.Log("[KerbalDatabase]: Saving completed!");
+            LogUtils.Log("[KerbalDatabase]: Saving completed!");
 
         }
 

@@ -47,9 +47,9 @@ namespace Radioactivity
         public override string GetInfo()
         {
             string toRet = "Probe core is affected by radiation \n\n Penalties\n";
-            toRet += String.Format("-{0}Sv/s: {1} SAS levels\n", Utils.ToSI(0, "F2"), Mathf.Clamp(GetSASPenalty(0f), 0, 3));
-            toRet += String.Format("-{0}Sv/s: -{1} SAS levels\n", Utils.ToSI(1, "F2"), Mathf.Clamp(GetSASPenalty(1f), 0, 3));
-            toRet += String.Format("-{0}Sv/s: -{1} SAS levels\n", Utils.ToSI(5, "F2"), Mathf.Clamp(GetSASPenalty(5f), 0, 3));
+            toRet += String.Format("-{0}Sv/s: {1} SAS levels\n", FormatUtils.ToSI(0, "F2"), Mathf.Clamp(GetSASPenalty(0f), 0, 3));
+            toRet += String.Format("-{0}Sv/s: -{1} SAS levels\n", FormatUtils.ToSI(1, "F2"), Mathf.Clamp(GetSASPenalty(1f), 0, 3));
+            toRet += String.Format("-{0}Sv/s: -{1} SAS levels\n", FormatUtils.ToSI(5, "F2"), Mathf.Clamp(GetSASPenalty(5f), 0, 3));
             return toRet;
         }
         public Dictionary<string, string> GetDetails()
@@ -125,7 +125,7 @@ namespace Radioactivity
                 {
                     drone.SASServiceLevel = frameSAS;
                     if (RadioactivityConstants.debugModules)
-                        Utils.Log(String.Format("[RadiationDroneCore]: Set SAS level to {0}", frameSAS));
+                        LogUtils.Log(String.Format("[RadiationDroneCore]: Set SAS level to {0}", frameSAS));
 
                     drone.OnAwake();
                     drone.OnActive();

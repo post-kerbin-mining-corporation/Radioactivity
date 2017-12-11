@@ -15,7 +15,7 @@ namespace Radioactivity.UI
 
         public UIEditorWindow(System.Random randomizer, RadioactivityUI uiHost) : base(randomizer, uiHost)
         {
-            Utils.Log("[UIEditorWindow]: Initialized");
+            LogUtils.Log("[UIEditorWindow]: Initialized");
         }
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace Radioactivity.UI
         }
         void DrawBodyParameters()
         {
-            float optionHeight = 50f;
+            float optionHeight = 30f;
             float optionWidth = 360f;
-            float optionTitleWidth = 100f;
+            float optionTitleWidth = 130f;
             float optionSliderWidth = 150f;
             float optionLabelWidth = 100f;
 
@@ -88,6 +88,21 @@ namespace Radioactivity.UI
                                                                               (float)RadioactivityPreferences.editorSunDistance,
                                                                               0f, 1000000f);
             GUI.Label(labelRect, String.Format("<color=#99ff00>{0:F1} km</color>", RadioactivityPreferences.editorSunDistance),
+                      host.GUIResources.GetStyle("editor_text"));
+            GUI.EndGroup();
+
+            optionsRect = GUILayoutUtility.GetRect(optionWidth, optionHeight);
+            sliderRect = new Rect(optionTitleWidth, 0f, optionSliderWidth, optionHeight);
+            titleRect = new Rect(0f, 0f, optionTitleWidth, optionHeight);
+            labelRect = new Rect(optionTitleWidth + optionSliderWidth, 0f, optionLabelWidth, optionHeight);
+
+            GUI.BeginGroup(optionsRect);
+
+            GUI.Label(titleRect, "<b>Body Radius</b>", host.GUIResources.GetStyle("editor_header"));
+            RadioactivityPreferences.editorPlanetRadius = GUI.HorizontalSlider(sliderRect,
+                                                                               (float)RadioactivityPreferences.editorPlanetRadius,
+                                                                              0f, 2f);
+            GUI.Label(labelRect, String.Format("<color=#99ff00>{0:F2}</color>", RadioactivityPreferences.editorPlanetRadius),
                       host.GUIResources.GetStyle("editor_text"));
             GUI.EndGroup();
 

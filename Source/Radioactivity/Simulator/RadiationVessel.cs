@@ -19,19 +19,19 @@ namespace Radioactivity.Simulator
 
         public RadiationVessel()
         {
-            Utils.Log("[RadiationVessel]: Created from NOTHING");
+            LogUtils.Log("[RadiationVessel]: Created from NOTHING");
             sinks = new List<RadioactiveSink>();
         }
         public RadiationVessel(Vessel v)
         {
-            Utils.Log("[RadiationVessel]: Created from Vessel");
+            LogUtils.Log("[RadiationVessel]: Created from Vessel");
             vessel = v;
             protoVessel = v.protoVessel;
             sinks = new List<RadioactiveSink>();
         }
         public RadiationVessel(ProtoVessel pv)
         {
-            Utils.Log("[RadiationVessel]: Created from ProtoVessel");
+            LogUtils.Log("[RadiationVessel]: Created from ProtoVessel");
             vessel = pv.vesselRef;
             protoVessel = pv;
             sinks = new List<RadioactiveSink>();
@@ -52,13 +52,15 @@ namespace Radioactivity.Simulator
             }
         }
         public void RemoveSink(RadioactiveSink snk)
-        {
-            
-        }
+        {}
 
         public void Simulate(float timeStep)
         {
-            
+            if (RadioactivitySimulationSettings.SimulateCosmicRadiation)
+            {
+                for (int i = 0; i < sinks.Count; i++)
+                sinks[i].AddRadiation("Cosmic", 1f);    
+            }
         }
         public void SimulateEditor(float timeStep)
         {

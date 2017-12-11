@@ -1,4 +1,4 @@
-// Represents a basic radioactive source from which to emit ray-diation
+﻿// Represents a basic radioactive source from which to emit ray-diation
 // All parts that interact with the radiation simulation need one of these
 using System;
 using System.Collections.Generic;
@@ -93,7 +93,7 @@ namespace Radioactivity
             if (EmitterTransform == null)
             {
                 if (RadioactivityConstants.debugSourceSinks)
-                    Utils.LogWarning("[RadioactiveSource]: Couldn't find Emitter transform, using part root transform");
+                    LogUtils.LogWarning("[RadioactiveSource]: Couldn't find Emitter transform, using part root transform");
                 EmitterTransform = part.transform;
             }
 

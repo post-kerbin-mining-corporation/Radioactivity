@@ -19,7 +19,7 @@ namespace Radioactivity.UI
             source = parent;
             CreateRenderer();
             if (RadioactivityConstants.debugOverlay)
-                Utils.Log("[OverlayShadowShieldRenderer]: Initialized");
+                LogUtils.Log("[OverlayShadowShieldRenderer]: Initialized");
         }
 
         public void CreateRenderer()
