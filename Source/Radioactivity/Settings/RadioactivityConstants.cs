@@ -26,6 +26,19 @@ namespace Radioactivity
         // How much the mass through a raypath can change before we need to recalculate it
         public static float maximumMassDelta = 0.05f;
 
+
+        // Ambient simulation
+        // General
+        public static float groundSVFRaycastDistance = 5000f;
+        public static int groundSVFRaycastCount = 50;
+        // How far the geometry between two radiation link endpoints can change before we need to recalculate it
+        public static float groundSVFPositionDelta = 1f;
+
+        // GCR
+        // Default dose in Sv/s from galactic cosmic rays
+        public static double cosmicRadiationFlux = 0.00005073566;
+
+
         // DEFAULT SETTINGS
         // Default value for the linear attenuation coefficient for parts, in cm2/g
         public static float defaultPartAttenuationCoefficient = 1.5f;
@@ -33,8 +46,8 @@ namespace Radioactivity
         public static float defaultDensity = 1f;
 
 
-        // Default dose in Sv/s from galactic cosmic rays
-        public static double cosmicRadiationFlux = 0.00005073566;
+
+
 
         // OVERLAY SETTINGS
         public static int overlayRayLayer = 0;

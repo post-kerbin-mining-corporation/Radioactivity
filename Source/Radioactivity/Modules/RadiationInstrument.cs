@@ -67,9 +67,9 @@ namespace Radioactivity
         {
             return true;
         }
-        public void AddRadiation(float amt)
+        public void AddRadiation(float pointAmount, float ambientAmount)
         {
-            LifetimeRadiation = LifetimeRadiation + amt;
+            LifetimeRadiation = LifetimeRadiation + pointAmount + ambientAmount;
         }
         public override void OnStart(PartModule.StartState state)
         {

@@ -63,11 +63,11 @@ namespace Radioactivity
             return true;
         }
 
-        public void AddRadiation(float amt)
+        public void AddRadiation(float pointAmount, float ambientAmount)
         {
-            CurrentRadiation = amt;
+            CurrentRadiation = pointAmount + ambientAmount;
             if (HighLogic.LoadedSceneIsFlight)
-                LifetimeRadiation = LifetimeRadiation + amt;
+                LifetimeRadiation = LifetimeRadiation + pointAmount + ambientAmount;
         }
 
         public void FixedUpdate()

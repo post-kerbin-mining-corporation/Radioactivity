@@ -26,14 +26,27 @@ namespace Radioactivity.Simulator
                 }
             }
         }
-        // Irradiates a kerbal
-        public void SetIrradiation(ProtoCrewMember crew, Vessel crewVessel, double pointAmount)
+        // Irradiates a kerbal from a point scene
+        public void SetIrradiationParameters(ProtoCrewMember crew, Vessel crewVessel, double pointAmount, double localShielding)
         {
             foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
             {
                 if (crew == kerbal.Value.Kerbal)
                 {
-                    kerbal.Value.CurrentExposure = pointAmount;
+                    kerbal.Value.PointExposure = pointAmount;
+                    kerbal.Value.AmbientShielding = localShielding;
+
+                }
+            }
+        }
+        // Irradiates a kerbal
+        public void SetAmbientIrradiation(ProtoCrewMember crew, double ambientAmount)
+        {
+            foreach (KeyValuePair<string, RadioactivityKerbal> kerbal in KerbalDB.Kerbals)
+            {
+                if (crew == kerbal.Value.Kerbal)
+                {
+                    kerbal.Value.AmbientExposure = ambientAmount;
                 }
             }
         }
@@ -82,7 +95,7 @@ namespace Radioactivity.Simulator
         // Simulates effects when the
         void SimulateOnMission(float timeStep, RadioactivityKerbal kerbal)
         {
-            if ((kerbal.CurrentExposure) <= RadioactivityConstants.kerbalHealThreshold)
+            if ((kerbal.SummedExposure) <= RadioactivityConstants.kerbalHealThreshold)
             {
                 kerbal.TotalExposure = kerbal.TotalExposure - RadioactivityConstants.kerbalHealRate * timeStep;
                 if (kerbal.TotalExposure < 0d)
@@ -90,7 +103,7 @@ namespace Radioactivity.Simulator
             }
             else
             {
-                kerbal.TotalExposure = kerbal.TotalExposure + (kerbal.CurrentExposure  * timeStep);
+                kerbal.TotalExposure = kerbal.TotalExposure + (kerbal.SummedExposure * timeStep);
             }
         }
 

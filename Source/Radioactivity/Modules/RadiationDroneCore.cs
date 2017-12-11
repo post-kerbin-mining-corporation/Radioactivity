@@ -75,9 +75,9 @@ namespace Radioactivity
             return AbsorberID;
         }
 
-        public void AddRadiation(float amt)
+        public void AddRadiation(float pointAmount, float ambientAmount)
         {
-            LifetimeRadiation = LifetimeRadiation + amt;
+            LifetimeRadiation = LifetimeRadiation + pointAmount + ambientAmount;
         }
 
         public bool IsAbsorbing()
@@ -113,7 +113,7 @@ namespace Radioactivity
             LifetimeRadiationString = String.Format("{0:F2}", LifetimeRadiation);
 
             if (HighLogic.LoadedSceneIsFlight && RadioactivityEffectSettings.EnableControlDegradation)
-              ApplySASPenalty();
+                ApplySASPenalty();
         }
 
         void ApplySASPenalty()

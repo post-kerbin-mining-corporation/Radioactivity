@@ -26,8 +26,13 @@ namespace Radioactivity.Persistance
 
         // Kerbal's total exposure
         public double TotalExposure;
+        public double SummedExposure { get { return PointExposure + AmbientShielding * AmbientExposure; } }
+
         // Kerbal's current exposure from point sources
-        public double CurrentExposure;
+        public double PointExposure;
+
+        public double AmbientShielding;
+        public double AmbientExposure;
 
         // Kerbal's health state
         public RadioactivityKerbalState HealthState;
@@ -40,7 +45,9 @@ namespace Radioactivity.Persistance
         {
             Name = name;
             TotalExposure = 0d;
-            CurrentExposure = 0d;
+
+            PointExposure = 0d;
+            AmbientExposure = 0d;
         }
 
         // Load from confignode
@@ -53,7 +60,8 @@ namespace Radioactivity.Persistance
             LastUpdate = ConfigNodeUtils.GetValue(config, "LastUpdate", 0d);
 
             TotalExposure = ConfigNodeUtils.GetValue(config, "TotalExposure", 0d);
-            CurrentExposure = ConfigNodeUtils.GetValue(config, "CurrentExposure", 0d);
+            PointExposure = ConfigNodeUtils.GetValue(config, "PointExposure", 0d);
+            AmbientExposure = ConfigNodeUtils.GetValue(config, "AmbientExposure", 0d);
 
             HealthState = (RadioactivityKerbalState)Enum.Parse(typeof(RadioactivityKerbalState), ConfigNodeUtils.GetValue(config, "HealthState", "Healthy"));
 
@@ -78,7 +86,9 @@ namespace Radioactivity.Persistance
             //Status = crewMember
             //newKerbal.CrewType = Utils.GetValue(config, "Type", ProtoCrewMember.KerbalType.Crew);
             TotalExposure = 0d;
-            CurrentExposure = 0d;
+            PointExposure = 0d;
+
+            AmbientExposure = 0d;
 
             HealthState = RadioactivityKerbalState.Healthy;
         }
@@ -91,7 +101,9 @@ namespace Radioactivity.Persistance
             node.AddValue("Status", Status);
             node.AddValue("Type", CrewType);
             node.AddValue("TotalExposure", TotalExposure);
-            node.AddValue("CurrentExposure", CurrentExposure);
+            node.AddValue("PointExposure", PointExposure);
+            node.AddValue("AmbientExposure", AmbientExposure);
+
             node.AddValue("HealthState", HealthState.ToString());
             node.AddValue("VesselID", VesselID.ToString());
             return node;

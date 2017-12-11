@@ -18,7 +18,7 @@ namespace Radioactivity.Interfaces
         Dictionary<string, string> GetDetails();
 
         // Add radiation to a part. Should propagate radiation to kerbals, track it, etc.
-        void AddRadiation(float amt);
+        void AddRadiation(float pointAmount, float ambientAmount);
 
         // Determines if the absorber is active
         bool IsAbsorbing();

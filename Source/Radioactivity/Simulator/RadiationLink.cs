@@ -46,7 +46,7 @@ namespace Radioactivity.Simulator
                 if (Path != null)
                 {
                     int ct = 0;
-                    for (int i=0; i < Path.Count ; i++)
+                    for (int i = 0; i < Path.Count; i++)
                     {
                         if (Path[i].attenuationType != AttenuationType.Empty)
                             ct++;
@@ -106,12 +106,12 @@ namespace Radioactivity.Simulator
             }
             if (needsSimpleRecalculation)
             {
-              fluxEndScale = AttenuateFlux(Path, 1.0f);
+                fluxEndScale = AttenuateFlux(Path, 1.0f);
                 RadioactivityOverlay.Instance.UpdateLink(this, false);
             }
             inputFlux = (double)source.CurrentEmission;
 
-            sink.AddRadiation(source.SourceID, (float)(inputFlux * fluxEndScale));
+            sink.AddRadiation(source.SourceID, (inputFlux * fluxEndScale));
 
         }
 
@@ -121,7 +121,7 @@ namespace Radioactivity.Simulator
         /// <param name="timeScale">Time scale.</param>
         public void SimulateEditor(float timeScale)
         {
-           
+
             if (needsGeometricRecalculation)
             {
                 ComputeGeometry(this.source, this.sink);
@@ -134,7 +134,7 @@ namespace Radioactivity.Simulator
             }
             inputFlux = (double)source.CurrentEmission;
 
-            sink.AddRadiation(source.SourceID, (float)(inputFlux* fluxEndScale));
+            sink.AddRadiation(source.SourceID, (inputFlux * fluxEndScale));
 
         }
 
@@ -178,7 +178,7 @@ namespace Radioactivity.Simulator
         protected float GetConnectionMass()
         {
             float m = 0f;
-            for (int i = 0 ; i < Path.Count; i++)
+            for (int i = 0; i < Path.Count; i++)
             {
 
                 if (Path[i].attenuationType == AttenuationType.ParameterizedPart || Path[i].attenuationType == AttenuationType.Part)
@@ -209,7 +209,7 @@ namespace Radioactivity.Simulator
             attenuationPath = GetLineOfSight(src, target);
 
             // Attenuate the ray between these
-            fluxStart = src.AttenuateShadowShields(target.SinkTransform.position- src.EmitterTransform.position);
+            fluxStart = src.AttenuateShadowShields(target.SinkTransform.position - src.EmitterTransform.position);
             fluxEndScale = AttenuateFlux(attenuationPath, fluxStart);
 
             needsGeometricRecalculation = false;
@@ -228,7 +228,7 @@ namespace Radioactivity.Simulator
             double curFlux = strength;
             for (int i = 0; i < rayPath.Count; i++)
             {
-                 curFlux = rayPath[i].Attenuate(curFlux);
+                curFlux = rayPath[i].Attenuate(curFlux);
             }
             // Get the total mass in the connection
             connectionMass = GetConnectionMass();
@@ -279,15 +279,15 @@ namespace Radioactivity.Simulator
         {
             List<AttenuationZone> attens = new List<AttenuationZone>();
             if (RadioactivityConstants.debugRaycasting)
-                LogUtils.Log("[RadiationLink]: Looking along a distance of " +totalPathLength.ToString() + " with "+ outgoing.Count +  " hits");
+                LogUtils.Log("[RadiationLink]: Looking along a distance of " + totalPathLength.ToString() + " with " + outgoing.Count + " hits");
             float curZoneStartDistance = RadioactivityConstants.defaultSourceFluxDistance;
             float curZoneEndDistance = 0.01f;
-            Vector3 curZoneStartPoint = src.EmitterTransform.position + (target.SinkTransform.position - src.EmitterTransform.position).normalized*curZoneStartDistance;
+            Vector3 curZoneStartPoint = src.EmitterTransform.position + (target.SinkTransform.position - src.EmitterTransform.position).normalized * curZoneStartDistance;
             Vector3 curZoneEndPoint = target.SinkTransform.position;
 
             int hitNum = 0;
             // for each object we hit outgoing, see if we found it incoming
-            for (int i=0; i < outgoing.Count; i++)
+            for (int i = 0; i < outgoing.Count; i++)
             {
                 if (RadioactivityConstants.debugRaycasting)
                     LogUtils.Log("[RadiationLink]: Looking for incoming rayhits with " + outgoing[i].collider.name);

@@ -29,10 +29,11 @@ namespace Radioactivity
 
         // Ambient radiation field parameters
         [KSPField(isPersistant = true)]
-        public double GroundFractionVisible = 0d;
+        public double SkyViewFactor = 0d;
+
 
         [KSPField(isPersistant = true)]
-        public double SkyFractionVisible = 0d;
+        public double SkyViewFactorComplex = 0d;
 
         // Access the sink transform
         public Transform SinkTransform
@@ -40,9 +41,9 @@ namespace Radioactivity
             get { return sinkTransform; }
             set { sinkTransform = value; }
         }
-        public double CurrentRadiation
+        public double TotalRadiation
         {
-            get { return currentRadiation; }
+            get { return totalRadiation; }
         }
         public bool SinkEnabled
         {
@@ -75,17 +76,19 @@ namespace Radioactivity
 
             return toReturn;
         }
-        public Dictionary<string, float> GetSourceDictionary()
+        public Dictionary<string, double> GetSourceDictionary()
         {
             return sourceDictionary;
         }
 
-        private double currentRadiation;
+        private double pointRadiation = 0d;
+        private double ambientRadiation = 0d;
+        private double totalRadiation = 0d;
 
         private Transform sinkTransform;
         private bool registered = false;
         private bool sinkEnabled = false;
-        private Dictionary<string, float> sourceDictionary = new Dictionary<string, float>();
+        private Dictionary<string, double> sourceDictionary = new Dictionary<string, double>();
         private List<IRadiationAbsorber> associatedAbsorbers = new List<IRadiationAbsorber>();
 
         // Add radiation to the sink
@@ -94,15 +97,22 @@ namespace Radioactivity
             AddRadiation("Null", amt);
         }
 
-        public void AddRadiation(string src, float amt)
+        public void AddRadiation(string src, double amt)
         {
             sourceDictionary[src] = amt;
-            currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
+            totalRadiation = sourceDictionary.Sum(k => k.Value);
         }
+
+        public void AddAmbientRadiation(string src, double amt)
+        {
+            AddRadiation(src, amt);
+            ambientRadiation = amt;
+        }
+
         public void CleanupRadiation(string src)
         {
             sourceDictionary.Remove(src);
-            currentRadiation = (double)sourceDictionary.Sum(k => k.Value);
+            totalRadiation = sourceDictionary.Sum(k => k.Value);
         }
 
         void FixedUpdate()
@@ -127,7 +137,7 @@ namespace Radioactivity
                     allDisabled = !abs.IsAbsorbing();
                     if (!allDisabled)
                     {
-                        abs.AddRadiation((float)currentRadiation);
+                        abs.AddRadiation((float)pointRadiation, (float)ambientRadiation);
                     }
                 }
                 if (allDisabled)

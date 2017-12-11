@@ -64,7 +64,7 @@ namespace Radioactivity.UI
             Rect optionsRect = GUILayoutUtility.GetRect(optionWidth, optionHeight);
             Rect sliderRect = new Rect(optionTitleWidth, 0f, optionSliderWidth, optionHeight);
             Rect titleRect = new Rect(0f, 0f, optionTitleWidth, optionHeight);
-            Rect labelRect = new Rect(optionTitleWidth+optionSliderWidth, 0f, optionLabelWidth, optionHeight);
+            Rect labelRect = new Rect(optionTitleWidth + optionSliderWidth, 0f, optionLabelWidth, optionHeight);
 
             GUI.BeginGroup(optionsRect);
 
@@ -156,8 +156,10 @@ namespace Radioactivity.UI
         {
             if (RadioactivitySimulationSettings.SimulateCosmicRadiation)
             {
+                double val = Radioactivity.Instance.RadSim.AmbientSim.EditorVessel.CosmicFlux;
+
                 GUILayout.BeginHorizontal();
-                string contribution = String.Format("<color=#99ff00>{0} Sv</color>", 50f);
+                string contribution = String.Format("<color=#99ff00>{0}Sv</color>", FormatUtils.ToSI(val));
                 GUILayout.Label("<b>Cosmic</b>", host.GUIResources.GetStyle("editor_header"), GUILayout.MinWidth(contributionHeaderWidth), GUILayout.MaxWidth(contributionHeaderWidth));
                 GUILayout.Label(contribution, host.GUIResources.GetStyle("editor_text"), GUILayout.MinWidth(contributionNumberWidth), GUILayout.MaxWidth(contributionNumberWidth));
                 GUILayout.EndHorizontal();
@@ -167,9 +169,9 @@ namespace Radioactivity.UI
         {
             if (RadioactivitySimulationSettings.SimulateSolarRadiation)
             {
-
+                double val = Radioactivity.Instance.RadSim.AmbientSim.EditorVessel.SolarFlux;
                 GUILayout.BeginHorizontal();
-                string contribution = String.Format("<color=#99ff00>{0} Sv</color>", 0f);
+                string contribution = String.Format("<color=#99ff00>{0} Sv</color>", FormatUtils.ToSI(val));
                 GUILayout.Label("<b>Solar</b>", host.GUIResources.GetStyle("editor_header"), GUILayout.MinWidth(contributionHeaderWidth), GUILayout.MaxWidth(contributionHeaderWidth));
                 GUILayout.Label(contribution, host.GUIResources.GetStyle("editor_text"), GUILayout.MinWidth(contributionNumberWidth), GUILayout.MaxWidth(contributionNumberWidth));
                 GUILayout.EndHorizontal();
@@ -179,9 +181,9 @@ namespace Radioactivity.UI
         {
             if (RadioactivitySimulationSettings.SimulateBeltRadiation)
             {
-
+                double val = Radioactivity.Instance.RadSim.AmbientSim.EditorVessel.BeltFlux;
                 GUILayout.BeginHorizontal();
-                string contribution = String.Format("<color=#99ff00>{0} Sv</color>", 0f);
+                string contribution = String.Format("<color=#99ff00>{0} Sv</color>", FormatUtils.ToSI(val));
                 GUILayout.Label("<b>Belt</b>", host.GUIResources.GetStyle("editor_header"), GUILayout.MinWidth(contributionHeaderWidth), GUILayout.MaxWidth(contributionHeaderWidth));
                 GUILayout.Label(contribution, host.GUIResources.GetStyle("editor_text"), GUILayout.MinWidth(contributionNumberWidth), GUILayout.MaxWidth(contributionNumberWidth));
                 GUILayout.EndHorizontal();
@@ -192,8 +194,9 @@ namespace Radioactivity.UI
         {
             if (RadioactivitySimulationSettings.SimulateLocalRadiation)
             {
+                double val = Radioactivity.Instance.RadSim.AmbientSim.EditorVessel.PlanetaryFlux;
                 GUILayout.BeginHorizontal();
-                string contribution = String.Format("<color=#99ff00>{0} Sv</color>", 50f);
+                string contribution = String.Format("<color=#99ff00>{0} Sv</color>", FormatUtils.ToSI(val));
                 GUILayout.Label("<b>Planetary</b>", host.GUIResources.GetStyle("editor_header"), GUILayout.MinWidth(contributionHeaderWidth), GUILayout.MaxWidth(contributionHeaderWidth));
                 GUILayout.Label(contribution, host.GUIResources.GetStyle("editor_text"), GUILayout.MinWidth(contributionNumberWidth), GUILayout.MaxWidth(contributionNumberWidth));
                 GUILayout.EndHorizontal();
@@ -202,7 +205,8 @@ namespace Radioactivity.UI
         void DrawTotalContribution()
         {
             GUILayout.BeginHorizontal();
-            string contribution = String.Format("<b><color=#99ff00>{0} Sv</color></b>", 100f);
+            double val = Radioactivity.Instance.RadSim.AmbientSim.EditorVessel.TotalFlux;
+            string contribution = String.Format("<b><color=#99ff00>{0} Sv</color></b>", FormatUtils.ToSI(val));
             GUILayout.Label("<b>Total</b>", host.GUIResources.GetStyle("editor_header"), GUILayout.MinWidth(contributionHeaderWidth), GUILayout.MaxWidth(contributionHeaderWidth));
             GUILayout.Label(contribution, host.GUIResources.GetStyle("editor_text"), GUILayout.MinWidth(contributionNumberWidth), GUILayout.MaxWidth(contributionNumberWidth));
             GUILayout.EndHorizontal();

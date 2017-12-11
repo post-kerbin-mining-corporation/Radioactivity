@@ -63,18 +63,19 @@ namespace Radioactivity
             if (this.part.protoModuleCrew.Count > 0)
             {
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
         }
         // Adds radiation
-        public void AddRadiation(float amt)
+        public void AddRadiation(float pointAmount, float ambientAmount)
         {
-            LifetimeRadiation = LifetimeRadiation + amt * (1f - RadiationAttenuationFraction);
+            LifetimeRadiation = LifetimeRadiation + (pointAmount + ambientAmount) * (1f - RadiationAttenuationFraction);
 
             if (HighLogic.LoadedSceneIsFlight)
-                IrradiateCrew(amt * (1f - RadiationAttenuationFraction));
+                IrradiateCrew(pointAmount * (1f - RadiationAttenuationFraction));
         }
 
         public void FixedUpdate()
@@ -93,8 +94,9 @@ namespace Radioactivity
             {
                 for (int i = 0; i < this.part.protoModuleCrew.Count; i++)
                 {
-                    Radioactivity.Instance.RadSim.KerbalSim.SetIrradiation(this.part.protoModuleCrew[i], part.vessel, (double)amt);
+                    Radioactivity.Instance.RadSim.KerbalSim.SetIrradiationParameters(this.part.protoModuleCrew[i], part.vessel, (double)amt, (1f - RadiationAttenuationFraction));
                 }
+
             }
         }
     }

@@ -186,7 +186,7 @@ namespace Radioactivity.UI
             GUI.Label(new Rect(tempBarWidth - iconDims.x, iconDims.y + 4f, iconDims.x * 2f, 20f), String.Format("{0}Sv", FormatUtils.ToSI(RadioactivityConstants.kerbalDeathThreshold, "F0")), host.GUIResources.GetStyle("roster_body"));
 
             // End labels
-            GUI.Label(new Rect(tempBarWidth + 20f, 2f, 120f, 20f), String.Format("<b><color=#ffffff>Current:</color></b> {0}Sv/s", FormatUtils.ToSI(kerbal.CurrentExposure, "F2")), host.GUIResources.GetStyle("roster_body"));
+            GUI.Label(new Rect(tempBarWidth + 20f, 2f, 120f, 20f), String.Format("<b><color=#ffffff>Current:</color></b> {0}Sv/s", FormatUtils.ToSI(kerbal.SummedExposure, "F2")), host.GUIResources.GetStyle("roster_body"));
             GUI.Label(new Rect(tempBarWidth + 20f, 20f, 120f, 20f), String.Format("<b><color=#ffffff>Total:</color></b> {0}Sv", FormatUtils.ToSI(kerbal.TotalExposure, "F2")), host.GUIResources.GetStyle("roster_body"));
 
 

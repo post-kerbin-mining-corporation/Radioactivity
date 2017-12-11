@@ -1,5 +1,4 @@
 ﻿using System;
-
 using System.Collections.Generic;
 
 namespace Radioactivity.Simulator
@@ -7,23 +6,37 @@ namespace Radioactivity.Simulator
     public class AmbientRadiationSimulator
     {
         public bool SimReady { get { return simulationReady; } set { simulationReady = value; } }
+        public RadiationVessel EditorVessel { get { return editorVessel; } }
 
+        public CosmicRadiationSimulator CosmicSim { get { return cosmicSimulator; } }
+        public PlanetaryRadiationSimulator PlanetSim { get { return planetarySimulator; } }
         bool simulationReady = false;
-        RadioactivitySimulator mainSimulator;
-        List<RadiationVessel> allVessels;
 
+        RadioactivitySimulator mainSimulator;
+        CosmicRadiationSimulator cosmicSimulator;
+        PlanetaryRadiationSimulator planetarySimulator;
+
+        List<RadiationVessel> allVessels;
         RadiationVessel editorVessel;
 
         public AmbientRadiationSimulator(RadioactivitySimulator hostSim)
         {
-            
+
             LogUtils.Log("[AmbientRadiationSimulator]: Initializing simulator");
             allVessels = new List<RadiationVessel>();
             mainSimulator = hostSim;
 
             if (HighLogic.LoadedSceneIsEditor)
             {
-                editorVessel = new RadiationVessel();
+                editorVessel = new RadiationVessel(this);
+            }
+            if (RadioactivitySimulationSettings.SimulateCosmicRadiation)
+            {
+                cosmicSimulator = new CosmicRadiationSimulator();
+            }
+            if (RadioactivitySimulationSettings.SimulateLocalRadiation)
+            {
+                planetarySimulator = new PlanetaryRadiationSimulator();
             }
         }
 
@@ -80,7 +93,7 @@ namespace Radioactivity.Simulator
 
         protected RadiationVessel RegisterVessel(Vessel v)
         {
-            RadiationVessel radVessel = new RadiationVessel(v);
+            RadiationVessel radVessel = new RadiationVessel(v, this);
             allVessels.Add(radVessel);
             LogUtils.Log("[AmbientRadiationSimulator]: Adding vessel " + radVessel.vessel.GetName() + " to simulator");
             return radVessel;
@@ -101,7 +114,7 @@ namespace Radioactivity.Simulator
             }
         }
 
-       
+
 
         public void AddSink(RadioactiveSink snk)
         {

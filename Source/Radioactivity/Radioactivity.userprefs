@@ -1,19 +1,31 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Modules/RadiationParameters.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Simulator/RadiationVessel.cs">
     <Files>
-      <File FileName="Settings/RadioactivitySettings.cs" Line="80" Column="51" />
-      <File FileName="Simulator/RadiationVessel.cs" Line="62" Column="24" />
-      <File FileName="Modules/RadiationParameters.cs" Line="12" Column="45" />
-      <File FileName="Simulator/AttenuationZone.cs" Line="64" Column="31" />
-      <File FileName="UI/Windows/UISourceWindow.cs" Line="66" Column="71" />
-      <File FileName="Settings/RadioactivityConstants.cs" Line="120" Column="51" />
+      <File FileName="Utils/VesselUtils.cs" Line="13" Column="54" />
+      <File FileName="Simulator/AmbientRadiationSimulator.cs" Line="112" Column="45" />
+      <File FileName="Simulator/CosmicRadiationSimulator.cs" Line="18" Column="10" />
+      <File FileName="Simulator/RadiationVessel.cs" Line="121" Column="13" />
+      <File FileName="Modules/RadioactiveSink.cs" Line="91" Column="92" />
+      <File FileName="Simulator/RadiationLink.cs" Line="122" Column="52" />
+      <File FileName="Settings/RadioactivityConstants.cs" Line="35" Column="56" />
+      <File FileName="UI/Windows/UIEditorWindow.cs" Line="154" Column="10" />
+      <File FileName="Simulator/PlanetaryRadiationSimulator.cs" Line="9" Column="83" />
+      <File FileName="Persistence/RadioactivityKerbal.cs" Line="65" Column="13" />
+      <File FileName="Modules/RadioactiveSource.cs" Line="1" Column="1" />
+      <File FileName="Modules/RadiationShieldedCrewContainer.cs" Line="75" Column="63" />
+      <File FileName="Simulator/KerbalSimulator.cs" Line="96" Column="14" />
+      <File FileName="Interfaces/IRadiationAbsorber.cs" Line="21" Column="27" />
+      <File FileName="Modules/RadiationDroneCore.cs" Line="80" Column="80" />
+      <File FileName="Modules/RadiationInstrument.cs" Line="72" Column="80" />
+      <File FileName="Modules/RadiationParameters.cs" Line="19" Column="1" />
+      <File FileName="Modules/RadiationTracker.cs" Line="34" Column="36" />
+      <File FileName="UI/Windows/UISinkWindow.cs" Line="91" Column="14" />
+      <File FileName="Simulator/PointRadiationSimulator.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/github/Radioactivity/Source/Radioactivity/Simulator/AmbientRadiationSimulator.cs" relfile="Simulator/AmbientRadiationSimulator.cs" line="97" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />

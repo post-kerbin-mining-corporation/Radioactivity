@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Radioactivity.UI
 {
-    public class UISinkWindow: UIWindow
+    public class UISinkWindow : UIWindow
     {
 
         public RadioactiveSink Sink
@@ -26,11 +26,11 @@ namespace Radioactivity.UI
         Vector3 screenPosition;
         Rect windowPosition;
         RadioactiveSink sink;
-      
 
-        public UISinkWindow(RadioactiveSink snk, System.Random randomizer, RadioactivityUI uiHost): base(randomizer, uiHost)
+
+        public UISinkWindow(RadioactiveSink snk, System.Random randomizer, RadioactivityUI uiHost) : base(randomizer, uiHost)
         {
-            
+
             sink = snk;
             // Set up screen position
             //screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
@@ -45,13 +45,13 @@ namespace Radioactivity.UI
             {
                 screenPosition = Camera.main.WorldToScreenPoint(sink.SinkTransform.position);
                 windowPosition = new Rect(screenPosition.x + iconDims.x / 2 + 5f, Screen.height - screenPosition.y + iconDims.y / 2f, windowDims.x, windowDims.y);
-            }    
+            }
         }
 
         public void Draw()
         {
             if (showWindow)
-                windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, "", 
+                windowPosition = GUILayout.Window(windowID, windowPosition, DrawWindow, "",
                                                   host.GUIResources.GetStyle("mini_window"),
                                                   GUILayout.MinHeight(20), GUILayout.ExpandHeight(true));
             if (screenPosition.z > 0f)
@@ -60,15 +60,15 @@ namespace Radioactivity.UI
 
         internal void DrawButton()
         {
-            Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f, 
-                                       Screen.height - screenPosition.y - iconDims.y / 2f, 
+            Rect buttonRect = new Rect(screenPosition.x - iconDims.x / 2f,
+                                       Screen.height - screenPosition.y - iconDims.y / 2f,
                                        iconDims.x, iconDims.y);
-            Rect groupRect = new Rect(buttonRect.xMax + 5f, 
-                                      buttonRect.yMin + buttonRect.height / 2 - infoBarDims.y / 2f, 
+            Rect groupRect = new Rect(buttonRect.xMax + 5f,
+                                      buttonRect.yMin + buttonRect.height / 2 - infoBarDims.y / 2f,
                                       120f, infoBarDims.y);
 
-            GUI.DrawTextureWithTexCoords(buttonRect, 
-                                         host.GUIResources.GetIcon(sink.IconID).iconAtlas, 
+            GUI.DrawTextureWithTexCoords(buttonRect,
+                                         host.GUIResources.GetIcon(sink.IconID).iconAtlas,
                                          host.GUIResources.GetIcon(sink.IconID).iconRect);
             GUI.BeginGroup(groupRect, host.GUIResources.GetStyle("mini_group"));
 
@@ -76,7 +76,7 @@ namespace Radioactivity.UI
             Rect sinkButtonRect = new Rect(90f, 0f, 16f, 16f);
             Rect sourceButtonRect = new Rect(106f, 0f, 16f, 16f);
 
-            GUI.Label(labelRect, FormatUtils.FormatFluxString(RadioactivityUI.Instance.UnitMode, sink.CurrentRadiation), 
+            GUI.Label(labelRect, FormatUtils.FormatFluxString(RadioactivityUI.Instance.UnitMode, sink.TotalRadiation),
                       host.GUIResources.GetStyle("mini_text_rad"));
 
             if (GUI.Button(sinkButtonRect, "...", host.GUIResources.GetStyle("mini_button")))
@@ -103,11 +103,11 @@ namespace Radioactivity.UI
 
         internal void DrawWindow(int WindowID)
         {
- 
-               if (showSinkInfo)
-                    DrawSinkDetails();
-                if (showSourceInfo)
-                    DrawSourceDetails();
+
+            if (showSinkInfo)
+                DrawSinkDetails();
+            if (showSourceInfo)
+                DrawSourceDetails();
 
         }
 

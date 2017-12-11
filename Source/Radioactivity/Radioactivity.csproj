@@ -107,6 +107,8 @@
     <Compile Include="Utils\ConfigNodeUtils.cs" />
     <Compile Include="Utils\PartUtils.cs" />
     <Compile Include="Utils\VesselUtils.cs" />
+    <Compile Include="Simulator\CosmicRadiationSimulator.cs" />
+    <Compile Include="Simulator\PlanetaryRadiationSimulator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Simulator\" />

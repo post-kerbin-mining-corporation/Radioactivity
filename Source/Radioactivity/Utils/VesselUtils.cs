@@ -13,9 +13,15 @@ namespace Radioactivity
         // Solid angle of a body relative to a vessel
         public static double ComputeBodySolidAngle(Vessel vessel, CelestialBody body)
         {
-            double dist = body.GetAltitude(vessel.GetWorldPos3D()) + body.Radius;
-            return 2.0 * Math.PI * (1.0 - Math.Cos(dist));
+            return VesselUtils.ComputeBodySolidAngle(body.Radius, body.GetAltitude(vessel.GetWorldPos3D()));
         }
+
+        public static double ComputeBodySolidAngle(double radius, double altitude)
+        {
+            double theta = Math.Atan(radius / altitude);
+            return 2.0 * Math.PI * (1.0 - Math.Cos(theta));
+        }
+
         // Solid angle of the sky, that is, the total area minus all bodies
         public static double ComputeSkySolidAngle(Vessel vessel)
         {
