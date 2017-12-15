@@ -136,6 +136,39 @@ namespace Radioactivity.UI
                                                RadioactivityPreferences.editorAtmosphereHeight),
  host.GUIResources.GetStyle("editor_text"));
             GUI.EndGroup();
+
+            optionsRect = GUILayoutUtility.GetRect(optionWidth, optionHeight);
+            sliderRect = new Rect(optionTitleWidth, 0f, optionSliderWidth, optionHeight);
+            titleRect = new Rect(0f, 0f, optionTitleWidth, optionHeight);
+            labelRect = new Rect(optionTitleWidth + optionSliderWidth, 0f, optionLabelWidth, optionHeight);
+
+            GUI.BeginGroup(optionsRect);
+
+            GUI.Label(titleRect, "<b>Local Magnetic Attenuation</b>", host.GUIResources.GetStyle("editor_header"));
+            RadioactivityPreferences.editorMagneticFieldStrength = GUI.HorizontalSlider(sliderRect,
+                                                                                        (float)RadioactivityPreferences.editorMagneticFieldStrength,
+                                                                              0f, 1.0f);
+            GUI.Label(labelRect, String.Format("<color=#99ff00>{0:F1}% </color>",
+                                               (float)RadioactivityPreferences.editorMagneticFieldStrength * 100f),
+ host.GUIResources.GetStyle("editor_text"));
+            GUI.EndGroup();
+
+            optionsRect = GUILayoutUtility.GetRect(optionWidth, optionHeight);
+            sliderRect = new Rect(optionTitleWidth, 0f, optionSliderWidth, optionHeight);
+            titleRect = new Rect(0f, 0f, optionTitleWidth, optionHeight);
+            labelRect = new Rect(optionTitleWidth + optionSliderWidth, 0f, optionLabelWidth, optionHeight);
+
+            GUI.BeginGroup(optionsRect);
+
+            GUI.Label(titleRect, "<b>Belt Radiation</b>", host.GUIResources.GetStyle("editor_header"));
+            RadioactivityPreferences.editorRadiationBeltStrength = GUI.HorizontalSlider(sliderRect,
+                                                                                        (float)RadioactivityPreferences.editorRadiationBeltStrength,
+                                                                              0f, 1.0f);
+            GUI.Label(labelRect, String.Format("<color=#99ff00>{0:F2} Sv</color>",
+                                               FormatUtils.ToSI(RadioactivityPreferences.editorRadiationBeltStrength)),
+ host.GUIResources.GetStyle("editor_text"));
+            GUI.EndGroup();
+
         }
 
 

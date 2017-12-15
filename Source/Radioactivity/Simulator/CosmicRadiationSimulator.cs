@@ -14,12 +14,12 @@ namespace Radioactivity.Simulator
 
         public double CalculateCosmicRadiationFlux(RadiationVessel vessel)
         {
-            return vessel.SkyViewFactor * backgroundFlux;
+            return vessel.SkyViewFactor * backgroundFlux * (1.0 - RadioactivityEnvironmentData.GetAttenuation(vessel.vessel.GetWorldPos3D(), vessel.vessel.mainBody));
         }
 
         public double CalculateCosmicRadiationFluxEditor(RadiationVessel vessel)
         {
-            return vessel.SkyViewFactor * backgroundFlux;
+            return vessel.SkyViewFactor * backgroundFlux * (1.0 - RadioactivityPreferences.editorMagneticFieldStrength);
         }
     }
 }

@@ -25,6 +25,8 @@ namespace Radioactivity
         // These settings allow the user to simulate approximately the effects of atmosphere 
         // on ambient radiation sources
         // Settings for what "planet" we are on
+        public static double editorMagneticFieldStrength = 0.0d;
+        public static double editorRadiationBeltStrength = 0.0d;
         public static double editorAtmosphereDensity = 0.0d;
         public static double editorAtmosphereHeight = 0.0d;
         public static double editorPlanetRadius = 0.0d;
@@ -45,6 +47,8 @@ namespace Radioactivity
                 overlayShown = ConfigNodeUtils.GetValue(mNode, "OverlayShown", false);
                 editorShown = ConfigNodeUtils.GetValue(mNode, "EditorShown", false);
                 unitMode = ConfigNodeUtils.GetValue(mNode, "UnitMode", 0);
+                editorMagneticFieldStrength = ConfigNodeUtils.GetValue(mNode, "EditorMagneticFieldStrength", 0.0d);
+                editorRadiationBeltStrength = ConfigNodeUtils.GetValue(mNode, "EditorRadiationBeltStrength", 0.0d);
                 editorAtmosphereDensity = ConfigNodeUtils.GetValue(mNode, "EditorAtmosphereDensity", 0.0d);
                 editorAtmosphereHeight = ConfigNodeUtils.GetValue(mNode, "EditorAtmosphereHeight", 0.0d);
                 editorPlanetRadius = ConfigNodeUtils.GetValue(mNode, "EditorPlanetRadius", 0.0d);
@@ -69,6 +73,9 @@ namespace Radioactivity
             prefsNode.AddValue("OverlayShown", RadioactivityUI.Instance.OverlayWindow.Drawn);
             prefsNode.AddValue("EditorShown", RadioactivityUI.Instance.EditorWindow.Drawn);
             prefsNode.AddValue("UnitMode", RadioactivityUI.Instance.UnitMode);
+
+            prefsNode.AddValue("EditorMagneticFieldStrength", editorMagneticFieldStrength);
+            prefsNode.AddValue("EditorRadiationBeltStrength", editorRadiationBeltStrength);
 
             prefsNode.AddValue("EditorAtmosphereDensity", editorAtmosphereDensity);
             prefsNode.AddValue("EditorAtmosphereHeight", editorAtmosphereHeight);
