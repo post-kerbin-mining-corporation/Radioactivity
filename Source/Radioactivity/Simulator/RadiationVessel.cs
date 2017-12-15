@@ -137,6 +137,15 @@ namespace Radioactivity.Simulator
                         sinks[i].AddAmbientRadiation("Planetary", planetaryFlux);
                     }
                 }
+                if (RadioactivitySimulationSettings.SimulateBeltRadiation)
+                {
+                    beltFlux = simulator.BeltSim.CalculateBeltRadiationFlux(this);
+
+                    for (int i = 0; i < sinks.Count; i++)
+                    {
+                        sinks[i].AddAmbientRadiation("Belt", beltFlux);
+                    }
+                }
             }
             if (vessel != null)
             {
@@ -157,15 +166,21 @@ namespace Radioactivity.Simulator
 
             if (RadioactivitySimulationSettings.SimulateCosmicRadiation)
             {
-                cosmicFlux = simulator.CosmicSim.CalculateCosmicRadiationFlux(this);
+                cosmicFlux = simulator.CosmicSim.CalculateCosmicRadiationFluxEditor(this);
                 for (int i = 0; i < sinks.Count; i++)
                     sinks[i].AddAmbientRadiation("Cosmic", cosmicFlux);
             }
             if (RadioactivitySimulationSettings.SimulateLocalRadiation)
             {
-                planetaryFlux = simulator.PlanetSim.CalculatePlanetaryRadiationFlux(this);
+                planetaryFlux = simulator.PlanetSim.CalculatePlanetaryRadiationFluxEditor(this);
                 for (int i = 0; i < sinks.Count; i++)
                     sinks[i].AddAmbientRadiation("Planetary", planetaryFlux);
+            }
+            if (RadioactivitySimulationSettings.SimulateBeltRadiation)
+            {
+                planetaryFlux = simulator.BeltSim.CalculateBeltRadiationFluxEditor(this);
+                for (int i = 0; i < sinks.Count; i++)
+                    sinks[i].AddAmbientRadiation("Belt", beltFlux);
             }
         }
 

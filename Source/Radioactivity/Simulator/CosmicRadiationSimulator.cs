@@ -16,5 +16,10 @@ namespace Radioactivity.Simulator
         {
             return vessel.SkyViewFactor * backgroundFlux;
         }
+
+        public double CalculateCosmicRadiationFluxEditor(RadiationVessel vessel)
+        {
+            return vessel.SkyViewFactor * backgroundFlux;
+        }
     }
 }

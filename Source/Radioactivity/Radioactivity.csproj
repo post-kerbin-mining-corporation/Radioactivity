@@ -109,6 +109,7 @@
     <Compile Include="Utils\VesselUtils.cs" />
     <Compile Include="Simulator\CosmicRadiationSimulator.cs" />
     <Compile Include="Simulator\PlanetaryRadiationSimulator.cs" />
+    <Compile Include="Simulator\BeltRadiationSimulator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Simulator\" />

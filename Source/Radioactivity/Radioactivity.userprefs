@@ -1,26 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Simulator/RadiationVessel.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Simulator/BeltRadiationSimulator.cs">
     <Files>
       <File FileName="Utils/VesselUtils.cs" Line="13" Column="54" />
-      <File FileName="Simulator/AmbientRadiationSimulator.cs" Line="112" Column="45" />
-      <File FileName="Simulator/CosmicRadiationSimulator.cs" Line="18" Column="10" />
-      <File FileName="Simulator/RadiationVessel.cs" Line="121" Column="13" />
-      <File FileName="Modules/RadioactiveSink.cs" Line="91" Column="92" />
-      <File FileName="Simulator/RadiationLink.cs" Line="122" Column="52" />
+      <File FileName="Simulator/RadioactivityEnvironment.cs" Line="117" Column="10" />
+      <File FileName="Simulator/RadioactivityEnvironmentData.cs" Line="68" Column="17" />
       <File FileName="Settings/RadioactivityConstants.cs" Line="35" Column="56" />
-      <File FileName="UI/Windows/UIEditorWindow.cs" Line="154" Column="10" />
-      <File FileName="Simulator/PlanetaryRadiationSimulator.cs" Line="9" Column="83" />
-      <File FileName="Persistence/RadioactivityKerbal.cs" Line="65" Column="13" />
-      <File FileName="Modules/RadioactiveSource.cs" Line="1" Column="1" />
-      <File FileName="Modules/RadiationShieldedCrewContainer.cs" Line="75" Column="63" />
-      <File FileName="Simulator/KerbalSimulator.cs" Line="96" Column="14" />
-      <File FileName="Interfaces/IRadiationAbsorber.cs" Line="21" Column="27" />
-      <File FileName="Modules/RadiationDroneCore.cs" Line="80" Column="80" />
-      <File FileName="Modules/RadiationInstrument.cs" Line="72" Column="80" />
-      <File FileName="Modules/RadiationParameters.cs" Line="19" Column="1" />
-      <File FileName="Modules/RadiationTracker.cs" Line="34" Column="36" />
-      <File FileName="UI/Windows/UISinkWindow.cs" Line="91" Column="14" />
-      <File FileName="Simulator/PointRadiationSimulator.cs" Line="1" Column="1" />
+      <File FileName="Simulator/CosmicRadiationSimulator.cs" Line="16" Column="10" />
+      <File FileName="Simulator/AmbientRadiationSimulator.cs" Line="208" Column="44" />
+      <File FileName="Simulator/RadiationVessel.cs" Line="166" Column="90" />
+      <File FileName="Simulator/PlanetaryRadiationSimulator.cs" Line="16" Column="60" />
+      <File FileName="Simulator/BeltRadiationSimulator.cs" Line="12" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

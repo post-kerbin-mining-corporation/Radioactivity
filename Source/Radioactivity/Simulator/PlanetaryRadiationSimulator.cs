@@ -13,5 +13,9 @@ namespace Radioactivity.Simulator
         {
             return 0d;
         }
+        public double CalculatePlanetaryRadiationFluxEditor(RadiationVessel vessel)
+        {
+            return 0d;
+        }
     }
 }

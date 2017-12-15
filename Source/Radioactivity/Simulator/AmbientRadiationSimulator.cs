@@ -10,11 +10,14 @@ namespace Radioactivity.Simulator
 
         public CosmicRadiationSimulator CosmicSim { get { return cosmicSimulator; } }
         public PlanetaryRadiationSimulator PlanetSim { get { return planetarySimulator; } }
+        public BeltRadiationSimulator BeltSim { get { return beltSimulator; } }
+
         bool simulationReady = false;
 
         RadioactivitySimulator mainSimulator;
         CosmicRadiationSimulator cosmicSimulator;
         PlanetaryRadiationSimulator planetarySimulator;
+        BeltRadiationSimulator beltSimulator;
 
         List<RadiationVessel> allVessels;
         RadiationVessel editorVessel;
@@ -37,6 +40,10 @@ namespace Radioactivity.Simulator
             if (RadioactivitySimulationSettings.SimulateLocalRadiation)
             {
                 planetarySimulator = new PlanetaryRadiationSimulator();
+            }
+            if (RadioactivitySimulationSettings.SimulateBeltRadiation)
+            {
+                beltSimulator = new BeltRadiationSimulator();
             }
         }
 
@@ -205,7 +212,7 @@ namespace Radioactivity.Simulator
         protected void SimulateAmbientRadiationEditor(float fixedDeltaTime)
         {
             if (editorVessel != null)
-                editorVessel.Simulate(fixedDeltaTime);
+                editorVessel.SimulateEditor(fixedDeltaTime);
         }
     }
 }
